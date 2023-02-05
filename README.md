@@ -3,6 +3,11 @@
 A bite-sized QuakeC virtual machine written in C, based on the original Quake Engine
 source code release from 1999.
 
+## Todo
+
+- Refactor code to remove globals, allowing for multiple instances to run simultainiously.
+- Add function-search to call specific functions by name, along with setting function parameters.
+
 ## License
 
 GNU GENERAL PUBLIC LICENSE
