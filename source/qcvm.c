@@ -240,12 +240,7 @@ int qc_function_leave(void)
 	return qc_stack[qc_depth].s;
 }
 
-
-/*
-====================
-PR_ExecuteProgram
-====================
-*/
+/* execute qc code, starting from fnum */
 void qc_execute(int fnum)
 {
 	qc_eval_t *a, *b, *c;
