@@ -13,6 +13,7 @@ source code release from 1999.
 GNU GENERAL PUBLIC LICENSE
 
 QCVM is Copyright (C) 2023-2024 erysdren (it/she)
+
 Quake is Copyright (C) 1996-1997 Id Software, Inc.
 
 This program is free software; you can redistribute it and/or
