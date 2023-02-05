@@ -1,0 +1,8 @@
+
+#pragma warning disable Q208
+
+#pragma progs_dat progs.dat
+
+#includelist
+	main.qc
+#endlist
