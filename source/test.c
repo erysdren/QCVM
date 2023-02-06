@@ -31,7 +31,7 @@
  *
  * Description:		QCVM test application
  *
- * Last Modified:	February 5th 2023
+ * Last Modified:	February 6th 2023
  *
  *****************************************************************************/
 
@@ -47,11 +47,11 @@
 #include "qcvm.h"
 
 /*
- * functions
+ * builtin functions
  */
 
-/* my_print */
-void my_print(void)
+/* print */
+void print(void)
 {
 	int i;
 
@@ -61,25 +61,39 @@ void my_print(void)
 	}
 }
 
+/* float to string */
+void ftos(void)
+{
+	/* variables */
+	float f;
+
+	/* assign float */
+	f = QC_GET_FLOAT(QC_OFS_PARM0);
+
+	/* sprintf it */
+	sprintf(qc_string_temp, "%1.2f", f);
+
+	/* assign return val */
+	QC_GET_INT(QC_OFS_RETURN) = qc_string_temp - qc_strings;
+}
+
+/*
+ * main
+ */
+
 /* main */
 int main(int argc, char **argv)
 {
-	/* variables */
-	int f_init, f_update;
-
 	/* load qc */
 	qc_load("../qc/progs.dat");
 
 	/* load builtins */
-	qc_builtin_add(my_print);
-
-	/* get function pointers */
-	f_init = qc_function_get("init");
-	f_update = qc_function_get("update");
+	qc_builtin_add(print);
+	qc_builtin_add(ftos);
 
 	/* call functions */
-	qc_execute(f_init);
-	qc_execute(f_update);
+	qc_execute(qc_function_get("init"));
+	qc_execute(qc_function_get("update"));
 
 	/* exit */
 	qc_exit();

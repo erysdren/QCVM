@@ -31,9 +31,12 @@
 //
 // Description:		QCVM test environment builtins
 //
-// Last Modified:	February 5th 2023
+// Last Modified:	February 6th 2023
 //
 //=============================================================================
 
 // Print string to stdout
 void print(string s, ...) = #1;
+
+// Convert float to string
+string ftos(float f) = #2;

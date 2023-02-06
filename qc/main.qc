@@ -31,7 +31,7 @@
 //
 // Description:		QCVM test environment
 //
-// Last Modified:	February 5th 2023
+// Last Modified:	February 6th 2023
 //
 //=============================================================================
 
@@ -68,4 +68,7 @@ void update()
 
 	// print with return string
 	print(test_return_str(), "\n");
+
+	// print a float
+	print("ftos: ", ftos(21.3), "\n");
 }

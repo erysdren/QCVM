@@ -31,7 +31,7 @@
  *
  * Description:		QCVM main runtime
  *
- * Last Modified:	February 5th 2023
+ * Last Modified:	February 6th 2023
  *
  *****************************************************************************/
 
@@ -81,6 +81,9 @@ int qc_argc;
 /* builtins */
 qc_builtin_t qc_builtins[QC_MAX_BUILTINS]; 
 int qc_num_builtins;
+
+/* strings */
+char qc_string_temp[QC_TEMPSTRING_LENGTH];
 
 /*
  * functions
@@ -520,6 +523,7 @@ void qc_execute(int fnum)
 				ptr->_int = a->_int;
 				*/
 				break;
+
 			case QC_OP_STOREP_V:
 				/*
 				ptr = (qc_eval_t *)((byte *)sv.edicts + b->_int);

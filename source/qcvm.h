@@ -31,7 +31,7 @@
  *
  * Description:		QCVM main header
  *
- * Last Modified:	February 5th 2023
+ * Last Modified:	February 6th 2023
  *
  *****************************************************************************/
 
@@ -49,6 +49,11 @@
 /* max builtins */
 #ifndef QC_MAX_BUILTINS
 #define QC_MAX_BUILTINS			256
+#endif
+
+/* tempstring legth */
+#ifndef QC_TEMPSTRING_LENGTH
+#define QC_TEMPSTRING_LENGTH	128
 #endif
 
 /* true/false */
@@ -271,6 +276,9 @@ extern int qc_argc;
 /* builtins */
 extern qc_builtin_t qc_builtins[QC_MAX_BUILTINS]; 
 extern int qc_num_builtins;
+
+/* strings */
+extern char qc_string_temp[QC_TEMPSTRING_LENGTH];
 
 /*
  * functions
