@@ -139,7 +139,6 @@ typedef struct qc_t
 	int32_t entityfields;
 } qc_t;
 
-
 /* stack type */
 typedef struct qc_stack_t
 {
@@ -231,8 +230,14 @@ typedef enum qc_opcodes_t
  * functions
  */
 
+/* load progs. returns 0 on success */
 int qc_load(const char *filename);
+
+/* exit qc and free memory */
 void qc_exit();
+
+/* print an error and exit qc */
 void qc_error(char *s, ...);
 
+/* run execution loop */
 void qc_execute(int fnum);
