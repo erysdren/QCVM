@@ -3,12 +3,16 @@
 A bite-sized QuakeC virtual machine written in C, based on the original Quake Engine
 source code release from 1999.
 
-## Tools
+## Resources
 
-- [State-of-the-art QuakeC compiler](https://www.fteqcc.org/)
+- [State-of-the-art QuakeC compiler.](https://www.fteqcc.org/)
+- [FTEQCC reference manual.](https://icculus.org/~marco/quakec/fteqcc_manual.txt)
 - [Kaitai Struct definitions file for the QuakeC "progs" format.](./tools/progs.ksy)
 - [QuakeC highlighting for VS Code by VictorF.](https://marketplace.visualstudio.com/items?itemName=VictorF.quakec)
 - [QuakeC highlighting for VS Code by joshuaskelly.](https://marketplace.visualstudio.com/items?itemName=joshuaskelly.quakec)
+- [InsideQC tutorials.](https://www.insideqc.com/)
+- [QuakeC tutorials at quakewiki.org.](https://quakewiki.org/wiki/QuakeC_tutorials)
+
 
 ## Contact
 
