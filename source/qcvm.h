@@ -51,6 +51,11 @@
 #define QC_MAX_BUILTINS			256
 #endif
 
+/* max exports */
+#ifndef QC_MAX_EXPORTS
+#define QC_MAX_EXPORTS			256
+#endif
+
 /* tempstring legth */
 #ifndef QC_TEMPSTRING_LENGTH
 #define QC_TEMPSTRING_LENGTH	128
@@ -89,6 +94,29 @@
 
 /* callback to c function */
 typedef void (*qc_builtin_t)(void);
+
+/* types for a builtin parameter */
+typedef enum qc_parm_type_t
+{
+	QC_PARM_NULL,
+	QC_PARM_STRING,
+	QC_PARM_FLOAT,
+	QC_PARM_VECTOR,
+	QC_PARM_FUNCTION,
+	QC_PARM_INT,
+	QC_PARM_EDICT
+} qc_parm_type_t;
+
+/* c exports */
+typedef struct qc_export_t
+{
+	const char *name;
+	qc_builtin_t function;
+	/*
+	qc_parm_type_t parms[QC_MAX_PARMS];
+	const char *parm_strings[QC_MAX_PARMS];
+	*/
+} qc_export_t;
 
 /* statement evaluation */
 typedef union qc_eval_t
@@ -316,3 +344,9 @@ void qc_set_parm_float(int i, float f);
 
 /* set parameter to vector */
 void qc_set_parm_vector(int i, float v0, float v1, float v2);
+
+/* add export */
+void qc_export_add(qc_export_t *export);
+
+/* dump exports */
+void qc_dump_exports(const char *filename);

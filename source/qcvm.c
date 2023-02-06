@@ -82,11 +82,19 @@ int qc_argc;
 qc_builtin_t qc_builtins[QC_MAX_BUILTINS]; 
 int qc_num_builtins;
 
+/* exports */
+qc_export_t qc_exports[QC_MAX_EXPORTS];
+int qc_num_exports;
+
 /* strings */
 char qc_string_temp[QC_TEMPSTRING_LENGTH];
 
 /*
  * functions
+ */
+
+/*
+ * load and exit
  */
 
 /* load qc progs into memory */
@@ -153,6 +161,10 @@ int qc_load(const char *filename)
 	memset(qc_builtins, 0, sizeof(qc_builtin_t) * QC_MAX_BUILTINS);
 	qc_num_builtins = 1;
 
+	/* set this to NULL incase of weird stack allocation */
+	memset(qc_exports, 0, sizeof(qc_export_t) * QC_MAX_EXPORTS);
+	qc_num_exports = 1;
+
 	/* return success */
 	return 0;
 }
@@ -162,6 +174,10 @@ void qc_exit()
 {
 	if (qc) free(qc);
 }
+
+/*
+ * utilities
+ */
 
 /* aborts the current function and returns an error */
 void qc_error(char *s, ...)
@@ -184,6 +200,10 @@ void qc_error(char *s, ...)
 	/* stop qc from functioning */
 	qc_exit();
 }
+
+/*
+ * function enter and exit
+ */
 
 /* make this the currently executing function */
 int qc_function_enter(qc_function_t *f)
@@ -276,6 +296,10 @@ int qc_function_get(const char *name)
 	return -1;
 }
 
+/*
+ * parameter handling
+ */
+
 /* set parm (float) */
 void qc_set_parm_float(int i, float f)
 {
@@ -300,6 +324,10 @@ void qc_set_parm_vector(int i, float v0, float v1, float v2)
 	QC_GET_FLOAT(QC_OFS_PARM0 + (i * 3) + 2) = v2;
 }
 
+/*
+ * builtin handling
+ */
+
 /* add builtin */
 void qc_builtin_add(qc_builtin_t func)
 {
@@ -307,8 +335,50 @@ void qc_builtin_add(qc_builtin_t func)
 	qc_num_builtins += 1;
 
 	if (qc_num_builtins > QC_MAX_BUILTINS)
-		qc_error("added two many builtins!");
+		qc_error("added two many builtins");
 }
+
+/*
+ * export handling
+ */
+
+/* add export */
+void qc_export_add(qc_export_t *export)
+{
+	qc_exports[qc_num_exports] = *export;
+	qc_num_exports += 1;
+
+	if (qc_num_exports > QC_MAX_EXPORTS)
+		qc_error("added two many exports");
+}
+
+/* dump exports */
+void qc_dump_exports(const char *filename)
+{
+	/* variables */
+	int i;
+	FILE *file;
+
+	/* open file handle */
+	file = fopen(filename, "wt");
+	if (!file) return;
+
+	/* write exports */
+	for (i = 1; i < qc_num_exports; i++)
+	{
+		if (&qc_exports[i])
+		{
+			fprintf(file, "void %s() = #%d;\n", qc_exports[i].name, i);
+		}
+	}
+
+	/* close file handle */
+	fclose(file);
+}
+
+/*
+ * main execution loop
+ */
 
 /* execute qc code, starting from fnum */
 void qc_execute(int fnum)

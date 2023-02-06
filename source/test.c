@@ -84,6 +84,13 @@ void vector_test(void)
 }
 
 /*
+ * exports
+ */
+
+qc_export_t export_print = {"print", print};
+qc_export_t export_ftos = {"ftos", ftos};
+
+/*
  * main
  */
 
@@ -92,6 +99,11 @@ int main(int argc, char **argv)
 {
 	/* load qc */
 	qc_load("../qc/progs.dat");
+
+	/* exports test */
+	qc_export_add(&export_print);
+	qc_export_add(&export_ftos);
+	qc_dump_exports("../qc/test.qc");
 
 	/* load builtins */
 	qc_builtin_add(print);
