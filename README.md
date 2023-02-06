@@ -3,6 +3,11 @@
 A bite-sized QuakeC virtual machine written in C, based on the original Quake Engine
 source code release from 1999.
 
+## Tools
+
+- [State-of-the-art QuakeC compiler](https://www.fteqcc.org/)
+- [Kaitai Struct definitions file for the QuakeC "progs" format.](./tools/progs.ksy)
+
 ## Todo
 
 - Refactor code to remove globals, allowing for multiple instances to run simultainiously.
