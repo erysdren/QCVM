@@ -71,7 +71,7 @@ void ftos(void)
 	f = QC_GET_FLOAT(QC_OFS_PARM0);
 
 	/* sprintf it */
-	sprintf(qc_string_temp, "%1.2f", f);
+	sprintf(qc_string_temp, "%1.1f", f);
 
 	/* assign return val */
 	QC_GET_INT(QC_OFS_RETURN) = qc_string_temp - qc_strings;
