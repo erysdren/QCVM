@@ -40,3 +40,6 @@ void print(string s, ...) = #1;
 
 // Convert float to string
 string ftos(float f) = #2;
+
+// Convert float to string
+vector vector_test() = #3;

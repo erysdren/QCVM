@@ -74,7 +74,13 @@ void ftos(void)
 	sprintf(qc_string_temp, "%1.1f", f);
 
 	/* assign return val */
-	QC_GET_INT(QC_OFS_RETURN) = qc_string_temp - qc_strings;
+	QC_RETURN_STRING(qc_string_temp);
+}
+
+/* vector test */
+void vector_test(void)
+{
+	QC_RETURN_VECTOR(2.0, 3.0, 4.0);
 }
 
 /*
@@ -90,6 +96,7 @@ int main(int argc, char **argv)
 	/* load builtins */
 	qc_builtin_add(print);
 	qc_builtin_add(ftos);
+	qc_builtin_add(vector_test);
 
 	/* call init() function */
 	qc_execute(qc_function_get("init"));

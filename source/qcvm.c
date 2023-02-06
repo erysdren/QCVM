@@ -287,6 +287,19 @@ void qc_set_parm_float(int i, float f)
 	QC_GET_FLOAT(QC_OFS_PARM0 + (i * 3)) = f;
 }
 
+/* set parm (vector) */
+void qc_set_parm_vector(int i, float v0, float v1, float v2)
+{
+	/* sanity check */
+	if (i < 0 || i > QC_MAX_PARMS - 1)
+		qc_error("qc_set_parm_float(): parm %d out of range", i);
+
+	/* set parms */
+	QC_GET_FLOAT(QC_OFS_PARM0 + (i * 3)) = v0;
+	QC_GET_FLOAT(QC_OFS_PARM0 + (i * 3) + 1) = v1;
+	QC_GET_FLOAT(QC_OFS_PARM0 + (i * 3) + 2) = v2;
+}
+
 /* add builtin */
 void qc_builtin_add(qc_builtin_t func)
 {

@@ -243,6 +243,15 @@ typedef enum qc_opcodes_t
 #define QC_GET_STRING(o) (qc_strings + *(int32_t *)&qc_globals[o])
 #define QC_GET_FUNCTION(o) (*(int32_t *)&qc_globals[o])
 
+/* return macros */
+#define QC_RETURN_FLOAT(a) (QC_GET_FLOAT(QC_OFS_RETURN) = (a))
+#define QC_RETURN_INT(a) (QC_GET_INT(QC_OFS_RETURN) = (a))
+#define QC_RETURN_STRING(a) (QC_GET_INT(QC_OFS_RETURN) = (a) - qc_strings)
+#define QC_RETURN_VECTOR(a, b, c) \
+	QC_GET_FLOAT(QC_OFS_RETURN) = (a); \
+	QC_GET_FLOAT(QC_OFS_RETURN + 1) = (b); \
+	QC_GET_FLOAT(QC_OFS_RETURN + 2) = (c);
+
 /*
  * globals
  */
@@ -304,3 +313,6 @@ void qc_builtin_add(qc_builtin_t func);
 
 /* set parameter to float */
 void qc_set_parm_float(int i, float f);
+
+/* set parameter to vector */
+void qc_set_parm_vector(int i, float v0, float v1, float v2);

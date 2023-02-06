@@ -15,6 +15,7 @@ source code release from 1999.
 - Easy API for adding builtin functions.
 - Dump user-added builtin functions to properly formatted QC file.
 - Improve tempstring handling.
+- Add support for HexenC and FTEQCC's extended opcodes.
 
 ## License
 
