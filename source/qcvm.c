@@ -249,6 +249,23 @@ int qc_function_leave(void)
 	return qc_stack[qc_depth].s;
 }
 
+/* search for function by name */
+int qc_function_get(const char *name)
+{
+	/* variables */
+	int i, fnum;
+
+	/* loop through functions */
+	for (i = 1; i < qc->num_functions; i++)
+	{
+		if (strcmp(name, qc_strings + qc_functions[i].s_name) == 0)
+			return i;
+	}
+
+	/* return failure */
+	return -1;
+}
+
 /* execute qc code, starting from fnum */
 void qc_execute(int fnum)
 {

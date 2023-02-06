@@ -53,9 +53,23 @@
 /* main */
 int main(int argc, char **argv)
 {
+	/* variables */
+	int f_init, f_update;
+
+	/* load qc */
 	qc_load("../qc/progs.dat");
-	qc_execute(4);
-	qc_execute(6);
+
+	/* get function pointers */
+	f_init = qc_function_get("init");
+	f_update = qc_function_get("update");
+
+	/* call functions */
+	qc_execute(f_init);
+	qc_execute(f_update);
+
+	/* exit */
 	qc_exit();
+
+	/* return success */
 	return EXIT_SUCCESS;
 }

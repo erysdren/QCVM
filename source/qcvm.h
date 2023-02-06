@@ -278,3 +278,6 @@ void qc_error(char *s, ...);
 
 /* run execution loop */
 void qc_execute(int fnum);
+
+/* search for function by name */
+int qc_function_get(const char *name);
