@@ -41,7 +41,7 @@ void init()
 	print("init() called...", "\n");
 }
 
-// test function
+// test function to be called from elsewhere
 void test()
 {
 	print("test() called...", "\n");
@@ -50,14 +50,22 @@ void test()
 // return string as argument
 string test_return_str()
 {
+	// return a string constant
 	return "hello i am a string";
 }
 
 // update function
 void update()
 {
+	// call print() builtin from here
 	print("update() called...", "\n");
+
+	// call qc function
 	test();
-	spawnfunc_test_class();
+
+	// call qc class function
+	test_class::test_class();
+
+	// print with return string
 	print(test_return_str(), "\n");
 }
