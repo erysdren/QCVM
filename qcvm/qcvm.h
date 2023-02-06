@@ -59,6 +59,11 @@ extern "C" {
 #define QC_MAX_EXPORTS			256
 #endif
 
+/* number of tempstrings */
+#ifndef QC_NUM_TEMPSTRINGS
+#define QC_NUM_TEMPSTRINGS		8
+#endif
+
 /* tempstring legth */
 #ifndef QC_TEMPSTRING_LENGTH
 #define QC_TEMPSTRING_LENGTH	128
@@ -360,7 +365,8 @@ extern int qc_xstatement;
 extern int qc_argc;
 
 /* strings */
-extern char qc_string_temp[QC_TEMPSTRING_LENGTH];
+extern char qc_tstrings[QC_NUM_TEMPSTRINGS][QC_TEMPSTRING_LENGTH];
+extern int qc_tstring_idx;
 
 /*
  * functions

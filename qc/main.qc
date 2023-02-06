@@ -92,4 +92,7 @@ void update()
 
 	// print a vector
 	print("v: ", vtos(v), "\n");
+
+	// print multiple ftos
+	print("multiple ftos: ", ftos(21.3), " ", ftos(3225.5), "\n");
 }

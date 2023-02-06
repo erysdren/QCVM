@@ -83,7 +83,8 @@ qc_export_t qc_exports[QC_MAX_EXPORTS];
 int qc_num_exports;
 
 /* strings */
-char qc_string_temp[QC_TEMPSTRING_LENGTH];
+char qc_tstrings[QC_NUM_TEMPSTRINGS][QC_TEMPSTRING_LENGTH];
+int qc_tstring_idx;
 
 /*
  * functions

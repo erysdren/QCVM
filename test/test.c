@@ -71,21 +71,27 @@ void ftos()
 	f = QC_GET_FLOAT(QC_OFS_PARM0);
 
 	/* sprintf it */
-	sprintf(qc_string_temp, "%1.1f", f);
+	sprintf(qc_tstrings[qc_tstring_idx], "%1.1f", f);
 
 	/* assign return val */
-	QC_RETURN_STRING(qc_string_temp);
+	QC_RETURN_STRING(qc_tstrings[qc_tstring_idx]);
+
+	/* update tempstring idx */
+	qc_tstring_idx = qc_tstring_idx >= QC_NUM_TEMPSTRINGS ? 0 : qc_tstring_idx + 1;
 }
 
 /* vector to string */
 void vtos()
 {
 	/* sprintf it */
-	sprintf(qc_string_temp, "%1.1f %1.1f %1.1f", QC_GET_FLOAT(QC_OFS_PARM0),
+	sprintf(qc_tstrings[qc_tstring_idx], "%1.1f %1.1f %1.1f", QC_GET_FLOAT(QC_OFS_PARM0),
 		QC_GET_FLOAT(QC_OFS_PARM0 + 1), QC_GET_FLOAT(QC_OFS_PARM0 + 2));
 
 	/* assign return val */
-	QC_RETURN_STRING(qc_string_temp);
+	QC_RETURN_STRING(qc_tstrings[qc_tstring_idx]);
+
+	/* update tempstring idx */
+	qc_tstring_idx = qc_tstring_idx >= QC_NUM_TEMPSTRINGS ? 0 : qc_tstring_idx + 1;
 }
 
 /* integer to string */
@@ -93,8 +99,11 @@ void itos()
 {
 	int i;
 	i = QC_GET_INT(QC_OFS_PARM0);
-	sprintf(qc_string_temp, "%d", i);
-	QC_RETURN_STRING(qc_string_temp);
+	sprintf(qc_tstrings[qc_tstring_idx], "%d", i);
+	QC_RETURN_STRING(qc_tstrings[qc_tstring_idx]);
+
+	/* update tempstring idx */
+	qc_tstring_idx = qc_tstring_idx >= QC_NUM_TEMPSTRINGS ? 0 : qc_tstring_idx + 1;
 }
 
 /*
