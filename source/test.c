@@ -91,9 +91,15 @@ int main(int argc, char **argv)
 	qc_builtin_add(print);
 	qc_builtin_add(ftos);
 
-	/* call functions */
+	/* call init() function */
 	qc_execute(qc_function_get("init"));
+
+	/* call update() function */
 	qc_execute(qc_function_get("update"));
+
+	/* call input_test() function */
+	qc_set_parm_float(0, 0.5f);
+	qc_execute(qc_function_get("input_test"));
 
 	/* exit */
 	qc_exit();

@@ -276,6 +276,17 @@ int qc_function_get(const char *name)
 	return -1;
 }
 
+/* set parm (float) */
+void qc_set_parm_float(int i, float f)
+{
+	/* sanity check */
+	if (i < 0 || i > QC_MAX_PARMS - 1)
+		qc_error("qc_set_parm_float(): parm %d out of range", i);
+
+	/* set parm */
+	QC_GET_FLOAT(QC_OFS_PARM0 + (i * 3)) = f;
+}
+
 /* add builtin */
 void qc_builtin_add(qc_builtin_t func)
 {

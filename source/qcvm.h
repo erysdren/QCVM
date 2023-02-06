@@ -301,3 +301,6 @@ int qc_function_get(const char *name);
 
 /* add builtin to stack */
 void qc_builtin_add(qc_builtin_t func);
+
+/* set parameter to float */
+void qc_set_parm_float(int i, float f);

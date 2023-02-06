@@ -41,6 +41,12 @@ void init()
 	print("init() called...", "\n");
 }
 
+// input from C
+void input_test(float in)
+{
+	print("hello, \"in\" is ", ftos(in), "\n");
+}
+
 // test function to be called from elsewhere
 void test()
 {
