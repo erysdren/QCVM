@@ -1,4 +1,4 @@
-# QCVM
+![QCVM Logo](./.github/logo2.png "QCVM")
 
 A bite-sized QuakeC virtual machine written in C, based on the original Quake Engine
 source code release from 1999.
