@@ -87,8 +87,8 @@ void vector_test(void)
  * exports
  */
 
-qc_export_t export_print = {"print", print};
-qc_export_t export_ftos = {"ftos", ftos};
+qc_export_t export_print = {"print", "prints text to stdout", print};
+qc_export_t export_ftos = {"ftos", "converts float to string", ftos};
 
 /*
  * main

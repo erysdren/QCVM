@@ -111,6 +111,7 @@ typedef enum qc_parm_type_t
 typedef struct qc_export_t
 {
 	const char *name;
+	const char *desc;
 	qc_builtin_t function;
 	/*
 	qc_parm_type_t parms[QC_MAX_PARMS];
