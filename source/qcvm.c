@@ -47,7 +47,6 @@
 
 /* qcvm */
 #include "qcvm.h"
-#include "libqcvm.h"
 
 /*
  * globals

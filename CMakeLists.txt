@@ -47,7 +47,6 @@ option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
 ## QCVM Sources
 set(QCVM_SOURCES
 	source/qcvm.c
-	source/libqcvm.c
 )
 
 ## QCVM Library
