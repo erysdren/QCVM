@@ -47,10 +47,17 @@ void test()
 	print("test() called...", "\n");
 }
 
+// return string as argument
+string test_return_str()
+{
+	return "hello i am a string";
+}
+
 // update function
 void update()
 {
 	print("update() called...", "\n");
 	test();
 	spawnfunc_test_class();
+	print(test_return_str(), "\n");
 }

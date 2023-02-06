@@ -54,8 +54,8 @@
 int main(int argc, char **argv)
 {
 	qc_load("../qc/progs.dat");
-	qc_execute(3);
-	qc_execute(5);
+	qc_execute(4);
+	qc_execute(6);
 	qc_exit();
 	return EXIT_SUCCESS;
 }
