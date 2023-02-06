@@ -27,23 +27,21 @@
 //
 // Authors:			erysdren (it/she)
 //
-// File:			/qc/main.src
+// File:			/qc/extended.qc
 //
-// Description:		QCVM test environment compile script
+// Description:		QCVM extended opcodes test environment
 //
 // Last Modified:	February 5th 2023
 //
 //=============================================================================
 
-// disable "unusual defs" warning
-#pragma warning disable Q208
+class test_class
+{
+	void() test_class;
+};
 
-// progs output file
-#pragma progs_dat progs.dat
-
-// qc file list
-#includelist
-	builtins.qc
-	extended.qc
-	main.qc
-#endlist
+void test_class :: test_class()
+{
+	string s1 = "(member string)";
+	print("test_class() spawned - ", s1, "\n");
+}

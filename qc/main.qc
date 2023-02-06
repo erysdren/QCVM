@@ -38,7 +38,6 @@
 // init function
 void init()
 {
-	float f = 1;
 	print("init() called...", "\n");
 }
 
@@ -53,4 +52,5 @@ void update()
 {
 	print("update() called...", "\n");
 	test();
+	spawnfunc_test_class();
 }
