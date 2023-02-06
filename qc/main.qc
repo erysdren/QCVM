@@ -35,8 +35,22 @@
 //
 //=============================================================================
 
+// init function
+void init()
+{
+	float f = 1;
+	print("init() called...", "\n");
+}
+
 // test function
 void test()
 {
-	print("segmented", " string ", "test", "\n");
+	print("test() called...", "\n");
+}
+
+// update function
+void update()
+{
+	print("update() called...", "\n");
+	test();
 }
