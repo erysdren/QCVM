@@ -260,14 +260,52 @@ typedef enum qc_opcodes_t
 	QC_OP_BITOR
 } qc_opcodes_t;
 
-/* helper macros */
+/*
+ * qtest-specific progs structure (version 3)
+ */
+
+/* statement */
+typedef struct qc_statement_qtest_t
+{
+	uint32_t line;
+	uint16_t op;
+	uint16_t a, b, c;
+} qc_statement_qtest_t;
+
+/* def */
+typedef struct qc_def_qtest_t
+{
+	uint32_t type;
+	uint32_t s_name;
+	uint32_t ofs;
+} qc_def_qtest_t;
+
+/* function */
+typedef struct qc_function_qtest_t
+{
+	int32_t first_statement;
+	int32_t unused1;
+	int32_t locals;
+	int32_t profile;
+	int32_t s_name;
+	int32_t s_file;
+	int32_t numparms;
+	int32_t parm_start;
+	int32_t parm_size[QC_MAX_PARMS];
+} qc_function_qtest_t;
+
+/*
+ * helper macros
+ */
+
+/* retrieving values from parms */
 #define QC_GET_FLOAT(o) (qc_globals[o])
 #define QC_GET_INT(o) (*(int *)&qc_globals[o])
 #define QC_GET_VECTOR(o) (&qc_globals[o])
 #define QC_GET_STRING(o) (qc_strings + *(int32_t *)&qc_globals[o])
 #define QC_GET_FUNCTION(o) (*(int32_t *)&qc_globals[o])
 
-/* return macros */
+/* set return value from function */
 #define QC_RETURN_FLOAT(a) (QC_GET_FLOAT(QC_OFS_RETURN) = (a))
 #define QC_RETURN_INT(a) (QC_GET_INT(QC_OFS_RETURN) = (a))
 #define QC_RETURN_STRING(a) (QC_GET_INT(QC_OFS_RETURN) = (a) - qc_strings)
