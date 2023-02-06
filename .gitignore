@@ -13,3 +13,6 @@ meson-build-*/
 
 ## make
 make-build-*/
+
+## progs
+*.lno

@@ -31,6 +31,8 @@
  *
  * Description:		QCVM main runtime
  *
+ * Last Modified:	February 5th 2023
+ *
  *****************************************************************************/
 
 /*
@@ -161,9 +163,6 @@ void qc_error(char *s, ...)
 
 	/* stop qc from functioning */
 	qc_exit();
-
-	/* just exit i guess? */
-	exit(EXIT_FAILURE);
 }
 
 /* make this the currently executing function */
@@ -251,6 +250,9 @@ void qc_execute(int fnum)
 	int i;
 	int exitdepth;
 	qc_eval_t *ptr;
+
+	/* sanity checks */
+	if (!qc) return;
 
 	if (!fnum || fnum >= qc->num_functions)
 	{
