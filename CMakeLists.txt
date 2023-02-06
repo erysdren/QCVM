@@ -42,9 +42,21 @@ set(CMAKE_BUILD_TYPE Release)
 
 ## Options
 option(QCVM_BUILD_QC "Build Example QuakeC" ON)
+option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
+
+## QCVM Sources
+set(QCVM_SOURCES
+	source/qcvm.c
+	source/libqcvm.c
+)
+
+## QCVM Library
+add_library(qcvm ${QCVM_SOURCES})
+target_include_directories(qcvm PUBLIC source/)
 
 ## Compile QC test environment
 if(QCVM_BUILD_QC)
+
 	find_program(fteqcc64 fteqcc64 REQUIRED)
 
 	add_custom_command(
@@ -53,23 +65,19 @@ if(QCVM_BUILD_QC)
 	)
 
 	add_custom_target(progs ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/progs.dat)
+
 endif()
 
-## QCVM Sources
-set(QCVM_SOURCES
-	source/qcvm.c
-	source/libqcvm.c
-)
+## QCVM Test Application
+if(QCVM_BUILD_TESTAPP)
 
-## QCVM test sources
-set(QCVM_TEST_SOURCES
-	source/test.c
-)
+	## Sources
+	set(QCVM_TEST_SOURCES
+		source/test.c
+	)
 
-## Library
-add_library(qcvm ${QCVM_SOURCES})
-target_include_directories(qcvm PUBLIC source/)
+	## Executable
+	add_executable(test ${QCVM_TEST_SOURCES})
+	target_link_libraries(test PUBLIC qcvm)
 
-## Application
-add_executable(test ${QCVM_TEST_SOURCES})
-target_link_libraries(test PUBLIC qcvm)
+endif()
