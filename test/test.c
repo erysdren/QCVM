@@ -47,7 +47,7 @@
 #include "qcvm.h"
 
 /*
- * builtin functions
+ * exports
  */
 
 /* print */
@@ -60,6 +60,16 @@ void print()
 		printf("%s", QC_GET_STRING(QC_OFS_PARM0 + i * 3));
 	}
 }
+
+qc_export_t export_print = {
+	.name = "print",
+	.desc = "prints text to stdout",
+	.func = print,
+	.ret = QC_TYPE_VOID,
+	.parmc = 2,
+	.parms[0] = {"s", QC_TYPE_STRING},
+	.parms[1] = {"v", QC_TYPE_VARGS}
+};
 
 /* float to string */
 void ftos()
@@ -80,6 +90,15 @@ void ftos()
 	qc_tstring_idx = qc_tstring_idx >= QC_NUM_TEMPSTRINGS ? 0 : qc_tstring_idx + 1;
 }
 
+qc_export_t export_ftos = {
+	.name = "ftos",
+	.desc = "converts float to string",
+	.func = ftos,
+	.ret = QC_TYPE_STRING,
+	.parmc = 1,
+	.parms[0] = {"f", QC_TYPE_FLOAT}
+};
+
 /* vector to string */
 void vtos()
 {
@@ -94,6 +113,15 @@ void vtos()
 	qc_tstring_idx = qc_tstring_idx >= QC_NUM_TEMPSTRINGS ? 0 : qc_tstring_idx + 1;
 }
 
+qc_export_t export_vtos = {
+	.name = "vtos",
+	.desc = "converts vector to string",
+	.func = vtos,
+	.ret = QC_TYPE_STRING,
+	.parmc = 1,
+	.parms[0] = {"v", QC_TYPE_VECTOR}
+};
+
 /* integer to string */
 void itos()
 {
@@ -106,38 +134,6 @@ void itos()
 	qc_tstring_idx = qc_tstring_idx >= QC_NUM_TEMPSTRINGS ? 0 : qc_tstring_idx + 1;
 }
 
-/*
- * exports
- */
-
-qc_export_t export_print = {
-	.name = "print",
-	.desc = "prints text to stdout",
-	.func = print,
-	.ret = QC_TYPE_VOID,
-	.parmc = 2,
-	.parms[0] = {"s", QC_TYPE_STRING},
-	.parms[1] = {"v", QC_TYPE_VARGS}
-};
-
-qc_export_t export_ftos = {
-	.name = "ftos",
-	.desc = "converts float to string",
-	.func = ftos,
-	.ret = QC_TYPE_STRING,
-	.parmc = 1,
-	.parms[0] = {"f", QC_TYPE_FLOAT}
-};
-
-qc_export_t export_vtos = {
-	.name = "vtos",
-	.desc = "converts vector to string",
-	.func = vtos,
-	.ret = QC_TYPE_STRING,
-	.parmc = 1,
-	.parms[0] = {"v", QC_TYPE_VECTOR}
-};
-
 qc_export_t export_itos = {
 	.name = "itos",
 	.desc = "converts int to string",
@@ -145,6 +141,29 @@ qc_export_t export_itos = {
 	.ret = QC_TYPE_STRING,
 	.parmc = 1,
 	.parms[0] = {"i", QC_TYPE_INT}
+};
+
+/* combine two strings */
+void string_concat()
+{
+	char *s1, *s2;
+	s1 = QC_GET_STRING(QC_OFS_PARM0);
+	s2 = QC_GET_STRING(QC_OFS_PARM1);
+	sprintf(qc_tstrings[qc_tstring_idx], "%s%s", s1, s2);
+	QC_RETURN_STRING(qc_tstrings[qc_tstring_idx]);
+
+	/* update tempstring idx */
+	qc_tstring_idx = qc_tstring_idx >= QC_NUM_TEMPSTRINGS ? 0 : qc_tstring_idx + 1;
+}
+
+qc_export_t export_strcat = {
+	.name = "strcat",
+	.desc = "combine two strings",
+	.func = string_concat,
+	.ret = QC_TYPE_STRING,
+	.parmc = 2,
+	.parms[0] = {"s1", QC_TYPE_STRING},
+	.parms[1] = {"s2", QC_TYPE_STRING},
 };
 
 /*
@@ -162,6 +181,7 @@ int main(int argc, char **argv)
 	qc_add_export(&export_ftos);
 	qc_add_export(&export_vtos);
 	qc_add_export(&export_itos);
+	qc_add_export(&export_strcat);
 	qc_dump_exports("../qc/builtins.qc");
 
 	/* call init() function */

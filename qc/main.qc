@@ -95,4 +95,7 @@ void update()
 
 	// print multiple ftos
 	print("multiple ftos: ", ftos(21.3), " ", ftos(3225.5), "\n");
+
+	// test strcat
+	print("strcat: ", strcat("hello ", "peter"), "\n");
 }

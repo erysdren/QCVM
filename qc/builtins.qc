@@ -13,3 +13,6 @@ string vtos(vector v) = #3;
 // converts int to string
 string itos(int i) = #4;
 
+// combine two strings
+string strcat(string s1, string s2) = #5;
+
