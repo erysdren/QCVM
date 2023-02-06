@@ -27,7 +27,7 @@
  *
  * Authors:			erysdren (it/she)
  *
- * File:			/source/qcvm.h
+ * File:			/qcvm/qcvm.h
  *
  * Description:		QCVM main header
  *

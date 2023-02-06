@@ -27,7 +27,7 @@
  *
  * Authors:			erysdren (it/she)
  *
- * File:			/source/test.c
+ * File:			/test/test.c
  *
  * Description:		QCVM test application
  *

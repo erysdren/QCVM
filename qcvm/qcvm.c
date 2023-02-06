@@ -27,7 +27,7 @@
  *
  * Authors:			erysdren (it/she)
  *
- * File:			/source/qcvm.c
+ * File:			/qcvm/qcvm.c
  *
  * Description:		QCVM main runtime
  *

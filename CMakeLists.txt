@@ -46,12 +46,12 @@ option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
 
 ## QCVM Sources
 set(QCVM_SOURCES
-	source/qcvm.c
+	qcvm/qcvm.c
 )
 
 ## QCVM Library
 add_library(qcvm ${QCVM_SOURCES})
-target_include_directories(qcvm PUBLIC source/)
+target_include_directories(qcvm PUBLIC qcvm/)
 
 ## Compile QC test environment
 if(QCVM_BUILD_QC)
@@ -72,7 +72,7 @@ if(QCVM_BUILD_TESTAPP)
 
 	## Sources
 	set(QCVM_TEST_SOURCES
-		source/test.c
+		test/test.c
 	)
 
 	## Executable
