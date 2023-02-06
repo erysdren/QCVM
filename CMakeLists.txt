@@ -40,6 +40,21 @@ cmake_minimum_required(VERSION 3.13)
 project(QCVM LANGUAGES C)
 set(CMAKE_BUILD_TYPE Release)
 
+## Options
+option(QCVM_BUILD_QC "Build Example QuakeC" ON)
+
+## Compile QC test environment
+if(QCVM_BUILD_QC)
+	find_program(fteqcc64 fteqcc64 REQUIRED)
+
+	add_custom_command(
+		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/progs.dat
+		COMMAND fteqcc64 ${CMAKE_SOURCE_DIR}/qc/main.src
+	)
+
+	add_custom_target(progs ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/progs.dat)
+endif()
+
 ## QCVM Sources
 set(QCVM_SOURCES
 	source/qcvm.c
@@ -50,14 +65,6 @@ set(QCVM_SOURCES
 set(QCVM_TEST_SOURCES
 	source/test.c
 )
-
-## Compile QC test environment
-find_program(fteqcc64 fteqcc64 REQUIRED)
-add_custom_command(
-	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/progs.dat
-	COMMAND fteqcc64 ${CMAKE_SOURCE_DIR}/qc/main.src
-)
-add_custom_target(progs ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/progs.dat)
 
 ## Library
 add_library(qcvm ${QCVM_SOURCES})
