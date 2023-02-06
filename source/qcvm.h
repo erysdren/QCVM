@@ -35,6 +35,14 @@
  *
  *****************************************************************************/
 
+#pragma once
+#ifndef _QCVM_H_
+#define _QCVM_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * headers
  */
@@ -90,28 +98,35 @@
 /* callback to c function */
 typedef void (*qc_builtin_t)(void);
 
-/* types for a builtin parameter */
-typedef enum qc_parm_type_t
+/* main qc types */
+typedef enum qc_types_t
 {
-	QC_PARM_NULL,
-	QC_PARM_STRING,
-	QC_PARM_FLOAT,
-	QC_PARM_VECTOR,
-	QC_PARM_FUNCTION,
-	QC_PARM_INT,
-	QC_PARM_EDICT
-} qc_parm_type_t;
+	QC_TYPE_VOID,
+	QC_TYPE_STRING,
+	QC_TYPE_FLOAT,
+	QC_TYPE_VECTOR,
+	QC_TYPE_FUNCTION,
+	QC_TYPE_INT,
+	QC_TYPE_EDICT,
+	QC_TYPE_VARGS
+} qc_types_t;
+
+/* qc export parm */
+typedef struct qc_parm_t
+{
+	const char *name;
+	qc_types_t type;
+} qc_parm_t;
 
 /* c exports */
 typedef struct qc_export_t
 {
 	const char *name;
 	const char *desc;
-	qc_builtin_t function;
-	/*
-	qc_parm_type_t parms[QC_MAX_PARMS];
-	const char *parm_strings[QC_MAX_PARMS];
-	*/
+	qc_builtin_t func;
+	qc_types_t ret;
+	qc_parm_t parms[QC_MAX_PARMS];
+	int parmc;
 } qc_export_t;
 
 /* statement evaluation */
@@ -300,7 +315,7 @@ typedef struct qc_function_qtest_t
 
 /* retrieving values from parms */
 #define QC_GET_FLOAT(o) (qc_globals[o])
-#define QC_GET_INT(o) (*(int *)&qc_globals[o])
+#define QC_GET_INT(o) (*(int32_t *)&qc_globals[o])
 #define QC_GET_VECTOR(o) (&qc_globals[o])
 #define QC_GET_STRING(o) (qc_strings + *(int32_t *)&qc_globals[o])
 #define QC_GET_FUNCTION(o) (*(int32_t *)&qc_globals[o])
@@ -377,3 +392,9 @@ void qc_add_export(qc_export_t *export);
 
 /* dump exports */
 void qc_dump_exports(const char *filename);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _QCVM_H_ */

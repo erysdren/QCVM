@@ -77,19 +77,66 @@ void ftos()
 	QC_RETURN_STRING(qc_string_temp);
 }
 
-/* vector test */
-void vector_test()
+/* vector to string */
+void vtos()
 {
-	QC_RETURN_VECTOR(2.0, 3.0, 4.0);
+	/* sprintf it */
+	sprintf(qc_string_temp, "%1.1f %1.1f %1.1f", QC_GET_FLOAT(QC_OFS_PARM0),
+		QC_GET_FLOAT(QC_OFS_PARM0 + 1), QC_GET_FLOAT(QC_OFS_PARM0 + 2));
+
+	/* assign return val */
+	QC_RETURN_STRING(qc_string_temp);
+}
+
+/* integer to string */
+void itos()
+{
+	int i;
+	i = QC_GET_INT(QC_OFS_PARM0);
+	sprintf(qc_string_temp, "%d", i);
+	QC_RETURN_STRING(qc_string_temp);
 }
 
 /*
  * exports
  */
 
-qc_export_t export_print = {"print", "prints text to stdout", print};
-qc_export_t export_ftos = {"ftos", "converts float to string", ftos};
-qc_export_t export_vector_test = {"vector_test", "vector test", vector_test};
+qc_export_t export_print = {
+	.name = "print",
+	.desc = "prints text to stdout",
+	.func = print,
+	.ret = QC_TYPE_VOID,
+	.parmc = 2,
+	.parms[0] = {"s", QC_TYPE_STRING},
+	.parms[1] = {"v", QC_TYPE_VARGS}
+};
+
+qc_export_t export_ftos = {
+	.name = "ftos",
+	.desc = "converts float to string",
+	.func = ftos,
+	.ret = QC_TYPE_STRING,
+	.parmc = 1,
+	.parms[0] = {"f", QC_TYPE_FLOAT}
+};
+
+qc_export_t export_vtos = {
+	.name = "vtos",
+	.desc = "converts vector to string",
+	.func = vtos,
+	.ret = QC_TYPE_STRING,
+	.parmc = 1,
+	.parms[0] = {"v", QC_TYPE_VECTOR}
+};
+
+qc_export_t export_itos = {
+	.name = "itos",
+	.desc = "converts int to string",
+	.func = itos,
+	.ret = QC_TYPE_STRING,
+	.parmc = 1,
+	.parms[0] = {"i", QC_TYPE_INT}
+};
 
 /*
  * main
@@ -104,8 +151,9 @@ int main(int argc, char **argv)
 	/* exports test */
 	qc_add_export(&export_print);
 	qc_add_export(&export_ftos);
-	qc_add_export(&export_vector_test);
-	qc_dump_exports("../qc/test.qc");
+	qc_add_export(&export_vtos);
+	qc_add_export(&export_itos);
+	qc_dump_exports("../qc/builtins.qc");
 
 	/* call init() function */
 	qc_execute(qc_function_get("init"));

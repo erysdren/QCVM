@@ -70,7 +70,7 @@ float pow(float f)
 void update()
 {
 	float f = 2;
-	vector v = vector_test();
+	vector v = [125, 354, 324];
 
 	// call print() builtin from here
 	print("update() called...", "\n");
@@ -91,7 +91,5 @@ void update()
 	print("pow: ", ftos((pow(f))), "\n");
 
 	// print a vector
-	print("v[0]: ", ftos(v[0]), "\n");
-	print("v[1]: ", ftos(v[1]), "\n");
-	print("v[2]: ", ftos(v[2]), "\n");
+	print("v: ", vtos(v), "\n");
 }
