@@ -46,6 +46,11 @@
  * macros
  */
 
+/* max builtins */
+#ifndef QC_MAX_BUILTINS
+#define QC_MAX_BUILTINS			256
+#endif
+
 /* true/false */
 #define QC_TRUE					1
 #define QC_FALSE				0
@@ -263,6 +268,10 @@ extern int qc_xstatement;
 /* args */
 extern int qc_argc;
 
+/* builtins */
+extern qc_builtin_t qc_builtins[QC_MAX_BUILTINS]; 
+extern int qc_num_builtins;
+
 /*
  * functions
  */
@@ -281,3 +290,6 @@ void qc_execute(int fnum);
 
 /* search for function by name */
 int qc_function_get(const char *name);
+
+/* add builtin to stack */
+void qc_builtin_add(qc_builtin_t func);

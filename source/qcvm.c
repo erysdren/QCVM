@@ -79,6 +79,10 @@ int qc_xstatement;
 /* args */
 int qc_argc;
 
+/* builtins */
+qc_builtin_t qc_builtins[QC_MAX_BUILTINS]; 
+int qc_num_builtins;
+
 /*
  * functions
  */
@@ -142,6 +146,10 @@ int qc_load(const char *filename)
 	qc_fielddefs = (qc_def_t *)((uint8_t *)qc + qc->ofs_fielddefs);
 	qc_statements = (qc_statement_t *)((uint8_t *)qc + qc->ofs_statements);
 	qc_globals = (float *)((uint8_t *)qc + qc->ofs_globals);
+
+	/* set this to NULL incase of weird stack allocation */
+	memset(qc_builtins, 0, sizeof(qc_builtin_t) * QC_MAX_BUILTINS);
+	qc_num_builtins = 1;
 
 	/* return success */
 	return 0;
@@ -264,6 +272,16 @@ int qc_function_get(const char *name)
 
 	/* return failure */
 	return -1;
+}
+
+/* add builtin */
+void qc_builtin_add(qc_builtin_t func)
+{
+	qc_builtins[qc_num_builtins] = func;
+	qc_num_builtins += 1;
+
+	if (qc_num_builtins > QC_MAX_BUILTINS)
+		qc_error("added two many builtins!");
 }
 
 /* execute qc code, starting from fnum */
@@ -577,10 +595,19 @@ void qc_execute(int fnum)
 				{
 					i = -newf->first_statement;
 
-					if (i >= qcvm_num_builtins)
-						qc_error("qc_execute(): bad builtin %d", i);;
+					if (i >= qc_num_builtins)
+					{
+						qc_error("qc_execute(): builtin %d out of range", i);
+						return;
+					}
 
-					qcvm_builtins[i]();
+					if (qc_builtins[i] == NULL)
+					{
+						qc_error("qc_execute(): bad builtin %d", i);
+						return;
+					}
+
+					qc_builtins[i]();
 					break;
 				}
 

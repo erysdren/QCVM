@@ -50,6 +50,17 @@
  * functions
  */
 
+/* my_print */
+void my_print(void)
+{
+	int i;
+
+	for (i = 0; i < qc_argc; i++)
+	{
+		printf("%s", QC_GET_STRING(QC_OFS_PARM0 + i * 3));
+	}
+}
+
 /* main */
 int main(int argc, char **argv)
 {
@@ -58,6 +69,9 @@ int main(int argc, char **argv)
 
 	/* load qc */
 	qc_load("../qc/progs.dat");
+
+	/* load builtins */
+	qc_builtin_add(my_print);
 
 	/* get function pointers */
 	f_init = qc_function_get("init");
