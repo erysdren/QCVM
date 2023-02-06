@@ -43,5 +43,5 @@ extern int qcvm_num_builtins;
  * functions
  */
 
-/* print string */
+void qcvm_null(void);
 void qcvm_print(void);

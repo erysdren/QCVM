@@ -49,7 +49,7 @@
 
 /* struct */
 qc_builtin_t qcvm_builtins[] = {
-	qcvm_print,
+	qcvm_null,
 	qcvm_print
 };
 
@@ -59,6 +59,13 @@ int qcvm_num_builtins = sizeof(qcvm_builtins) / sizeof(qcvm_builtins[0]);
  * functions
  */
 
+/* builtin #0 - null */
+void qcvm_null(void)
+{
+	printf("qcvm_null(): you should not be seeing this!\n");
+}
+
+/* builtin #1 - print to stdout */
 void qcvm_print(void)
 {
 	printf("qcvm_print(): not yet implemented\n");

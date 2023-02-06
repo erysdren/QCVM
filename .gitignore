@@ -16,3 +16,4 @@ make-build-*/
 
 ## progs
 *.lno
+*.log

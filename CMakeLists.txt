@@ -51,6 +51,14 @@ set(QCVM_TEST_SOURCES
 	source/test.c
 )
 
+## Compile QC test environment
+find_program(fteqcc64 fteqcc64 REQUIRED)
+add_custom_command(
+	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/progs.dat
+	COMMAND fteqcc64 ${CMAKE_SOURCE_DIR}/qc/main.src
+)
+add_custom_target(progs ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/progs.dat)
+
 ## Library
 add_library(qcvm ${QCVM_SOURCES})
 target_include_directories(qcvm PUBLIC source/)

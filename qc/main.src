@@ -35,10 +35,14 @@
 //
 //=============================================================================
 
+// disable "unusual defs" warning
 #pragma warning disable Q208
 
+// progs output file
 #pragma progs_dat progs.dat
 
+// qc file list
 #includelist
+	builtins.qc
 	main.qc
 #endlist

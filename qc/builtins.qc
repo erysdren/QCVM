@@ -27,16 +27,13 @@
 //
 // Authors:			erysdren (it/she)
 //
-// File:			/qc/main.qc
+// File:			/qc/builtins.qc
 //
-// Description:		QCVM test environment
+// Description:		QCVM test environment builtins
 //
 // Last Modified:	February 5th 2023
 //
 //=============================================================================
 
-// test function
-void test()
-{
-	print("init() from progs.dat\n");
-}
+// Print string to stdout
+void print(string s) = #1;

@@ -53,7 +53,7 @@
 /* main */
 int main(int argc, char **argv)
 {
-	qc_load("../test/progs.dat");
+	qc_load("../qc/progs.dat");
 	qc_execute(2);
 	qc_exit();
 	return EXIT_SUCCESS;
