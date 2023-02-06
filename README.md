@@ -16,6 +16,7 @@ source code release from 1999.
 - Dump user-added builtin functions to properly formatted QC file.
 - Improve tempstring handling.
 - Add support for HexenC and FTEQCC's extended opcodes.
+- Add support for the QTest progs format.
 
 ## License
 

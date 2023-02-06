@@ -78,10 +78,6 @@ int qc_xstatement;
 /* args */
 int qc_argc;
 
-/* builtins */
-qc_builtin_t qc_builtins[QC_MAX_BUILTINS]; 
-int qc_num_builtins;
-
 /* exports */
 qc_export_t qc_exports[QC_MAX_EXPORTS];
 int qc_num_exports;
@@ -156,10 +152,6 @@ int qc_load(const char *filename)
 	qc_fielddefs = (qc_def_t *)((uint8_t *)qc + qc->ofs_fielddefs);
 	qc_statements = (qc_statement_t *)((uint8_t *)qc + qc->ofs_statements);
 	qc_globals = (float *)((uint8_t *)qc + qc->ofs_globals);
-
-	/* set this to NULL incase of weird stack allocation */
-	memset(qc_builtins, 0, sizeof(qc_builtin_t) * QC_MAX_BUILTINS);
-	qc_num_builtins = 1;
 
 	/* set this to NULL incase of weird stack allocation */
 	memset(qc_exports, 0, sizeof(qc_export_t) * QC_MAX_EXPORTS);
@@ -325,25 +317,11 @@ void qc_set_parm_vector(int i, float v0, float v1, float v2)
 }
 
 /*
- * builtin handling
- */
-
-/* add builtin */
-void qc_builtin_add(qc_builtin_t func)
-{
-	qc_builtins[qc_num_builtins] = func;
-	qc_num_builtins += 1;
-
-	if (qc_num_builtins > QC_MAX_BUILTINS)
-		qc_error("added two many builtins");
-}
-
-/*
  * export handling
  */
 
 /* add export */
-void qc_export_add(qc_export_t *export)
+void qc_add_export(qc_export_t *export)
 {
 	qc_exports[qc_num_exports] = *export;
 	qc_num_exports += 1;
@@ -696,19 +674,19 @@ void qc_execute(int fnum)
 				{
 					i = -newf->first_statement;
 
-					if (i >= qc_num_builtins)
+					if (i >= qc_num_exports)
 					{
-						qc_error("qc_execute(): builtin %d out of range", i);
+						qc_error("qc_execute(): export %d out of range", i);
 						return;
 					}
 
-					if (qc_builtins[i] == NULL)
+					if (qc_exports[i].function == NULL)
 					{
-						qc_error("qc_execute(): bad builtin %d", i);
+						qc_error("qc_execute(): bad export %d", i);
 						return;
 					}
 
-					qc_builtins[i]();
+					qc_exports[i].function();
 					break;
 				}
 

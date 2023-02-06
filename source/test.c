@@ -51,7 +51,7 @@
  */
 
 /* print */
-void print(void)
+void print()
 {
 	int i;
 
@@ -62,7 +62,7 @@ void print(void)
 }
 
 /* float to string */
-void ftos(void)
+void ftos()
 {
 	/* variables */
 	float f;
@@ -78,7 +78,7 @@ void ftos(void)
 }
 
 /* vector test */
-void vector_test(void)
+void vector_test()
 {
 	QC_RETURN_VECTOR(2.0, 3.0, 4.0);
 }
@@ -89,6 +89,7 @@ void vector_test(void)
 
 qc_export_t export_print = {"print", "prints text to stdout", print};
 qc_export_t export_ftos = {"ftos", "converts float to string", ftos};
+qc_export_t export_vector_test = {"vector_test", "vector test", vector_test};
 
 /*
  * main
@@ -101,14 +102,10 @@ int main(int argc, char **argv)
 	qc_load("../qc/progs.dat");
 
 	/* exports test */
-	qc_export_add(&export_print);
-	qc_export_add(&export_ftos);
+	qc_add_export(&export_print);
+	qc_add_export(&export_ftos);
+	qc_add_export(&export_vector_test);
 	qc_dump_exports("../qc/test.qc");
-
-	/* load builtins */
-	qc_builtin_add(print);
-	qc_builtin_add(ftos);
-	qc_builtin_add(vector_test);
 
 	/* call init() function */
 	qc_execute(qc_function_get("init"));

@@ -46,11 +46,6 @@
  * macros
  */
 
-/* max builtins */
-#ifndef QC_MAX_BUILTINS
-#define QC_MAX_BUILTINS			256
-#endif
-
 /* max exports */
 #ifndef QC_MAX_EXPORTS
 #define QC_MAX_EXPORTS			256
@@ -311,10 +306,6 @@ extern int qc_xstatement;
 /* args */
 extern int qc_argc;
 
-/* builtins */
-extern qc_builtin_t qc_builtins[QC_MAX_BUILTINS]; 
-extern int qc_num_builtins;
-
 /* strings */
 extern char qc_string_temp[QC_TEMPSTRING_LENGTH];
 
@@ -337,9 +328,6 @@ void qc_execute(int fnum);
 /* search for function by name */
 int qc_function_get(const char *name);
 
-/* add builtin to stack */
-void qc_builtin_add(qc_builtin_t func);
-
 /* set parameter to float */
 void qc_set_parm_float(int i, float f);
 
@@ -347,7 +335,7 @@ void qc_set_parm_float(int i, float f);
 void qc_set_parm_vector(int i, float v0, float v1, float v2);
 
 /* add export */
-void qc_export_add(qc_export_t *export);
+void qc_add_export(qc_export_t *export);
 
 /* dump exports */
 void qc_dump_exports(const char *filename);

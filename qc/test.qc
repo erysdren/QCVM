@@ -6,3 +6,6 @@ void print() = #1;
 // converts float to string
 void ftos() = #2;
 
+// vector test
+void vector_test() = #3;
+
