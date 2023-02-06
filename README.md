@@ -8,6 +8,11 @@ source code release from 1999.
 - [State-of-the-art QuakeC compiler](https://www.fteqcc.org/)
 - [Kaitai Struct definitions file for the QuakeC "progs" format.](./tools/progs.ksy)
 
+## Contact
+
+- [Discord](https://discord.gg/5MwE3xMcdN)
+- [Email](mailto:jaycie@erysdren.me)
+
 ## Todo
 
 - Refactor code to remove globals, allowing for multiple instances to run simultainiously.
