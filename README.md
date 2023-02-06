@@ -7,6 +7,8 @@ source code release from 1999.
 
 - [State-of-the-art QuakeC compiler](https://www.fteqcc.org/)
 - [Kaitai Struct definitions file for the QuakeC "progs" format.](./tools/progs.ksy)
+- [QuakeC highlighting for VS Code by VictorF.](https://marketplace.visualstudio.com/items?itemName=VictorF.quakec)
+- [QuakeC highlighting for VS Code by joshuaskelly.](https://marketplace.visualstudio.com/items?itemName=joshuaskelly.quakec)
 
 ## Contact
 

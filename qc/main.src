@@ -31,7 +31,7 @@
 //
 // Description:		QCVM test environment compile script
 //
-// Last Modified:	February 5th 2023
+// Last Modified:	February 6th 2023
 //
 //=============================================================================
 
@@ -40,6 +40,9 @@
 
 // progs output file
 #pragma progs_dat progs.dat
+
+// autoproto
+#pragma autoproto
 
 // qc file list
 #includelist
