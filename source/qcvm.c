@@ -274,17 +274,19 @@ void qc_execute(int fnum)
 		/* next statement */
 		s++;
 
-		printf("statement: %d\n", s);
-
 		/* get statement and eval */
 		st = &qc_statements[s];
 		a = (qc_eval_t *)&qc_globals[st->a];
 		b = (qc_eval_t *)&qc_globals[st->b];
 		c = (qc_eval_t *)&qc_globals[st->c];
 
-		printf("st->a: %d\n", st->a);
-		printf("st->b: %d\n", st->b);
-		printf("st->c: %d\n", st->c);
+		if (qc_trace)
+		{
+			printf("statement: %d\n", s);
+			printf("st->a: %d\n", st->a);
+			printf("st->b: %d\n", st->b);
+			printf("st->c: %d\n", st->c);
+		}
 
 		/* protect against runaway loop */
 		if (!--runaway)
@@ -299,7 +301,7 @@ void qc_execute(int fnum)
 		*/
 
 		/* opcode processing */
-		printf("opcode: %d\n", st->op);
+		if (qc_trace) printf("opcode: %d\n", st->op);
 		switch (st->op)
 		{
 			case QC_OP_ADD_F:
