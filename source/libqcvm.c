@@ -69,5 +69,10 @@ void qcvm_null(void)
 /* builtin #1 - print to stdout */
 void qcvm_print(void)
 {
-	printf("qcvm_print(): not yet implemented\n");
+	int i;
+
+	for (i = 0; i < qc_argc; i++)
+	{
+		printf("%s", QC_GET_STRING(QC_OFS_PARM0 + i * 3));
+	}
 }

@@ -36,4 +36,4 @@
 //=============================================================================
 
 // Print string to stdout
-void print(string s) = #1;
+void print(string s, ...) = #1;

@@ -226,6 +226,43 @@ typedef enum qc_opcodes_t
 	QC_OP_BITOR
 } qc_opcodes_t;
 
+/* helper macros */
+#define QC_GET_FLOAT(o) (qc_globals[o])
+#define QC_GET_INT(o) (*(int *)&qc_globals[o])
+#define QC_GET_VECTOR(o) (&qc_globals[o])
+#define QC_GET_STRING(o) (qc_strings + *(int32_t *)&qc_globals[o])
+#define QC_GET_FUNCTION(o) (*(int32_t *)&qc_globals[o])
+
+/*
+ * globals
+ */
+
+/* main */
+extern qc_t *qc;
+extern qc_function_t *qc_functions;
+extern char *qc_strings;
+extern qc_def_t *qc_fielddefs;
+extern qc_def_t *qc_globaldefs;
+extern qc_statement_t *qc_statements;
+extern float *qc_globals;
+extern int qc_edict_size;
+
+/* stack */
+extern qc_stack_t qc_stack[QC_MAX_STACK_DEPTH];
+extern int qc_depth;
+extern int qc_localstack[QC_LOCALSTACK_SIZE];
+extern int qc_localstack_used;
+
+/* trace */
+extern int qc_trace;
+
+/* x */
+extern qc_function_t *qc_xfunction;
+extern int qc_xstatement;
+
+/* args */
+extern int qc_argc;
+
 /*
  * functions
  */

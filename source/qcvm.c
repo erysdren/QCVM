@@ -110,10 +110,29 @@ int qc_load(const char *filename)
 	fread(qc, filesize, 1, file);
 
 	/* check version */
-	if (qc->version != QC_VERSION)
+	switch (qc->version)
 	{
-		qc_error("qc_load(): invalid progs version %d, should be %d", qc->version, QC_VERSION);
-		return 2;
+		/* qtest progs */
+		case 3:
+			qc_error("qc_load(): qtest progs not supported at this time");
+			return 2;
+			break;
+
+		/* default */
+		case 6:
+			break;
+
+		/* extended */
+		case 7:
+			qc_error("qc_load(): extended progs not supported at this time");
+			return 2;
+			break;
+
+		/* unknown */
+		default:
+			qc_error("qc_load(): invalid progs version %d, should be %d", qc->version, QC_VERSION);
+			return 2;
+			break;
 	}
 
 	/* setup pointers */
@@ -123,11 +142,6 @@ int qc_load(const char *filename)
 	qc_fielddefs = (qc_def_t *)((uint8_t *)qc + qc->ofs_fielddefs);
 	qc_statements = (qc_statement_t *)((uint8_t *)qc + qc->ofs_statements);
 	qc_globals = (float *)((uint8_t *)qc + qc->ofs_globals);
-
-	/*
-	qc_global_struct = (globalvars_t *)((uint8_t *)qc + qc->ofs_globals);
-	qc_globals = (float *)qc_global_struct;
-	*/
 
 	/* return success */
 	return 0;

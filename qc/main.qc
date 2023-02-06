@@ -38,5 +38,5 @@
 // test function
 void test()
 {
-	print("init() from progs.dat\n");
+	print("segmented", " string ", "test", "\n");
 }
