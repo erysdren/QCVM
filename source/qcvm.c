@@ -79,10 +79,6 @@ int qc_xstatement;
 /* args */
 int qc_argc;
 
-/* builtins */
-qc_builtin_t *qc_builtins = qcvm_builtins;
-/* int qc_num_builtins = qcvm_num_builtins; */
-
 /*
  * functions
  */
@@ -551,7 +547,7 @@ void qc_execute(int fnum)
 					if (i >= qcvm_num_builtins)
 						qc_error("qc_execute(): bad builtin %d", i);;
 
-					qc_builtins[i] ();
+					qcvm_builtins[i]();
 					break;
 				}
 

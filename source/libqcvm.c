@@ -47,12 +47,13 @@
 #include "qcvm.h"
 #include "libqcvm.h"
 
-/* struct */
+/* builtins struct */
 qc_builtin_t qcvm_builtins[] = {
 	qcvm_null,
 	qcvm_print
 };
 
+/* number of builtins */
 int qcvm_num_builtins = sizeof(qcvm_builtins) / sizeof(qcvm_builtins[0]);
 
 /*
