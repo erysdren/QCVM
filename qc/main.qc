@@ -60,9 +60,17 @@ string test_return_str()
 	return "hello i am a string";
 }
 
+// pow
+float pow(float f)
+{
+	return f * f;
+}
+
 // update function
 void update()
 {
+	float f = 2;
+
 	// call print() builtin from here
 	print("update() called...", "\n");
 
@@ -77,4 +85,7 @@ void update()
 
 	// print a float
 	print("ftos: ", ftos(21.3), "\n");
+
+	// print a float
+	print("pow: ", ftos((pow(f))), "\n");
 }
