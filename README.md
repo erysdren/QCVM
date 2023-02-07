@@ -19,6 +19,8 @@ source code release from 1999.
 See the [Example Implementation](./test/test.c) for more inforamtion.
 
 ```c
+#include "qcvm.h"
+
 void example()
 {
 	float f = QC_GET_FLOAT(QC_OFS_PARM0);
