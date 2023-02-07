@@ -12,6 +12,49 @@ source code release from 1999.
 - [QuakeC highlighting for VS Code by joshuaskelly.](https://marketplace.visualstudio.com/items?itemName=joshuaskelly.quakec)
 - [InsideQC tutorials.](https://www.insideqc.com/)
 - [QuakeC tutorials at quakewiki.org.](https://quakewiki.org/wiki/QuakeC_tutorials)
+- [QuakeC Reference Manual.](https://pages.cs.wisc.edu/~jeremyp/quake/quakec/quakec.pdf)
+
+## Usage
+
+See the [Example Implementation](./test/test.c) for more inforamtion.
+
+```c
+void example()
+{
+	float f = QC_GET_FLOAT(QC_OFS_PARM0);
+	f += 2;
+	QC_RETURN_FLOAT(f);
+}
+
+qc_export_t export_example = {
+	.name = "example",
+	.desc = "returns float += 2",
+	.func = example,
+	.ret = QC_TYPE_FLOAT,
+	.parmc = 1,
+	.parms[0] = {"f", QC_TYPE_FLOAT}
+};
+
+int main()
+{
+	/* load compiled qc */
+	qc_load("progs.dat");
+
+	/* add export */
+	qc_add_export(&export_example);
+
+	/* dump export to valid qc */
+	qc_dump_exports("exports.qc");
+
+	/* execute qc function by name */
+	qc_execute(qc_function_get("init"));
+
+	/* destroy qc context */
+	qc_exit();
+
+	return 0;
+}
+```
 
 ## Contact
 
