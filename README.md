@@ -13,7 +13,6 @@ source code release from 1999.
 - [InsideQC tutorials.](https://www.insideqc.com/)
 - [QuakeC tutorials at quakewiki.org.](https://quakewiki.org/wiki/QuakeC_tutorials)
 
-
 ## Contact
 
 - [Discord](https://discord.gg/5MwE3xMcdN)
@@ -28,6 +27,7 @@ source code release from 1999.
 - Improve tempstring handling.
 - Add support for HexenC and FTEQCC's extended opcodes.
 - Add support for the QTest progs format.
+- Bindings for other languages.
 
 ## License
 
