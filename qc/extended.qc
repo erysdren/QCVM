@@ -37,11 +37,12 @@
 
 class test_class
 {
+	float f1;
 	void() test_class;
 };
 
 void test_class :: test_class()
 {
-	string s1 = "(member string)";
-	print("test_class() spawned - ", s1, "\n");
+	this.f1 = 3467.6;
+	print("test_class spawned", "\n");
 }

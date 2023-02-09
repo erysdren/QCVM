@@ -166,6 +166,21 @@ qc_export_t export_strcat = {
 	.parms[1] = {"s2", QC_TYPE_STRING},
 };
 
+/* spawn entity */
+void spawn()
+{
+	QC_RETURN_EDICT(&qc_edicts[qc_num_edicts]);
+	qc_num_edicts++;
+}
+
+qc_export_t export_spawn = {
+	.name = "spawn",
+	.desc = "spawn an entity",
+	.func = spawn,
+	.ret = QC_TYPE_EDICT,
+	.parmc = 0,
+};
+
 /*
  * main
  */
@@ -182,17 +197,11 @@ int main(int argc, char **argv)
 	qc_add_export(&export_vtos);
 	qc_add_export(&export_itos);
 	qc_add_export(&export_strcat);
+	qc_add_export(&export_spawn);
 	qc_dump_exports("../qc/builtins.qc");
 
-	/* call init() function */
-	qc_execute(qc_function_get("init"));
-
-	/* call update() function */
-	qc_execute(qc_function_get("update"));
-
-	/* call input_test() function */
-	qc_set_parm_float(0, 0.5f);
-	qc_execute(qc_function_get("input_test"));
+	/* call entity_test() function */
+	qc_execute(qc_function_get("entity_test"));
 
 	/* exit */
 	qc_exit();

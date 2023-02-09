@@ -62,6 +62,17 @@ extern "C" {
 #define QC_TEMPSTRING_LENGTH	128
 #endif
 
+/* number of edicts */
+/* FIXME: please make this less stupid */
+#ifndef QC_NUM_EDICTS
+#define QC_NUM_EDICTS			32
+#endif
+
+/* size of edict (in bytes) */
+#ifndef QC_EDICT_SIZE
+#define QC_EDICT_SIZE			512
+#endif
+
 /* true/false */
 #define QC_TRUE					1
 #define QC_FALSE				0
@@ -273,9 +284,19 @@ typedef enum qc_opcodes_t
 	QC_OP_BITOR
 } qc_opcodes_t;
 
+/* edict */
+typedef struct qc_edict_t
+{
+	unsigned char v[QC_EDICT_SIZE];
+} qc_edict_t;
+
 /*
  * helper macros
  */
+
+/* edict handling */
+#define	QC_EDICT_TO_PROG(e) ((unsigned char *)e - (unsigned char *)qc_edicts)
+#define QC_PROG_TO_EDICT(e) ((qc_edict_t *)((unsigned char *)qc_edicts + e))
 
 /* retrieving values from parms */
 #define QC_GET_FLOAT(o) (qc_globals[o])
@@ -288,6 +309,7 @@ typedef enum qc_opcodes_t
 #define QC_RETURN_FLOAT(a) (QC_GET_FLOAT(QC_OFS_RETURN) = (a))
 #define QC_RETURN_INT(a) (QC_GET_INT(QC_OFS_RETURN) = (a))
 #define QC_RETURN_STRING(a) (QC_GET_INT(QC_OFS_RETURN) = (a) - qc_strings)
+#define	QC_RETURN_EDICT(e) (QC_GET_INT(QC_OFS_RETURN) = QC_EDICT_TO_PROG(e))
 #define QC_RETURN_VECTOR(a, b, c) \
 	QC_GET_FLOAT(QC_OFS_RETURN) = (a); \
 	QC_GET_FLOAT(QC_OFS_RETURN + 1) = (b); \
@@ -326,6 +348,10 @@ extern int qc_argc;
 /* strings */
 extern char qc_tstrings[QC_NUM_TEMPSTRINGS][QC_TEMPSTRING_LENGTH];
 extern int qc_tstring_idx;
+
+/* edicts */
+extern qc_edict_t qc_edicts[QC_NUM_EDICTS];
+extern int qc_num_edicts;
 
 /*
  * functions

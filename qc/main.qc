@@ -35,6 +35,8 @@
 //
 //=============================================================================
 
+.float field1;
+
 // init function
 void init()
 {
@@ -98,4 +100,18 @@ void update()
 
 	// test strcat
 	print("strcat: ", strcat("hello ", "peter"), "\n");
+}
+
+void entity_test()
+{
+	print("test2() begin\n");
+
+	entity ent = spawn();
+	ent.field1 = 532.7;
+	print("ent.field1: ", ftos(ent.field1), "\n");
+
+	test_class tc1 = spawn(test_class);
+	print("tc1.f1: ", ftos(tc1.f1), "\n");
+
+	print("test2() end\n");
 }
