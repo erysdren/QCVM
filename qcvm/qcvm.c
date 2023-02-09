@@ -53,7 +53,7 @@
  */
 
 /* main */
-qc_t *qc;
+qc_data_t *qc_data;
 qc_function_t *qc_functions;
 char *qc_strings;
 qc_def_t *qc_fielddefs;
@@ -115,13 +115,13 @@ int qc_load(const char *filename)
 	fseek(file, 0L, SEEK_SET);
 
 	/* allocate qc object */
-	qc = (qc_t *)malloc(filesize);
+	qc_data = (qc_data_t *)malloc(filesize);
 
 	/* read in the whole file */
-	fread(qc, filesize, 1, file);
+	fread(qc_data, filesize, 1, file);
 
 	/* check version */
-	switch (qc->version)
+	switch (qc_data->version)
 	{
 		/* qtest progs */
 		case 3:
@@ -141,18 +141,18 @@ int qc_load(const char *filename)
 
 		/* unknown */
 		default:
-			qc_error("qc_load(): invalid progs version %d, should be %d", qc->version, QC_VERSION);
+			qc_error("qc_load(): invalid progs version %d, should be %d", qc_data->version, QC_VERSION);
 			return 2;
 			break;
 	}
 
 	/* setup pointers */
-	qc_functions = (qc_function_t *)((uint8_t *)qc + qc->ofs_functions);
-	qc_strings = (char *)qc + qc->ofs_strings;
-	qc_globaldefs = (qc_def_t *)((uint8_t *)qc + qc->ofs_globaldefs);
-	qc_fielddefs = (qc_def_t *)((uint8_t *)qc + qc->ofs_fielddefs);
-	qc_statements = (qc_statement_t *)((uint8_t *)qc + qc->ofs_statements);
-	qc_globals = (float *)((uint8_t *)qc + qc->ofs_globals);
+	qc_functions = (qc_function_t *)((unsigned char *)qc_data + qc_data->ofs_functions);
+	qc_strings = (char *)qc_data + qc_data->ofs_strings;
+	qc_globaldefs = (qc_def_t *)((unsigned char *)qc_data + qc_data->ofs_globaldefs);
+	qc_fielddefs = (qc_def_t *)((unsigned char *)qc_data + qc_data->ofs_fielddefs);
+	qc_statements = (qc_statement_t *)((unsigned char *)qc_data + qc_data->ofs_statements);
+	qc_globals = (float *)((unsigned char *)qc_data + qc_data->ofs_globals);
 
 	/* set this to NULL incase of weird stack allocation */
 	memset(qc_exports, 0, sizeof(qc_export_t) * QC_MAX_EXPORTS);
@@ -165,7 +165,7 @@ int qc_load(const char *filename)
 /* free qc memory */
 void qc_exit()
 {
-	if (qc) free(qc);
+	if (qc_data) free(qc_data);
 }
 
 /*
@@ -279,7 +279,7 @@ int qc_function_get(const char *name)
 	int i, fnum;
 
 	/* loop through functions */
-	for (i = 1; i < qc->num_functions; i++)
+	for (i = 1; i < qc_data->num_functions; i++)
 	{
 		if (strcmp(name, qc_strings + qc_functions[i].s_name) == 0)
 			return i;
@@ -438,9 +438,9 @@ void qc_execute(int fnum)
 	qc_eval_t *ptr;
 
 	/* sanity checks */
-	if (!qc) return;
+	if (!qc_data) return;
 
-	if (!fnum || fnum >= qc->num_functions)
+	if (!fnum || fnum >= qc_data->num_functions)
 	{
 		qc_error("qc_execute(): null functtion %d", fnum);
 		return;

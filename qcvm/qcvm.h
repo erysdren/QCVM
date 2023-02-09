@@ -44,13 +44,6 @@ extern "C" {
 #endif
 
 /*
- * headers
- */
-
-/* std */
-#include <stdint.h>
-
-/*
  * macros
  */
 
@@ -137,61 +130,61 @@ typedef struct qc_export_t
 /* statement evaluation */
 typedef union qc_eval_t
 {
-	int32_t string;
+	int string;
 	float _float;
 	float vector[3];
-	int32_t function;
-	int32_t _int;
-	int32_t edict;
+	int function;
+	int _int;
+	int edict;
 } qc_eval_t;
 
 /* statement */
 typedef struct qc_statement_t
 {
-	uint16_t op;
-	int16_t a, b, c;
+	unsigned short op;
+	short a, b, c;
 } qc_statement_t;
 
 /* variable definition */
 typedef struct qc_def_t
 {
-	uint16_t type;
-	uint16_t ofs;
-	int32_t s_name;
+	unsigned short type;
+	unsigned short ofs;
+	int s_name;
 } qc_def_t;
 
 /* function */
 typedef struct qc_function_t
 {
-	int32_t first_statement;
-	int32_t parm_start;
-	int32_t locals;
-	int32_t profile;
-	int32_t s_name;
-	int32_t s_file;
-	int32_t numparms;
-	uint8_t parm_size[QC_MAX_PARMS];
+	int first_statement;
+	int parm_start;
+	int locals;
+	int profile;
+	int s_name;
+	int s_file;
+	int numparms;
+	unsigned char parm_size[QC_MAX_PARMS];
 } qc_function_t;
 
 /* main struct type */
-typedef struct qc_t
+typedef struct qc_data_t
 {
-	int32_t version;
-	int32_t crc;
-	int32_t ofs_statements;
-	int32_t num_statements;
-	int32_t ofs_globaldefs;
-	int32_t num_globaldefs;
-	int32_t ofs_fielddefs;
-	int32_t num_fielddefs;
-	int32_t ofs_functions;
-	int32_t num_functions;
-	int32_t ofs_strings;
-	int32_t num_strings;
-	int32_t ofs_globals;
-	int32_t num_globals;
-	int32_t entityfields;
-} qc_t;
+	int version;
+	int crc;
+	int ofs_statements;
+	int num_statements;
+	int ofs_globaldefs;
+	int num_globaldefs;
+	int ofs_fielddefs;
+	int num_fielddefs;
+	int ofs_functions;
+	int num_functions;
+	int ofs_strings;
+	int num_strings;
+	int ofs_globals;
+	int num_globals;
+	int entityfields;
+} qc_data_t;
 
 /* stack type */
 typedef struct qc_stack_t
@@ -281,49 +274,15 @@ typedef enum qc_opcodes_t
 } qc_opcodes_t;
 
 /*
- * qtest-specific progs structure (version 3)
- */
-
-/* statement */
-typedef struct qc_statement_qtest_t
-{
-	uint32_t line;
-	uint16_t op;
-	uint16_t a, b, c;
-} qc_statement_qtest_t;
-
-/* def */
-typedef struct qc_def_qtest_t
-{
-	uint32_t type;
-	uint32_t s_name;
-	uint32_t ofs;
-} qc_def_qtest_t;
-
-/* function */
-typedef struct qc_function_qtest_t
-{
-	int32_t first_statement;
-	int32_t unused1;
-	int32_t locals;
-	int32_t profile;
-	int32_t s_name;
-	int32_t s_file;
-	int32_t numparms;
-	int32_t parm_start;
-	int32_t parm_size[QC_MAX_PARMS];
-} qc_function_qtest_t;
-
-/*
  * helper macros
  */
 
 /* retrieving values from parms */
 #define QC_GET_FLOAT(o) (qc_globals[o])
-#define QC_GET_INT(o) (*(int32_t *)&qc_globals[o])
+#define QC_GET_INT(o) (*(int *)&qc_globals[o])
 #define QC_GET_VECTOR(o) (&qc_globals[o])
-#define QC_GET_STRING(o) (qc_strings + *(int32_t *)&qc_globals[o])
-#define QC_GET_FUNCTION(o) (*(int32_t *)&qc_globals[o])
+#define QC_GET_STRING(o) (qc_strings + *(int *)&qc_globals[o])
+#define QC_GET_FUNCTION(o) (*(int *)&qc_globals[o])
 
 /* set return value from function */
 #define QC_RETURN_FLOAT(a) (QC_GET_FLOAT(QC_OFS_RETURN) = (a))
@@ -339,7 +298,7 @@ typedef struct qc_function_qtest_t
  */
 
 /* main */
-extern qc_t *qc;
+extern qc_data_t *qc_data;
 extern qc_function_t *qc_functions;
 extern char *qc_strings;
 extern qc_def_t *qc_fielddefs;
