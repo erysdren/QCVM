@@ -30,34 +30,30 @@
 
 /* std */
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 /* qcvm */
-#include "qcvm.h"
+#include "qcvm_private.h"
 #include "qcvm_qclib.h"
 
-/* main */
-int main(int argc, char **argv)
+void qclib_print(qcvm_t *qcvm)
 {
-	qcvm_t *qcvm;
+	int i;
 
-	/* load qcvm */
-	qcvm = qcvm_open("../qc/testqc.dat");
-	qclib_install(qcvm);
+	for (i = 0; i < qcvm->function_argc; i++)
+	{
+		printf("%s", GET_STRING(OFS_PARM0 + i * 3));
+	}
+}
 
-	/* check validity */
-	if (qcvm == NULL)
-		fprintf(stderr, "oh noes!\n");
-	else
-		fprintf(stdout, "progs.dat successfully loaded\n");
+void qclib_spawn(qcvm_t *qcvm)
+{
+	RETURN_ENTITY(&qcvm->entities[qcvm->num_entities]);
+	qcvm->num_entities++;
+}
 
-	/* blargh */
-	qcvm_run(qcvm, qcvm_get_function(qcvm, "test"));
-
-	/* close qcvm */
-	qcvm_close(qcvm);
-
-	/* return success */
-	return 0;
+void qclib_install(qcvm_t *qcvm)
+{
+	qcvm->exports[0] = NULL;
+	qcvm->exports[1] = qclib_print;
+	qcvm->exports[2] = qclib_spawn;
 }

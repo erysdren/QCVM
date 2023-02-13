@@ -29,35 +29,25 @@
  */
 
 /* std */
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 /* qcvm */
-#include "qcvm.h"
+#include "qcvm_private.h"
 #include "qcvm_qclib.h"
 
-/* main */
-int main(int argc, char **argv)
+/* get function by name search */
+int qcvm_get_function(qcvm_t *qcvm, const char *name)
 {
-	qcvm_t *qcvm;
+	/* variables */
+	int i;
 
-	/* load qcvm */
-	qcvm = qcvm_open("../qc/testqc.dat");
-	qclib_install(qcvm);
+	/* loop through functions */
+	for (i = 1; i < qcvm->header->num_functions; i++)
+	{
+		if (strcmp(name, GET_STRING_OFS(qcvm->functions[i].name)) == 0)
+			return i;
+	}
 
-	/* check validity */
-	if (qcvm == NULL)
-		fprintf(stderr, "oh noes!\n");
-	else
-		fprintf(stdout, "progs.dat successfully loaded\n");
-
-	/* blargh */
-	qcvm_run(qcvm, qcvm_get_function(qcvm, "test"));
-
-	/* close qcvm */
-	qcvm_close(qcvm);
-
-	/* return success */
+	/* return failure */
 	return 0;
 }

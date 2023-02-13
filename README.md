@@ -1,7 +1,6 @@
 ![QCVM Logo](./.github/logo2.png "QCVM")
 
-A bite-sized QuakeC virtual machine written in C, based on the original Quake Engine
-source code release from 1999.
+A bite-sized QuakeC virtual machine written in C.
 
 ## Resources
 
@@ -16,82 +15,33 @@ source code release from 1999.
 
 ## Usage
 
-See the [Example Implementation](./test/test.c) for more inforamtion.
-
-```c
-#include "qcvm.h"
-
-void example()
-{
-	float f = QC_GET_FLOAT(QC_OFS_PARM0);
-	f += 2;
-	QC_RETURN_FLOAT(f);
-}
-
-qc_export_t export_example = {
-	.name = "example",
-	.desc = "returns float += 2",
-	.func = example,
-	.ret = QC_TYPE_FLOAT,
-	.parmc = 1,
-	.parms[0] = {"f", QC_TYPE_FLOAT}
-};
-
-int main()
-{
-	/* load compiled qc */
-	qc_load("progs.dat");
-
-	/* add export */
-	qc_add_export(&export_example);
-
-	/* dump export to valid qc */
-	qc_dump_exports("exports.qc");
-
-	/* execute qc function by name */
-	qc_execute(qc_function_get("init"));
-
-	/* destroy qc context */
-	qc_exit();
-
-	return 0;
-}
-```
+See the [Example Implementation](./test/test.c) for more inforamtion. Further documentation to come.
 
 ## Contact
 
 - [Discord](https://discord.gg/5MwE3xMcdN)
 - [Email](mailto:jaycie@erysdren.me)
 
-## Todo
-
-- Refactor code to remove globals, allowing for multiple instances to run simultainiously.
-- Add function-search to call specific functions by name, along with setting function parameters.
-- Easy API for adding builtin functions.
-- Dump user-added builtin functions to properly formatted QC file.
-- Improve tempstring handling.
-- Add support for HexenC and FTEQCC's extended opcodes.
-- Add support for the QTest progs format.
-- Bindings for other languages.
-
 ## License
 
-GNU GENERAL PUBLIC LICENSE
+MIT License
 
-QCVM is Copyright (C) 2023-2024 erysdren (it/she)
+Copyright (c) 2023 erysdren (it/she)
 
-Quake is Copyright (C) 1996-1997 Id Software, Inc.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-See the GNU General Public License for more details.
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

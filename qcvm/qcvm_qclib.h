@@ -24,40 +24,16 @@
  * 
  ******************************************************************************/
 
+#pragma once
+#ifndef _QCVM_QCLIB_H_
+#define _QCVM_QCLIB_H_
+
 /*
- * headers
+ *
+ * functions
+ *
  */
 
-/* std */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+void qclib_install(qcvm_t *qcvm);
 
-/* qcvm */
-#include "qcvm.h"
-#include "qcvm_qclib.h"
-
-/* main */
-int main(int argc, char **argv)
-{
-	qcvm_t *qcvm;
-
-	/* load qcvm */
-	qcvm = qcvm_open("../qc/testqc.dat");
-	qclib_install(qcvm);
-
-	/* check validity */
-	if (qcvm == NULL)
-		fprintf(stderr, "oh noes!\n");
-	else
-		fprintf(stdout, "progs.dat successfully loaded\n");
-
-	/* blargh */
-	qcvm_run(qcvm, qcvm_get_function(qcvm, "test"));
-
-	/* close qcvm */
-	qcvm_close(qcvm);
-
-	/* return success */
-	return 0;
-}
+#endif /* _QCVM_QCLIB_H_ */
