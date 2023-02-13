@@ -36,7 +36,9 @@
 
 /* qcvm */
 #include "qcvm_private.h"
-#include "qcvm_qclib.h"
+
+/* qclib */
+#include "qclib.h"
 
 /* setup function */
 int qcvm_function_setup(qcvm_t *qcvm, qcvm_function_t *func)

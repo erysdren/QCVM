@@ -36,7 +36,7 @@ option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
 ## QCVM Sources
 set(QCVM_SOURCES
 	qcvm/qcvm_bootstrap.c
-	qcvm/qcvm_qclib.c
+	qcvm/qclib.c
 	qcvm/qcvm_runtime.c
 	qcvm/qcvm_utils.c
 )

@@ -35,7 +35,9 @@
 
 /* qcvm */
 #include "qcvm.h"
-#include "qcvm_qclib.h"
+
+/* qclib */
+#include "qclib.h"
 
 /* main */
 int main(int argc, char **argv)

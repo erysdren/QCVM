@@ -24,16 +24,41 @@
  * 
  ******************************************************************************/
 
-#pragma once
-#ifndef _QCVM_QCLIB_H_
-#define _QCVM_QCLIB_H_
-
 /*
- *
- * functions
- *
+ * headers
  */
 
-void qclib_install(qcvm_t *qcvm);
+/* std */
+#include <stdio.h>
 
-#endif /* _QCVM_QCLIB_H_ */
+/* qcvm */
+#include "qcvm_private.h"
+
+/* qclib */
+#include "qclib.h"
+
+/* print text */
+void qclib_print(qcvm_t *qcvm)
+{
+	int i;
+
+	for (i = 0; i < qcvm->function_argc; i++)
+	{
+		printf("%s", GET_STRING(OFS_PARM0 + i * 3));
+	}
+}
+
+/* spawn entity */
+void qclib_spawn(qcvm_t *qcvm)
+{
+	RETURN_ENTITY(&qcvm->entities[qcvm->num_entities]);
+	qcvm->num_entities++;
+}
+
+/* install qclib default builtin functions */
+void qclib_install(qcvm_t *qcvm)
+{
+	qcvm->exports[0] = NULL;
+	qcvm->exports[1] = qclib_print;
+	qcvm->exports[2] = qclib_spawn;
+}

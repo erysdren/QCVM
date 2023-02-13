@@ -33,7 +33,9 @@
 
 /* qcvm */
 #include "qcvm_private.h"
-#include "qcvm_qclib.h"
+
+/* qclib */
+#include "qclib.h"
 
 /* get function by name search */
 int qcvm_get_function(qcvm_t *qcvm, const char *name)
