@@ -17,6 +17,10 @@ A bite-sized QuakeC virtual machine written in C.
 
 See the [Example Implementation](./test/test.c) for more inforamtion. Further documentation to come.
 
+## Bindings
+
+- [FreePascal](./bindings/pascal/qcvm.pas)
+
 ## Contact
 
 - [Discord](https://discord.gg/5MwE3xMcdN)

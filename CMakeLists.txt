@@ -42,8 +42,11 @@ set(QCVM_SOURCES
 )
 
 ## QCVM Library
-add_library(qcvm ${QCVM_SOURCES})
-target_include_directories(qcvm PUBLIC qcvm/)
+add_library(qcvm_static ${QCVM_SOURCES})
+target_include_directories(qcvm_static PUBLIC qcvm/)
+
+add_library(qcvm_shared SHARED ${QCVM_SOURCES})
+target_include_directories(qcvm_shared PUBLIC qcvm/)
 
 ## Compile QC test environment
 if(QCVM_BUILD_QC)
@@ -69,6 +72,6 @@ if(QCVM_BUILD_TESTAPP)
 
 	## Executable
 	add_executable(test ${QCVM_TEST_SOURCES})
-	target_link_libraries(test PUBLIC qcvm)
+	target_link_libraries(test PUBLIC qcvm_static)
 
 endif()
