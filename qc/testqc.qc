@@ -36,8 +36,8 @@ void test()
 	float x, y, z;
 
 	x = 1;
-	y = x// 4;
-	z = y// y;
+	y = x * 4;
+	z = y * y;
 	ent = spawn();
 	ent.field1 = 352;
 	ent.field2 = "hello!!!";
