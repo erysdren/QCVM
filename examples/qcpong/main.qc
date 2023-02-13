@@ -5,8 +5,13 @@
 //
 //
 
+// print string to stdoout
 void print(string s, ...) = #1;
+
+// acquire entity handle from the engine
 entity spawn() = #2;
+
+// draw a pixel on the screen at the specified coordinates
 void pixel(vector pos, vector color) = #3;
 
 //
