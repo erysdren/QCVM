@@ -378,9 +378,7 @@ typedef enum qcvm_opcodes_t
 	OPCODE_BITAND,
 	OPCODE_BITOR
 
-	/* hc extensions */
-
-	/* todo... */
+	/* todo: add extended opcodes from hexenc and fteqcc */
 
 } qcvm_opcodes_t;
 

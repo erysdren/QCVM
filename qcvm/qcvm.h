@@ -37,6 +37,9 @@
 /* qcvm runtime */
 typedef struct qcvm_runtime qcvm_t;
 
+/* export */
+typedef void (*qcvm_export_t)(qcvm_t *qcvm);
+
 /*
  *
  * functions
@@ -59,6 +62,9 @@ void qcvm_close(qcvm_t *qcvm);
 
 /* search all functions in the qcvm and return its function number if found */
 int qcvm_get_function(qcvm_t *qcvm, const char *name);
+
+/* add export to qcvm */
+void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export);
 
 /*
  * qcvm_runtime.c

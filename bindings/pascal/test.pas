@@ -10,6 +10,12 @@ var
 	qc : qcvm_t;
 	fn : integer;
 
+{ export test }
+procedure pascal_export_test(qcvm : qcvm_t); cdecl;
+begin
+	WriteLn('hello world from pascal!');
+end;
+
 begin
 
 	{ talk to user }
@@ -30,6 +36,7 @@ begin
 
 	{ install basic qclib functions }
 	qclib_install(qc);
+	qcvm_add_export(qc, @pascal_export_test);
 
 	{ get function id }
 	fn := qcvm_get_function(qc, 'test');

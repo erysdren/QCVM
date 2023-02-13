@@ -61,4 +61,6 @@ void qclib_install(qcvm_t *qcvm)
 	qcvm->exports[0] = NULL;
 	qcvm->exports[1] = qclib_print;
 	qcvm->exports[2] = qclib_spawn;
+
+	qcvm->num_exports = 2;
 }

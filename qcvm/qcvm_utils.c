@@ -37,6 +37,13 @@
 /* qclib */
 #include "qclib.h"
 
+/* add export */
+void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export)
+{
+	qcvm->num_exports++;
+	qcvm->exports[qcvm->num_exports] = export;
+}
+
 /* get function by name search */
 int qcvm_get_function(qcvm_t *qcvm, const char *name)
 {
