@@ -67,7 +67,7 @@ if(QCVM_BUILD_TESTAPP)
 
 	## Sources
 	set(QCVM_TEST_SOURCES
-		test/test.c
+		examples/qcvm_test/main.c
 	)
 
 	## Executable
