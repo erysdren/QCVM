@@ -32,6 +32,7 @@ set(CMAKE_BUILD_TYPE Release)
 ## Options
 option(QCVM_BUILD_QC "Build Example QuakeC" ON)
 option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
+option(QCVM_BUILD_QCPONG "Build Example Game" ON)
 
 ## QCVM Sources
 set(QCVM_SOURCES
@@ -73,5 +74,33 @@ if(QCVM_BUILD_TESTAPP)
 	## Executable
 	add_executable(test ${QCVM_TEST_SOURCES})
 	target_link_libraries(test PUBLIC qcvm_static)
+
+endif()
+
+## QCVM Example Game
+if(QCVM_BUILD_QCPONG)
+
+	## QC
+	find_program(fteqcc64 fteqcc64 REQUIRED)
+	add_custom_command(
+		OUTPUT ${CMAKE_BINARY_DIR}/qcpong.dat
+		COMMAND fteqcc64 ${CMAKE_SOURCE_DIR}/examples/qcpong/main.src
+	)
+	add_custom_target(qcpong_dat ALL DEPENDS ${CMAKE_BINARY_DIR}/qcpong.dat)
+
+	## Sources
+	set(QCPONG_SOURCES
+		examples/qcpong/main.c
+	)
+
+	## Dependencies
+	find_package(SDL2 REQUIRED)
+	find_package(OpenGL REQUIRED)
+
+	## Executable
+	add_executable(qcpong ${QCPONG_SOURCES})
+	target_link_libraries(qcpong PUBLIC qcvm_static)
+	target_link_libraries(qcpong PUBLIC OpenGL::GL)
+	target_link_libraries(qcpong PUBLIC SDL2::SDL2)
 
 endif()
