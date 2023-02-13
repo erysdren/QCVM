@@ -44,7 +44,6 @@ int main(int argc, char **argv)
 
 	/* load qcvm */
 	qcvm = qcvm_open("../qc/testqc.dat");
-	qclib_install(qcvm);
 
 	/* check validity */
 	if (qcvm == NULL)
@@ -52,7 +51,10 @@ int main(int argc, char **argv)
 	else
 		fprintf(stdout, "progs.dat successfully loaded\n");
 
-	/* blargh */
+	/* install qclib */
+	qclib_install(qcvm);
+
+	/* run function test() */
 	qcvm_run(qcvm, qcvm_get_function(qcvm, "test"));
 
 	/* close qcvm */
