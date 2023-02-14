@@ -40,6 +40,12 @@ typedef struct qcvm_runtime qcvm_t;
 /* export */
 typedef void (*qcvm_export_t)(qcvm_t *qcvm);
 
+/* vector */
+typedef struct qcvm_vec3
+{
+	float x, y, z;
+} qcvm_vec3;
+
 /*
  *
  * functions
@@ -59,6 +65,22 @@ void qcvm_close(qcvm_t *qcvm);
 /*
  * qcvm_utils.c
  */
+
+/* set various parameter types */
+void qcvm_set_parm_vector(qcvm_t *qcvm, int parm, float a, float b, float c);
+void qcvm_set_parm_int(qcvm_t *qcvm, int parm, int val);
+void qcvm_set_parm_float(qcvm_t *qcvm, int parm, float val);
+
+/* get various parameter types */
+qcvm_vec3 qcvm_get_parm_vector(qcvm_t *qcvm, int parm);
+const char *qcvm_get_parm_string(qcvm_t *qcvm, int parm);
+int qcvm_get_parm_int(qcvm_t *qcvm, int parm);
+float qcvm_get_parm_float(qcvm_t *qcvm, int parm);
+
+/* return various types to previous function */
+void qcvm_return_vector(qcvm_t *qcvm, float a, float b, float c);
+void qcvm_return_int(qcvm_t *qcvm, int val);
+void qcvm_return_float(qcvm_t *qcvm, float val);
 
 /* search all functions in the qcvm and return its function number if found */
 int qcvm_get_function(qcvm_t *qcvm, const char *name);

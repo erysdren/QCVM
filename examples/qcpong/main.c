@@ -95,10 +95,15 @@ int main(int argc, char **argv)
 	if (func_shutdown < 1) error("Failed to find required QuakeC function shutdown()!");
 
 	/* SDL */
-	SDL_Init(SDL_INIT_EVERYTHING);
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) error("Failed to initialize SDL!");
 	window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
+
+	/* check validity */
+	if (window == NULL) error("SDL window is NULL!");
+	if (renderer == NULL) error("SDL renderer is NULL!");
+	if (texture == NULL) error("SDL texture is NULL!");
 
 	/* call quakec setup function */
 	qcvm_run(qcvm, func_setup);
@@ -124,6 +129,7 @@ int main(int argc, char **argv)
 		}
 
 		/* call qc draw function */
+		qcvm_set_parm_vector(qcvm, 0, WIDTH, HEIGHT, 0);
 		qcvm_run(qcvm, func_draw);
 
 		SDL_RenderClear(renderer);
