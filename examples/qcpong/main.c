@@ -42,9 +42,17 @@
 /* qclib */
 #include "qclib.h"
 
+/* constants */
 #define WIDTH 640
 #define HEIGHT 480
 #define TITLE "QCPONG"
+
+/* error */
+void error(const char *err)
+{
+	fprintf(stderr, "ERROR: %s\n", err);
+	exit(1);
+}
 
 /* main */
 int main(int argc, char **argv)
@@ -69,15 +77,7 @@ int main(int argc, char **argv)
 	qcvm = qcvm_open("qcpong.dat");
 
 	/* check validity */
-	if (qcvm == NULL)
-	{
-		fprintf(stderr, "ERROR: Failed to load required QuakeC module!\n");
-		return 1;
-	}
-	else
-	{
-		fprintf(stdout, "Successfully loaded QuakeC module.\n");
-	}
+	if (qcvm == NULL) error("Failed to load required QuakeC module!\n");
 
 	/* install qclib */
 	qclib_install(qcvm);
@@ -89,11 +89,10 @@ int main(int argc, char **argv)
 	func_shutdown = qcvm_get_function(qcvm, "shutdown");
 
 	/* check validitiy */
-	if (func_draw < 1) fprintf(stderr, "ERROR: Failed to find required QuakeC function draw()!\n");
-	if (func_setup < 1) fprintf(stderr, "ERROR: Failed to find required QuakeC function setup()!\n");
-	if (func_update < 1) fprintf(stderr, "ERROR: Failed to find required QuakeC function update()!\n");
-	if (func_shutdown < 1) fprintf(stderr, "ERROR: Failed to find required QuakeC function shutdown()!\n");
-	if (func_draw < 1 || func_setup < 1 || func_update < 1 || func_shutdown < 1) return 1;
+	if (func_draw < 1) error("Failed to find required QuakeC function draw()!");
+	if (func_setup < 1) error("Failed to find required QuakeC function setup()!");
+	if (func_update < 1) error("Failed to find required QuakeC function update()!");
+	if (func_shutdown < 1) error("Failed to find required QuakeC function shutdown()!");
 
 	/* SDL */
 	SDL_Init(SDL_INIT_EVERYTHING);

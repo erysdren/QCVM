@@ -29,7 +29,6 @@
 
 void print(string s, ...) = #1;
 entity spawn() = #2;
-void pascal_export_test() = #3;
 
 void test()
 {
@@ -45,6 +44,4 @@ void test()
 
 	print("sup\n");
 	print(ent.field2, "\n");
-
-	pascal_export_test();
 }
