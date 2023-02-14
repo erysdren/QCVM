@@ -68,6 +68,7 @@ int main(int argc, char **argv)
 	SDL_Window *window;
 	SDL_Texture *texture;
 	SDL_Renderer *renderer;
+	void *pixels;
 
 	/*
 	 * startup
@@ -98,12 +99,15 @@ int main(int argc, char **argv)
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) error("Failed to initialize SDL!");
 	window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
+	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
 
 	/* check validity */
 	if (window == NULL) error("SDL window is NULL!");
 	if (renderer == NULL) error("SDL renderer is NULL!");
 	if (texture == NULL) error("SDL texture is NULL!");
+
+	/* allocate writeable pixels */
+	pixels = malloc(WIDTH * HEIGHT * 4);
 
 	/* call quakec setup function */
 	qcvm_run(qcvm, func_setup);
@@ -132,6 +136,10 @@ int main(int argc, char **argv)
 		qcvm_set_parm_vector(qcvm, 0, WIDTH, HEIGHT, 0);
 		qcvm_run(qcvm, func_draw);
 
+		/* update texture */
+		SDL_UpdateTexture(texture, NULL, pixels, WIDTH * 4);
+
+		/* display texture */
 		SDL_RenderClear(renderer);
 		SDL_RenderCopy(renderer, texture, NULL, NULL);
 		SDL_RenderPresent(renderer);
@@ -146,6 +154,9 @@ int main(int argc, char **argv)
 
 	/* close qcvm */
 	qcvm_close(qcvm);
+
+	/* pixels */
+	free(pixels);
 
 	/* close sdl */
 	SDL_DestroyWindow(window);
