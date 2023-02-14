@@ -42,6 +42,10 @@
 /* qclib */
 #include "qclib.h"
 
+#define WIDTH 640
+#define HEIGHT 480
+#define TITLE "QCPONG"
+
 /* main */
 int main(int argc, char **argv)
 {
@@ -93,9 +97,9 @@ int main(int argc, char **argv)
 
 	/* SDL */
 	SDL_Init(SDL_INIT_EVERYTHING);
-	window = SDL_CreateWindow("QCPONG", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STREAMING, 1280, 720);
+	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
 
 	/* call quakec setup function */
 	qcvm_run(qcvm, func_setup);
@@ -112,28 +116,8 @@ int main(int argc, char **argv)
 			switch (event.type)
 			{
 				case SDL_QUIT:
-				{
 					running = 0;
 					break;
-				}
-				
-				case SDL_WINDOWEVENT:
-				{
-					switch (event.window.event)
-					{
-						case SDL_WINDOWEVENT_RESIZED:
-						{
-							SDL_DestroyTexture(texture);
-							texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB24, SDL_TEXTUREACCESS_STREAMING, event.window.data1, event.window.data2);
-							break;
-						}
-
-						default:
-							break;
-					}
-
-					break;
-				}
 
 				default:
 					break;
