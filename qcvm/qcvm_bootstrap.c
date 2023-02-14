@@ -106,7 +106,7 @@ qcvm_t *qcvm_open(const char *filename)
 	#endif
 
 	#if ALLOCATE_ENTITIES
-	qcvm->entities = malloc(ENTITY_SIZE * NUM_ENTITIES);
+	qcvm->entities = malloc(sizeof(qcvm_entity_t) * NUM_ENTITIES);
 	qcvm->num_entities = 0;
 	#else
 	qcvm->entities = NULL;
