@@ -58,13 +58,16 @@ void export_drawpixel(qcvm_t *qcvm)
 {
 	/* variables */
 	qcvm_vec3 pos, col;
-	unsigned int rgb;
+	unsigned int rgba;
 	unsigned char r, g, b, a;
 	int x, y;
 
 	/* get parms */
 	pos = qcvm_get_parm_vector(qcvm, 0);
 	col = qcvm_get_parm_vector(qcvm, 1);
+
+	if (pos.x > WIDTH - 1 || pos.y > HEIGHT - 1) return;
+	if (pos.x < 0 || pos.y < 0) return;
 
 	/* convert pos values */
 	x = (int)pos.x;
@@ -77,10 +80,10 @@ void export_drawpixel(qcvm_t *qcvm)
 	a = 255;
 
 	/* pack color */
-	rgb = (unsigned int)((r << 24) | (g << 16) | (b << 8) | a);
+	rgba = (unsigned int)((r << 24) | (g << 16) | (b << 8) | a);
 
 	/* place color */
-	((unsigned int *)pixels)[x * WIDTH + y] = rgb;
+	((unsigned int *)pixels)[x * WIDTH + y] = rgba;
 }
 
 /* clear screen buffer */
@@ -90,9 +93,12 @@ void export_clearscreen(qcvm_t *qcvm)
 }
 
 /* make screen buffer visible */
-void export_renderscreen(qcvm_t *qcvm)
+void export_drawscreen(qcvm_t *qcvm)
 {
 	SDL_UpdateTexture(texture, NULL, pixels, WIDTH * 4);
+	SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+	SDL_RenderPresent(renderer);
 }
 
 /* error */
@@ -130,7 +136,7 @@ int main(int argc, char **argv)
 	/* install our own exports */
 	qcvm_add_export(qcvm, export_drawpixel);
 	qcvm_add_export(qcvm, export_clearscreen);
-	qcvm_add_export(qcvm, export_renderscreen);
+	qcvm_add_export(qcvm, export_drawscreen);
 
 	/* get function handles */
 	func_draw = qcvm_get_function(qcvm, "draw");
@@ -146,7 +152,7 @@ int main(int argc, char **argv)
 
 	/* SDL */
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) error("Failed to initialize SDL!");
-	window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
 
@@ -184,11 +190,6 @@ int main(int argc, char **argv)
 		/* call qc draw function */
 		qcvm_set_parm_vector(qcvm, 0, WIDTH, HEIGHT, 0);
 		qcvm_run(qcvm, func_draw);
-
-		/* display texture */
-		SDL_RenderClear(renderer);
-		SDL_RenderCopy(renderer, texture, NULL, NULL);
-		SDL_RenderPresent(renderer);
 	}
 
 	/*

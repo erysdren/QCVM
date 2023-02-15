@@ -18,7 +18,10 @@ void drawpixel(vector pos, vector color) = #3;
 void clearscreen() = #4;
 
 // render screen
-void renderscreen() = #5;
+void drawscreen() = #5;
+
+// draw text on screen
+void drawtext(vector pos, vector color, string text) = #6;
 
 //
 //
@@ -28,15 +31,12 @@ void renderscreen() = #5;
 
 .vector origin;
 .vector color;
-.float width;
-.float height;
+.vector size;
+.float score;
 
 entity ball;
-entity left_paddle;
-entity right_paddle;
-
-float left_score;
-float right_score;
+entity left;
+entity right;
 
 float r;
 float g;
@@ -55,14 +55,8 @@ void setup()
 
 	// spawn entities
 	ball = spawn();
-	left_paddle = spawn();
-	right_paddle = spawn();
-
-	left_score = 0;
-	right_score = 0;
-
-	// draw a pixel
-	drawpixel([32, 32], [1, 1, 1]);
+	left = spawn();
+	right = spawn();
 }
 
 void shutdown()
@@ -82,7 +76,7 @@ void draw(vector screensize)
 	clearscreen();
 
 	r += 0.001;
-	g += 0.001;
+	g += 0.01;
 	b += 0.001;
 
 	if (r > 1) r = 0;
@@ -91,5 +85,5 @@ void draw(vector screensize)
 
 	drawpixel([64, 64], [r, g, b]);
 
-	renderscreen();
+	drawscreen();
 }
