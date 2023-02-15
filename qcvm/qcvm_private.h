@@ -286,6 +286,7 @@ struct qcvm_runtime
 
 	#if ALLOCATE_TEMPSTRINGS
 	char *tempstrings;				/* pointer to tempstrings table */
+	char *tempstrings_ptr;			/* pointer to current tempstrings offset */
 	#endif
 
 	#if ALLOCATE_EXPORTS

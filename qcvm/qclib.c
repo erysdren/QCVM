@@ -62,6 +62,22 @@ void qclib_strlen(qcvm_t *qcvm)
 	RETURN_FLOAT((float)strlen(qcvm_get_parm_string(qcvm, 0)));
 }
 
+/* return a concat of two strings */
+void qclib_strcat(qcvm_t *qcvm)
+{
+	/* variables */
+	const char *s1, *s2;
+	char buf[512];
+
+	/* get strings */
+	s1 = qcvm_get_parm_string(qcvm, 0);
+	s2 = qcvm_get_parm_string(qcvm, 1);
+
+	sprintf(buf, "%s%s", s1, s2);
+
+	qcvm_return_string(qcvm, buf);
+}
+
 /* install qclib default builtin functions */
 void qclib_install(qcvm_t *qcvm)
 {
@@ -69,6 +85,7 @@ void qclib_install(qcvm_t *qcvm)
 	qcvm->exports[1] = qclib_print;
 	qcvm->exports[2] = qclib_spawn;
 	qcvm->exports[3] = qclib_strlen;
+	qcvm->exports[4] = qclib_strcat;
 
-	qcvm->num_exports = 3;
+	qcvm->num_exports = 4;
 }

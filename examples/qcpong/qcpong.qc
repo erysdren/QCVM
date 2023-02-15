@@ -6,19 +6,19 @@
 //
 
 // draw a pixel on the screen at the specified coordinates
-void drawpixel(vector pos, vector color) = #4;
+void drawpixel(vector pos, vector color) = #5;
 
 // clear screen
-void clearscreen(optional vector color) = #5;
+void clearscreen(optional vector color) = #6;
 
 // render screen
-void drawscreen() = #6;
+void drawscreen() = #7;
 
 // draw rectangle
-void drawrectangle(vector pos, vector size, vector color, float filled) = #7;
+void drawrectangle(vector pos, vector size, vector color, float filled) = #8;
 
 // draw text
-void drawtext(vector pos, vector color, string text) = #8;
+void drawtext(vector pos, vector color, string text) = #9;
 
 //
 //

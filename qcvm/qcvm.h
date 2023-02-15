@@ -79,6 +79,7 @@ int qcvm_get_parm_int(qcvm_t *qcvm, int parm);
 float qcvm_get_parm_float(qcvm_t *qcvm, int parm);
 
 /* return various types to previous function */
+void qcvm_return_string(qcvm_t *qcvm, const char *s);
 void qcvm_return_vector(qcvm_t *qcvm, float a, float b, float c);
 void qcvm_return_int(qcvm_t *qcvm, int val);
 void qcvm_return_float(qcvm_t *qcvm, float val);

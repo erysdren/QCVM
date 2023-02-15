@@ -100,6 +100,7 @@ qcvm_t *qcvm_open(const char *filename)
 	#if ALLOCATE_TEMPSTRINGS
 	qcvm->strings = (char *)malloc(qcvm->header->len_strings + TEMPSTRINGS_SIZE);
 	qcvm->tempstrings = (char *)qcvm->strings + qcvm->header->len_strings;
+	qcvm->tempstrings_ptr = qcvm->tempstrings;
 	memcpy(qcvm->strings, (char *)qcvm->pool + qcvm->header->ofs_strings, qcvm->header->len_strings);
 	#else
 	qcvm->strings = (char *)qcvm->pool + qcvm->header->ofs_strings;

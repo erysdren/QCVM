@@ -29,6 +29,7 @@
  */
 
 /* std */
+#include <stdio.h>
 #include <string.h>
 
 /* qcvm */
@@ -104,6 +105,23 @@ float qcvm_get_parm_float(qcvm_t *qcvm, int parm)
 /*
  * return values 
  */
+
+/* return a string to the previous function */
+void qcvm_return_string(qcvm_t *qcvm, const char *s)
+{
+	/* bounds check */
+	if (qcvm->tempstrings_ptr + strlen(s) + 1 > qcvm->tempstrings + TEMPSTRINGS_SIZE)
+		qcvm->tempstrings_ptr = qcvm->tempstrings;
+
+	/* sprintf */
+	sprintf(qcvm->tempstrings_ptr, "%s", s);
+
+	/* return str */
+	RETURN_STRING(qcvm->tempstrings_ptr);
+
+	/* advance ptr */
+	qcvm->tempstrings_ptr += strlen(s) + 1;
+}
 
 /* return a vector to the previous function */
 void qcvm_return_vector(qcvm_t *qcvm, float a, float b, float c)

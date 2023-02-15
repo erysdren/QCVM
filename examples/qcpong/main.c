@@ -170,7 +170,8 @@ void export_drawrectangle(qcvm_t *qcvm)
 	}
 }
 
-void draw_text(int x, int y, unsigned char r, unsigned char g, unsigned char b, char *bitmap)
+/* render char to pixel buffer */
+void draw_char(int x, int y, unsigned char r, unsigned char g, unsigned char b, char *bitmap)
 {
 	/* variables */
 	int cx, cy;
@@ -212,7 +213,7 @@ void export_drawtext(qcvm_t *qcvm)
 	for (i = 0; i < strlen(string); i++)
 	{
 		c = string[i];
-		draw_text((int)pos.x + (i * 8), (int)pos.y, r, g, b, font8x8_basic[c]);
+		draw_char((int)pos.x + (i * 8), (int)pos.y, r, g, b, font8x8_basic[c]);
 	}
 }
 
