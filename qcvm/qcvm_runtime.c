@@ -122,7 +122,7 @@ void qcvm_run(qcvm_t *qcvm, int func)
 {
 	/* variables */
 	qcvm_evaluator_t *eval1, *eval2, *eval3;
-	qcvm_evaluator_t *eval_global;
+	qcvm_evaluator_t *eval_ptr;
 	qcvm_statement_t *statement;
 	qcvm_function_t *function, *nextfunction;
 	qcvm_entity_t *entity;
@@ -430,18 +430,121 @@ void qcvm_run(qcvm_t *qcvm, int func)
 			case OPCODE_STOREP_S:
 			case OPCODE_STOREP_FNC:
 			{
-				eval_global = (qcvm_evaluator_t *)((unsigned char *)qcvm->entities + eval2->int_);
-				eval_global->int_ = eval1->int_;
+				eval_ptr = (qcvm_evaluator_t *)((unsigned char *)qcvm->entities + eval2->int_);
+				eval_ptr->int_ = eval1->int_;
 				break;
 			}
 
 			/* store a 12-byte value (vector) in an entity field */
 			case OPCODE_STOREP_V:
 			{
-				eval_global = (qcvm_evaluator_t *)((unsigned char *)qcvm->entities + eval2->int_);
-				eval_global->vector[0] = eval1->vector[0];
-				eval_global->vector[1] = eval1->vector[1];
-				eval_global->vector[2] = eval1->vector[2];
+				eval_ptr = (qcvm_evaluator_t *)((unsigned char *)qcvm->entities + eval2->int_);
+				eval_ptr->vector[0] = eval1->vector[0];
+				eval_ptr->vector[1] = eval1->vector[1];
+				eval_ptr->vector[2] = eval1->vector[2];
+				break;
+			}
+
+			case OPCODE_MULSTORE_F:
+			{
+				eval2->float_ *= eval1->float_;
+				break;
+			}
+
+			case OPCODE_MULSTORE_V:
+			{
+				eval2->vector[0] *= eval1->float_;
+				eval2->vector[1] *= eval1->float_;
+				eval2->vector[2] *= eval1->float_;
+				break;
+			}
+
+			case OPCODE_MULSTOREP_F:
+			{
+				eval_ptr = (qcvm_evaluator_t *)((unsigned char *)qcvm->entities + eval2->int_);
+				eval3->float_ = (eval_ptr->float_ *= eval1->float_);
+				break;
+			}
+
+			case OPCODE_MULSTOREP_V:
+			{
+				eval_ptr = (qcvm_evaluator_t *)((unsigned char *)qcvm->entities + eval2->int_);
+				eval3->vector[0] = (eval_ptr->vector[0] *= eval1->float_);
+				eval3->vector[0] = (eval_ptr->vector[1] *= eval1->float_);
+				eval3->vector[0] = (eval_ptr->vector[2] *= eval1->float_);
+				break;
+			}
+
+			case OPCODE_DIVSTORE_F:
+			{
+				eval2->float_ /= eval1->float_;
+				break;
+			}
+
+			case OPCODE_DIVSTOREP_F:
+			{
+				eval_ptr = (qcvm_evaluator_t *)((unsigned char *)qcvm->entities + eval2->int_);
+				eval3->float_ = (eval_ptr->float_ /= eval1->float_);
+				break;
+			}
+
+			case OPCODE_ADDSTORE_F:
+			{
+				eval2->float_ += eval1->float_;
+				break;
+			}
+
+			case OPCODE_ADDSTORE_V:
+			{
+				eval2->vector[0] += eval1->vector[0];
+				eval2->vector[1] += eval1->vector[1];
+				eval2->vector[2] += eval1->vector[2];
+				break;
+			}
+
+			case OPCODE_ADDSTOREP_F:
+			{
+				eval_ptr = (qcvm_evaluator_t *)((unsigned char *)qcvm->entities + eval2->int_);
+				eval3->float_ = (eval_ptr->float_ += eval1->float_);
+				break;
+			}
+
+			case OPCODE_ADDSTOREP_V:
+			{
+				eval_ptr = (qcvm_evaluator_t *)((unsigned char *)qcvm->entities + eval2->int_);
+				eval3->vector[0] = (eval_ptr->vector[0] += eval1->vector[0]);
+				eval3->vector[1] = (eval_ptr->vector[1] += eval1->vector[1]);
+				eval3->vector[2] = (eval_ptr->vector[2] += eval1->vector[2]);
+				break;
+			}
+
+			case OPCODE_SUBSTORE_F:
+			{
+				eval2->float_ -= eval1->float_;
+				break;
+			}
+
+			case OPCODE_SUBSTORE_V:
+			{
+				eval2->vector[0] -= eval1->vector[0];
+				eval2->vector[1] -= eval1->vector[1];
+				eval2->vector[2] -= eval1->vector[2];
+				break;
+			}
+
+			case OPCODE_SUBSTOREP_F:
+			{
+				eval_ptr = (qcvm_evaluator_t *)((unsigned char *)qcvm->entities + eval2->int_);
+				eval3->float_ = (eval_ptr->float_ -= eval1->float_);
+				break;
+			}
+
+			case OPCODE_SUBSTOREP_V:
+			{
+				eval_ptr = (qcvm_evaluator_t *)((unsigned char *)qcvm->entities + eval2->int_);
+				eval3->vector[0] = (eval_ptr->vector[0] -= eval1->vector[0]);
+				eval3->vector[1] = (eval_ptr->vector[1] -= eval1->vector[1]);
+				eval3->vector[2] = (eval_ptr->vector[2] -= eval1->vector[2]);
 				break;
 			}
 
