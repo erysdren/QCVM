@@ -48,6 +48,11 @@
 #define TITLE "QCPONG"
 #define PROGS "../examples/qcpong/qcpong.dat"
 
+/* macros */
+#define RGBA(r, g, b, a) (unsigned int)((r << 24) | (g << 16) | (b << 8) | a)
+#define ARGB(r, g, b, a) (unsigned int)((a << 24) | (r << 16) | (g << 8) | b)
+#define PIXEL(x, y) ((unsigned int *)pixels)[(unsigned int)(x) * WIDTH + (unsigned int)(y)]
+
 /* globals */
 void *pixels;
 SDL_Window *window;
@@ -59,9 +64,7 @@ void export_drawpixel(qcvm_t *qcvm)
 {
 	/* variables */
 	qcvm_vec3 pos, col;
-	unsigned int rgba;
-	unsigned char r, g, b, a;
-	int x, y;
+	unsigned char r, g, b;
 
 	/* get parms */
 	pos = qcvm_get_parm_vector(qcvm, 0);
@@ -70,33 +73,25 @@ void export_drawpixel(qcvm_t *qcvm)
 	if (pos.x > WIDTH - 1 || pos.y > HEIGHT - 1) return;
 	if (pos.x < 0 || pos.y < 0) return;
 
-	/* convert pos values */
-	x = (int)pos.x;
-	y = (int)pos.y;
-
 	/* convert color values */
 	r = (unsigned char)(col.x * 255);
 	g = (unsigned char)(col.y * 255);
 	b = (unsigned char)(col.z * 255);
-	a = 255;
-
-	/* pack color */
-	rgba = (unsigned int)((r << 24) | (g << 16) | (b << 8) | a);
 
 	/* place color */
-	((unsigned int *)pixels)[x * WIDTH + y] = rgba;
+	PIXEL(pos.x, pos.y) = RGBA(r, g, b, 255);
 }
 
 /* clear screen buffer */
 void export_clearscreen(qcvm_t *qcvm)
 {
-	memset(pixels, 0, WIDTH * HEIGHT * 4);
+	memset(pixels, 0, WIDTH * HEIGHT * sizeof(int));
 }
 
 /* make screen buffer visible */
 void export_drawscreen(qcvm_t *qcvm)
 {
-	SDL_UpdateTexture(texture, NULL, pixels, WIDTH * 4);
+	SDL_UpdateTexture(texture, NULL, pixels, WIDTH * sizeof(int));
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
@@ -163,7 +158,7 @@ int main(int argc, char **argv)
 	if (texture == NULL) error("SDL texture is NULL!");
 
 	/* allocate writeable pixels */
-	pixels = malloc(WIDTH * HEIGHT * 4);
+	pixels = malloc(WIDTH * HEIGHT * sizeof(int));
 
 	/* call quakec setup function */
 	qcvm_run(qcvm, func_setup);

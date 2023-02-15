@@ -83,7 +83,7 @@ void draw(vector screensize)
 	if (g > 1) g = 0;
 	if (b > 1) b = 0;
 
-	drawpixel([64, 64], [r, g, b]);
+	drawpixel([64, 64], [1, 0, 1]);
 
 	drawscreen();
 }
