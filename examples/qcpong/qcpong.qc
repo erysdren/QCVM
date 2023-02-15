@@ -38,14 +38,23 @@ entity right;
 
 float first_draw;
 
-#define BALL_SPEED 4
-#define PADDLE_SPEED 2
+#define BALL_SPEED 6
+#define PADDLE_SPEED 4
+
+enum
+{
+	BALL_UPLEFT,
+	BALL_UPRIGHT,
+	BALL_DOWNLEFT,
+	BALL_DOWNRIGHT
+};
 
 struct
 {
 	float moveup;
 	float movedown;
-} inputs;
+	float ball_dir;
+} gamestate;
 
 //
 //
@@ -100,12 +109,12 @@ void input(float key, float pressed)
 	{
 		case SC_UP:
 		case SC_W:
-			inputs.moveup = pressed ? TRUE : FALSE;
+			gamestate.moveup = pressed ? TRUE : FALSE;
 			break;
 
 		case SC_DOWN:
 		case SC_S:
-			inputs.movedown = pressed ? TRUE : FALSE;
+			gamestate.movedown = pressed ? TRUE : FALSE;
 			break;
 		
 		default:
@@ -129,11 +138,64 @@ void draw(vector screensize)
 	}
 
 	// process inputs
-	if (inputs.moveup) left.origin[1] -= BALL_SPEED;
-	if (inputs.movedown) left.origin[1] += BALL_SPEED;
+	if (gamestate.moveup) left.origin[1] -= PADDLE_SPEED;
+	if (gamestate.movedown) left.origin[1] += PADDLE_SPEED;
+
+	// process ball collision
+	if (ball.origin[0] - ball.mins[0] <= 0)
+	{
+		// hitting left
+		if (gamestate.ball_dir == BALL_UPLEFT) gamestate.ball_dir = BALL_UPRIGHT;
+		if (gamestate.ball_dir == BALL_DOWNLEFT) gamestate.ball_dir = BALL_DOWNRIGHT;
+	}
+	if (ball.origin[1] - ball.mins[1] <= 0)
+	{
+		// hitting top
+		if (gamestate.ball_dir == BALL_UPLEFT) gamestate.ball_dir = BALL_DOWNLEFT;
+		if (gamestate.ball_dir == BALL_UPRIGHT) gamestate.ball_dir = BALL_DOWNRIGHT;
+	}
+	if (ball.origin[0] + ball.maxs[0] >= screensize[0])
+	{
+		// hitting right
+		if (gamestate.ball_dir == BALL_UPRIGHT) gamestate.ball_dir = BALL_UPLEFT;
+		if (gamestate.ball_dir == BALL_DOWNRIGHT) gamestate.ball_dir = BALL_DOWNLEFT;
+	}
+	if (ball.origin[1] + ball.maxs[1] >= screensize[1])
+	{
+		// hitting bottom
+		if (gamestate.ball_dir == BALL_DOWNLEFT) gamestate.ball_dir = BALL_UPLEFT;
+		if (gamestate.ball_dir == BALL_DOWNRIGHT) gamestate.ball_dir = BALL_UPRIGHT;
+	}
+
+	// move ball
+	switch (gamestate.ball_dir)
+	{
+		case BALL_UPLEFT:
+			ball.origin[0] -= BALL_SPEED;
+			ball.origin[1] -= BALL_SPEED;
+			break;
+
+		case BALL_UPRIGHT:
+			ball.origin[0] += BALL_SPEED;
+			ball.origin[1] -= BALL_SPEED;
+			break;
+
+		case BALL_DOWNLEFT:
+			ball.origin[0] -= BALL_SPEED;
+			ball.origin[1] += BALL_SPEED;
+			break;
+
+		case BALL_DOWNRIGHT:
+			ball.origin[0] += BALL_SPEED;
+			ball.origin[1] += BALL_SPEED;
+			break;
+		
+		default:
+			break;
+	}
 
 	// draw debug text
-	drawtext([16, 16], [1, 1, 1], vtos(left.origin));
+	drawtext([16, 16], [1, 1, 1], strcat("ball.origin ", vtos(ball.origin)));
 
 	// draw ball & paddles
 	drawrectangle(ball.origin - ball.mins, ball.maxs + ball.mins, ball.color, TRUE);

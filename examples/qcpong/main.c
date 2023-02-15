@@ -149,22 +149,19 @@ void export_drawrectangle(qcvm_t *qcvm)
 	color = qcvm_get_parm_vector(qcvm, 2);
 	filled = qcvm_get_parm_float(qcvm, 3);
 
-	/* sanity checks */
-	if (pos.x < 0 || pos.y < 0) return;
-	if (pos.x > WIDTH || pos.y > HEIGHT) return;
-	if (pos.x + size.x < 0 || pos.y + size.y < 0) return;
-	if (pos.x + size.x > WIDTH || pos.y + size.y > HEIGHT) return;
-
 	/* convert color values */
 	r = (unsigned char)(color.x * 255);
 	g = (unsigned char)(color.y * 255);
 	b = (unsigned char)(color.z * 255);
 
 	/* inefficient loop */
+	/* todo: use memset32 for this */
 	for (y = (int)pos.y; y < (int)(pos.y + size.y); y++)
 	{
 		for (x = (int)pos.x; x < (int)(pos.x + size.x); x++)
 		{
+			if (x < 0 || y < 0) continue;
+			if (x > WIDTH - 1 || y > HEIGHT - 1) continue;
 			PIXEL(x, y) = RGBA(r, g, b, 255);
 		}
 	}
