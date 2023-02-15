@@ -11,17 +11,23 @@ void print(string s, ...) = #1;
 // acquire entity handle from the engine
 entity spawn() = #2;
 
+// get length of string
+float strlen(string s) = #3;
+
 // draw a pixel on the screen at the specified coordinates
-void drawpixel(vector pos, vector color) = #3;
+void drawpixel(vector pos, vector color) = #4;
 
 // clear screen
-void clearscreen() = #4;
+void clearscreen(optional vector color) = #5;
 
 // render screen
-void drawscreen() = #5;
+void drawscreen() = #6;
 
-// draw text on screen
-void drawtext(vector pos, vector color, string text) = #6;
+// draw rectangle
+void drawrectangle(vector pos, vector size, vector color, float filled) = #7;
+
+// draw text
+void drawtext(vector pos, vector color, string text) = #8;
 
 //
 //
@@ -38,9 +44,7 @@ entity ball;
 entity left;
 entity right;
 
-float r;
-float g;
-float b;
+string hellostr = "hello world!";
 
 //
 //
@@ -73,17 +77,10 @@ void update()
 // called every draw frame
 void draw(vector screensize)
 {
-	clearscreen();
+	clearscreen([1, 0, 1]);
 
-	r += 0.001;
-	g += 0.01;
-	b += 0.001;
-
-	if (r > 1) r = 0;
-	if (g > 1) g = 0;
-	if (b > 1) b = 0;
-
-	drawpixel([64, 64], [1, 0, 1]);
+	drawrectangle([12, 12], [(strlen(hellostr) * 8) + 8, 16], [0, 0, 0], 1);
+	drawtext([16, 16], [1, 1, 1], hellostr);
 
 	drawscreen();
 }

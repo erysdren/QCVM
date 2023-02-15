@@ -72,6 +72,7 @@ void qcvm_set_parm_int(qcvm_t *qcvm, int parm, int val);
 void qcvm_set_parm_float(qcvm_t *qcvm, int parm, float val);
 
 /* get various parameter types */
+int qcvm_get_argc(qcvm_t *qcvm);
 qcvm_vec3 qcvm_get_parm_vector(qcvm_t *qcvm, int parm);
 const char *qcvm_get_parm_string(qcvm_t *qcvm, int parm);
 int qcvm_get_parm_int(qcvm_t *qcvm, int parm);

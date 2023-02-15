@@ -41,7 +41,6 @@
  * set parameters
  */
 
-
 /* set vector parameter */
 void qcvm_set_parm_vector(qcvm_t *qcvm, int parm, float a, float b, float c)
 {
@@ -65,6 +64,12 @@ void qcvm_set_parm_float(qcvm_t *qcvm, int parm, float val)
 /*
  * get parameters
  */
+
+/* get argc */
+int qcvm_get_argc(qcvm_t *qcvm)
+{
+	return qcvm->function_argc;
+}
 
 /* get vector parameter */
 qcvm_vec3 qcvm_get_parm_vector(qcvm_t *qcvm, int parm)

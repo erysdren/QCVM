@@ -30,6 +30,7 @@
 
 /* std */
 #include <stdio.h>
+#include <string.h>
 
 /* qcvm */
 #include "qcvm_private.h"
@@ -55,12 +56,19 @@ void qclib_spawn(qcvm_t *qcvm)
 	qcvm->num_entities++;
 }
 
+/* get length of string */
+void qclib_strlen(qcvm_t *qcvm)
+{
+	RETURN_FLOAT((float)strlen(qcvm_get_parm_string(qcvm, 0)));
+}
+
 /* install qclib default builtin functions */
 void qclib_install(qcvm_t *qcvm)
 {
 	qcvm->exports[0] = NULL;
 	qcvm->exports[1] = qclib_print;
 	qcvm->exports[2] = qclib_spawn;
+	qcvm->exports[3] = qclib_strlen;
 
-	qcvm->num_exports = 2;
+	qcvm->num_exports = 3;
 }

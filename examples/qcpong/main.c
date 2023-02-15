@@ -42,16 +42,21 @@
 /* qclib */
 #include "qclib.h"
 
+/* https://github.com/dhepper/font8x8 */
+#include "font8x8_basic.h"
+
 /* constants */
 #define WIDTH 640
 #define HEIGHT 480
 #define TITLE "QCPONG"
 #define PROGS "../examples/qcpong/qcpong.dat"
+#define ASPECT1 (float)(WIDTH) / (float)(HEIGHT)
+#define ASPECT2 (float)(HEIGHT) / (float)(WIDTH)
 
 /* macros */
 #define RGBA(r, g, b, a) (unsigned int)((r << 24) | (g << 16) | (b << 8) | a)
 #define ARGB(r, g, b, a) (unsigned int)((a << 24) | (r << 16) | (g << 8) | b)
-#define PIXEL(x, y) ((unsigned int *)pixels)[(unsigned int)(x) * WIDTH + (unsigned int)(y)]
+#define PIXEL(x, y) ((unsigned int *)pixels)[(unsigned int)(y) * WIDTH + (unsigned int)(x)]
 
 /* globals */
 void *pixels;
@@ -59,24 +64,37 @@ SDL_Window *window;
 SDL_Texture *texture;
 SDL_Renderer *renderer;
 
+/* set memory area to a 32 bit value */
+void *memset32(void *s, unsigned int c, size_t n)
+{
+	/* variables */
+	unsigned int *dst = (unsigned int *)s;
+
+	/* loop to set memory */
+	while (n--) *dst++ = c;
+
+	/* return pointer to memory */
+	return s;
+}
+
 /* draw pixel on screen buffer */
 void export_drawpixel(qcvm_t *qcvm)
 {
 	/* variables */
-	qcvm_vec3 pos, col;
+	qcvm_vec3 pos, color;
 	unsigned char r, g, b;
 
 	/* get parms */
 	pos = qcvm_get_parm_vector(qcvm, 0);
-	col = qcvm_get_parm_vector(qcvm, 1);
+	color = qcvm_get_parm_vector(qcvm, 1);
 
 	if (pos.x > WIDTH - 1 || pos.y > HEIGHT - 1) return;
 	if (pos.x < 0 || pos.y < 0) return;
 
 	/* convert color values */
-	r = (unsigned char)(col.x * 255);
-	g = (unsigned char)(col.y * 255);
-	b = (unsigned char)(col.z * 255);
+	r = (unsigned char)(color.x * 255);
+	g = (unsigned char)(color.y * 255);
+	b = (unsigned char)(color.z * 255);
 
 	/* place color */
 	PIXEL(pos.x, pos.y) = RGBA(r, g, b, 255);
@@ -85,16 +103,117 @@ void export_drawpixel(qcvm_t *qcvm)
 /* clear screen buffer */
 void export_clearscreen(qcvm_t *qcvm)
 {
-	memset(pixels, 0, WIDTH * HEIGHT * sizeof(int));
+	/* variables */
+	qcvm_vec3 color;
+	unsigned char r, g, b;
+
+	/* if the user defined a color */
+	if (qcvm_get_argc(qcvm))
+	{
+		/* get parameters */
+		color = qcvm_get_parm_vector(qcvm, 0);
+
+		/* convert color values */
+		r = (unsigned char)(color.x * 255);
+		g = (unsigned char)(color.y * 255);
+		b = (unsigned char)(color.z * 255);
+
+		/* fancy memset */
+		memset32(pixels, RGBA(r, g, b, 255), WIDTH * HEIGHT);
+	}
+	else
+	{
+		/* memset */
+		memset(pixels, 0, WIDTH * HEIGHT * sizeof(int));
+	}
 }
 
 /* make screen buffer visible */
 void export_drawscreen(qcvm_t *qcvm)
 {
 	SDL_UpdateTexture(texture, NULL, pixels, WIDTH * sizeof(int));
-	SDL_RenderClear(renderer);
-	SDL_RenderCopy(renderer, texture, NULL, NULL);
-	SDL_RenderPresent(renderer);
+}
+
+/* draw a rectangle */
+void export_drawrectangle(qcvm_t *qcvm)
+{
+	/* variables */
+	qcvm_vec3 pos, size, color;
+	float filled;
+	int x, y;
+	unsigned char r, g, b;
+
+	/* get parms */
+	pos = qcvm_get_parm_vector(qcvm, 0);
+	size = qcvm_get_parm_vector(qcvm, 1);
+	color = qcvm_get_parm_vector(qcvm, 2);
+	filled = qcvm_get_parm_float(qcvm, 3);
+
+	/* sanity checks */
+	if (pos.x < 0 || pos.y < 0) return;
+	if (pos.x > WIDTH || pos.y > HEIGHT) return;
+	if (pos.x + size.x < 0 || pos.y + size.y < 0) return;
+	if (pos.x + size.x > WIDTH || pos.y + size.y > HEIGHT) return;
+
+	/* convert color values */
+	r = (unsigned char)(color.x * 255);
+	g = (unsigned char)(color.y * 255);
+	b = (unsigned char)(color.z * 255);
+
+	/* inefficient loop */
+	for (y = (int)pos.y; y < (int)(pos.y + size.y); y++)
+	{
+		for (x = (int)pos.x; x < (int)(pos.x + size.x); x++)
+		{
+			PIXEL(x, y) = RGBA(r, g, b, 255);
+		}
+	}
+}
+
+void draw_text(int x, int y, unsigned char r, unsigned char g, unsigned char b, char *bitmap)
+{
+	/* variables */
+	int cx, cy;
+
+	/* plot loop */
+	for (cx = 0; cx < 8; cx++)
+	{
+		for (cy = 0; cy < 8; cy++)
+		{
+			if (x + cy > WIDTH || y + cx > HEIGHT) return;
+
+			if (bitmap[cx] & 1 << cy)
+				PIXEL(x + cy, y + cx) = RGBA(r, g, b, 255);
+		}
+	}
+}
+
+/* draw text on screen */
+void export_drawtext(qcvm_t *qcvm)
+{
+	/* variables */
+	qcvm_vec3 pos, color;
+	const char *string;
+	int i;
+	char c;
+	unsigned char r, g, b;
+
+	/* get parms */
+	pos = qcvm_get_parm_vector(qcvm, 0);
+	color = qcvm_get_parm_vector(qcvm, 1);
+	string = qcvm_get_parm_string(qcvm, 2);
+
+	/* convert color values */
+	r = (unsigned char)(color.x * 255);
+	g = (unsigned char)(color.y * 255);
+	b = (unsigned char)(color.z * 255);
+
+	/* plot loop */
+	for (i = 0; i < strlen(string); i++)
+	{
+		c = string[i];
+		draw_text((int)pos.x + (i * 8), (int)pos.y, r, g, b, font8x8_basic[c]);
+	}
 }
 
 /* error */
@@ -115,6 +234,8 @@ int main(int argc, char **argv)
 	int func_shutdown;
 	int running;
 	SDL_Event event;
+	SDL_Rect dst_rect;
+	int window_x, window_y;
 
 	/*
 	 * startup
@@ -133,6 +254,8 @@ int main(int argc, char **argv)
 	qcvm_add_export(qcvm, export_drawpixel);
 	qcvm_add_export(qcvm, export_clearscreen);
 	qcvm_add_export(qcvm, export_drawscreen);
+	qcvm_add_export(qcvm, export_drawrectangle);
+	qcvm_add_export(qcvm, export_drawtext);
 
 	/* get function handles */
 	func_draw = qcvm_get_function(qcvm, "draw");
@@ -186,6 +309,46 @@ int main(int argc, char **argv)
 		/* call qc draw function */
 		qcvm_set_parm_vector(qcvm, 0, WIDTH, HEIGHT, 0);
 		qcvm_run(qcvm, func_draw);
+
+		/* update dst position */
+		SDL_GetWindowSize(window, &window_x, &window_y);
+		if (window_y < window_x && (window_y * ASPECT1) < window_x)
+		{
+			dst_rect.x = (window_x / 2) - ((window_y * ASPECT1) / 2);
+			dst_rect.y = 0;
+		}
+		else if (window_x / window_y == ASPECT1)
+		{
+			dst_rect.x = 0;
+			dst_rect.y = 0;
+		}
+		else
+		{
+			dst_rect.x = 0;
+			dst_rect.y = (window_y / 2) - ((window_x * ASPECT2) / 2);
+		}
+
+		/* update dst size */
+		if (window_y < window_x && (window_y * ASPECT1) < window_x)
+		{
+			dst_rect.w = window_y * ASPECT1;
+			dst_rect.h = window_y;
+		}
+		else if ((window_x / window_y) == ASPECT1)
+		{
+			dst_rect.w = window_x;
+			dst_rect.h = window_y;
+		}
+		else
+		{
+			dst_rect.w = window_x;
+			dst_rect.h = window_x * ASPECT2;
+		}
+
+		/* copy texture */
+		SDL_RenderClear(renderer);
+		SDL_RenderCopy(renderer, texture, NULL, &dst_rect);
+		SDL_RenderPresent(renderer);
 	}
 
 	/*
