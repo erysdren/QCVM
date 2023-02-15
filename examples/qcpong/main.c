@@ -46,6 +46,7 @@
 #define WIDTH 640
 #define HEIGHT 480
 #define TITLE "QCPONG"
+#define PROGS "../examples/qcpong/qcpong.dat"
 
 /* globals */
 void *pixels;
@@ -125,7 +126,7 @@ int main(int argc, char **argv)
 	 */
 
 	/* load qcvm */
-	qcvm = qcvm_open("../examples/qcpong/qcpong.dat");
+	qcvm = qcvm_open(PROGS);
 
 	/* check validity */
 	if (qcvm == NULL) error("Failed to load required QuakeC module!\n");
