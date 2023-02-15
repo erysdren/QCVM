@@ -39,7 +39,7 @@ entity right;
 float first_draw;
 
 #define BALL_SPEED 6
-#define PADDLE_SPEED 4
+#define PADDLE_SPEED 6
 
 enum
 {
@@ -141,30 +141,40 @@ void draw(vector screensize)
 	if (gamestate.moveup) left.origin[1] -= PADDLE_SPEED;
 	if (gamestate.movedown) left.origin[1] += PADDLE_SPEED;
 
-	// process ball collision
+	// process ball < - > screen collision
 	if (ball.origin[0] - ball.mins[0] <= 0)
 	{
 		// hitting left
 		if (gamestate.ball_dir == BALL_UPLEFT) gamestate.ball_dir = BALL_UPRIGHT;
-		if (gamestate.ball_dir == BALL_DOWNLEFT) gamestate.ball_dir = BALL_DOWNRIGHT;
+		else if (gamestate.ball_dir == BALL_DOWNLEFT) gamestate.ball_dir = BALL_DOWNRIGHT;
 	}
 	if (ball.origin[1] - ball.mins[1] <= 0)
 	{
 		// hitting top
 		if (gamestate.ball_dir == BALL_UPLEFT) gamestate.ball_dir = BALL_DOWNLEFT;
-		if (gamestate.ball_dir == BALL_UPRIGHT) gamestate.ball_dir = BALL_DOWNRIGHT;
+		else if (gamestate.ball_dir == BALL_UPRIGHT) gamestate.ball_dir = BALL_DOWNRIGHT;
 	}
 	if (ball.origin[0] + ball.maxs[0] >= screensize[0])
 	{
 		// hitting right
 		if (gamestate.ball_dir == BALL_UPRIGHT) gamestate.ball_dir = BALL_UPLEFT;
-		if (gamestate.ball_dir == BALL_DOWNRIGHT) gamestate.ball_dir = BALL_DOWNLEFT;
+		else if (gamestate.ball_dir == BALL_DOWNRIGHT) gamestate.ball_dir = BALL_DOWNLEFT;
 	}
 	if (ball.origin[1] + ball.maxs[1] >= screensize[1])
 	{
 		// hitting bottom
 		if (gamestate.ball_dir == BALL_DOWNLEFT) gamestate.ball_dir = BALL_UPLEFT;
-		if (gamestate.ball_dir == BALL_DOWNRIGHT) gamestate.ball_dir = BALL_UPRIGHT;
+		else if (gamestate.ball_dir == BALL_DOWNRIGHT) gamestate.ball_dir = BALL_UPRIGHT;
+	}
+
+	// process ball < - > paddle collision
+	if (ball.origin[0] < screensize[0] / 2)
+	{
+		// left paddle
+	}
+	else
+	{
+		// right paddle
 	}
 
 	// move ball

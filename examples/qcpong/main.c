@@ -214,7 +214,7 @@ void export_drawtext(qcvm_t *qcvm)
 	}
 }
 
-/* error */
+/* hard exit without freeing anything */
 void error(const char *err)
 {
 	fprintf(stderr, "ERROR: %s\n", err);
