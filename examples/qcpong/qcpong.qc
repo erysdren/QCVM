@@ -6,19 +6,19 @@
 //
 
 // draw a pixel on the screen at the specified coordinates
-void drawpixel(vector pos, vector color) = #5;
+void drawpixel(vector pos, vector color) = #7;
 
 // clear screen
-void clearscreen(optional vector color) = #6;
+void clearscreen(optional vector color) = #8;
 
 // render screen
-void drawscreen() = #7;
+void drawscreen() = #9;
 
 // draw rectangle
-void drawrectangle(vector pos, vector size, vector color, float filled) = #8;
+void drawrectangle(vector pos, vector size, vector color, float filled) = #10;
 
 // draw text
-void drawtext(vector pos, vector color, string text) = #9;
+void drawtext(vector pos, vector color, string text) = #11;
 
 //
 //
@@ -35,7 +35,7 @@ entity ball;
 entity left;
 entity right;
 
-string hellostr = "hello world!";
+string str_debug;
 
 //
 //
@@ -68,10 +68,14 @@ void update()
 // called every draw frame
 void draw(vector screensize)
 {
+	// clear screen
 	clearscreen([1, 0, 1]);
 
-	drawrectangle([12, 12], [(strlen(hellostr) * 8) + 8, 16], [0, 0, 0], 1);
-	drawtext([16, 16], [1, 1, 1], hellostr);
+	// create debug text for upper left corner
+	str_debug = strcat("screen size: ", vtos(screensize));
+	drawrectangle([12, 12], [(strlen(str_debug) * 8) + 8, 16], [0, 0, 0], 1);
+	drawtext([16, 16], [1, 1, 1], str_debug);
 
+	// draw screen
 	drawscreen();
 }

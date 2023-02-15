@@ -78,6 +78,43 @@ void qclib_strcat(qcvm_t *qcvm)
 	qcvm_return_string(qcvm, buf);
 }
 
+/* float to string */
+void qclib_ftos(qcvm_t *qcvm)
+{
+	/* variables */
+	float f;
+	char buf[64];
+
+	/* get parms */
+	f = qcvm_get_parm_float(qcvm, 0);
+
+	/* sprintf */
+	if (f == (int)f)
+		sprintf(buf, "%d", (int)f);
+	else
+		sprintf(buf, "%0.4f", f);
+
+	/* return */
+	qcvm_return_string(qcvm, buf);
+}
+
+/* vector to string */
+void qclib_vtos(qcvm_t *qcvm)
+{
+	/* variables */
+	qcvm_vec3 v;
+	char buf[64];
+
+	/* get parms */
+	v = qcvm_get_parm_vector(qcvm, 0);
+
+	/* sprintf */
+	sprintf(buf, "%0.4f %0.4f %0.4f", v.x, v.y, v.z);
+
+	/* return */
+	qcvm_return_string(qcvm, buf);
+}
+
 /* install qclib default builtin functions */
 void qclib_install(qcvm_t *qcvm)
 {
@@ -86,6 +123,8 @@ void qclib_install(qcvm_t *qcvm)
 	qcvm->exports[2] = qclib_spawn;
 	qcvm->exports[3] = qclib_strlen;
 	qcvm->exports[4] = qclib_strcat;
+	qcvm->exports[5] = qclib_ftos;
+	qcvm->exports[6] = qclib_vtos;
 
-	qcvm->num_exports = 4;
+	qcvm->num_exports = 6;
 }
