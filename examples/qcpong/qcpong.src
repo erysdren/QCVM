@@ -29,5 +29,6 @@
 #pragma autoproto
 
 #includelist
-	main.qc
+	qclib.qc
+	qcpong.qc
 #endlist

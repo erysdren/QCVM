@@ -84,7 +84,7 @@ if(QCVM_BUILD_QCPONG)
 	find_program(fteqcc64 fteqcc64 REQUIRED)
 	add_custom_command(
 		OUTPUT ${CMAKE_BINARY_DIR}/qcpong.dat
-		COMMAND fteqcc64 ${CMAKE_SOURCE_DIR}/examples/qcpong/main.src
+		COMMAND fteqcc64 ${CMAKE_SOURCE_DIR}/examples/qcpong/qcpong.src
 	)
 	add_custom_target(qcpong_dat ALL DEPENDS ${CMAKE_BINARY_DIR}/qcpong.dat)
 
