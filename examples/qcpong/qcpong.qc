@@ -28,14 +28,24 @@ void drawtext(vector pos, vector color, string text) = #11;
 
 .vector origin;
 .vector color;
-.vector size;
+.vector mins;
+.vector maxs;
 .float score;
 
 entity ball;
 entity left;
 entity right;
 
-string str_debug;
+float first_draw;
+
+#define BALL_SPEED 4
+#define PADDLE_SPEED 2
+
+struct
+{
+	float moveup;
+	float movedown;
+} inputs;
 
 //
 //
@@ -52,6 +62,24 @@ void setup()
 	ball = spawn();
 	left = spawn();
 	right = spawn();
+
+	// set ball values
+	ball.mins = [8, 8];
+	ball.maxs = [8, 8];
+	ball.color = [1, 1, 1];
+
+	// set left paddle values
+	left.mins = [8, 32];
+	left.maxs = [8, 32];
+	left.color = [1, 1, 1];
+
+	// set right paddle values
+	right.mins = [8, 32];
+	right.maxs = [8, 32];
+	right.color = [1, 1, 1];
+
+	// hack
+	first_draw = TRUE;
 }
 
 void shutdown()
@@ -65,16 +93,52 @@ void update()
 
 }
 
+// called whenever a keyboard input happens
+void input(float key, float pressed)
+{
+	switch (key)
+	{
+		case SC_UP:
+		case SC_W:
+			inputs.moveup = pressed ? TRUE : FALSE;
+			break;
+
+		case SC_DOWN:
+		case SC_S:
+			inputs.movedown = pressed ? TRUE : FALSE;
+			break;
+		
+		default:
+			break;
+	}
+}
+
 // called every draw frame
 void draw(vector screensize)
 {
 	// clear screen
-	clearscreen([1, 0, 1]);
+	clearscreen([0.1, 0.1, 0.1]);
 
-	// create debug text for upper left corner
-	str_debug = strcat("screen size: ", vtos(screensize));
-	drawrectangle([12, 12], [(strlen(str_debug) * 8) + 8, 16], [0, 0, 0], 1);
-	drawtext([16, 16], [1, 1, 1], str_debug);
+	// hack
+	if (first_draw)
+	{
+		left.origin = [32, screensize[1] / 2];
+		right.origin = [screensize[0] - 32, screensize[1] / 2];
+		ball.origin = screensize / 2;
+		first_draw = FALSE;
+	}
+
+	// process inputs
+	if (inputs.moveup) left.origin[1] -= BALL_SPEED;
+	if (inputs.movedown) left.origin[1] += BALL_SPEED;
+
+	// draw debug text
+	drawtext([16, 16], [1, 1, 1], vtos(left.origin));
+
+	// draw ball & paddles
+	drawrectangle(ball.origin - ball.mins, ball.maxs + ball.mins, ball.color, TRUE);
+	drawrectangle(left.origin - left.mins, left.maxs + left.mins, left.color, TRUE);
+	drawrectangle(right.origin - right.mins, right.maxs + right.mins, right.color, TRUE);
 
 	// draw screen
 	drawscreen();

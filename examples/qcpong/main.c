@@ -181,7 +181,7 @@ void draw_char(int x, int y, unsigned char r, unsigned char g, unsigned char b, 
 	{
 		for (cy = 0; cy < 8; cy++)
 		{
-			if (x + cy > WIDTH || y + cx > HEIGHT) return;
+			if (x + cy > WIDTH - 1 || y + cx > HEIGHT - 1) return;
 
 			if (bitmap[cx] & 1 << cy)
 				PIXEL(x + cy, y + cx) = RGBA(r, g, b, 255);
@@ -233,6 +233,7 @@ int main(int argc, char **argv)
 	int func_setup;
 	int func_update;
 	int func_shutdown;
+	int func_input;
 	int running;
 	SDL_Event event;
 	SDL_Rect dst_rect;
@@ -263,12 +264,14 @@ int main(int argc, char **argv)
 	func_setup = qcvm_get_function(qcvm, "setup");
 	func_update = qcvm_get_function(qcvm, "update");
 	func_shutdown = qcvm_get_function(qcvm, "shutdown");
+	func_input = qcvm_get_function(qcvm, "input");
 
 	/* check validitiy */
 	if (func_draw < 1) error("Failed to find required QuakeC function draw()!");
 	if (func_setup < 1) error("Failed to find required QuakeC function setup()!");
 	if (func_update < 1) error("Failed to find required QuakeC function update()!");
 	if (func_shutdown < 1) error("Failed to find required QuakeC function shutdown()!");
+	if (func_input < 1) error("Failed to find required QuakeC function input()!");
 
 	/* SDL */
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) error("Failed to initialize SDL!");
@@ -283,6 +286,9 @@ int main(int argc, char **argv)
 
 	/* allocate writeable pixels */
 	pixels = malloc(WIDTH * HEIGHT * sizeof(int));
+
+	/* check validity */
+	if (pixels == NULL) error("Failed to allocate pixels buffer!");
 
 	/* call quakec setup function */
 	qcvm_run(qcvm, func_setup);
@@ -300,6 +306,18 @@ int main(int argc, char **argv)
 			{
 				case SDL_QUIT:
 					running = 0;
+					break;
+
+				case SDL_KEYDOWN:
+					qcvm_set_parm_float(qcvm, 0, (float)event.key.keysym.scancode);
+					qcvm_set_parm_float(qcvm, 1, 1);
+					qcvm_run(qcvm, func_input);
+					break;
+
+				case SDL_KEYUP:
+					qcvm_set_parm_float(qcvm, 0, (float)event.key.keysym.scancode);
+					qcvm_set_parm_float(qcvm, 1, 0);
+					qcvm_run(qcvm, func_input);
 					break;
 
 				default:
