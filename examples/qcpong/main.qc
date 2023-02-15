@@ -12,7 +12,13 @@ void print(string s, ...) = #1;
 entity spawn() = #2;
 
 // draw a pixel on the screen at the specified coordinates
-void pixel(vector pos, vector color) = #3;
+void drawpixel(vector pos, vector color) = #3;
+
+// clear screen
+void clearscreen() = #4;
+
+// render screen
+void renderscreen() = #5;
 
 //
 //
@@ -32,6 +38,10 @@ entity right_paddle;
 float left_score;
 float right_score;
 
+float r;
+float g;
+float b;
+
 //
 //
 // these are called from c
@@ -50,6 +60,9 @@ void setup()
 
 	left_score = 0;
 	right_score = 0;
+
+	// draw a pixel
+	drawpixel([32, 32], [1, 1, 1]);
 }
 
 void shutdown()
@@ -66,5 +79,17 @@ void update()
 // called every draw frame
 void draw(vector screensize)
 {
+	clearscreen();
 
+	r += 0.001;
+	g += 0.001;
+	b += 0.001;
+
+	if (r > 1) r = 0;
+	if (g > 1) g = 0;
+	if (b > 1) b = 0;
+
+	drawpixel([64, 64], [r, g, b]);
+
+	renderscreen();
 }

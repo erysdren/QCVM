@@ -47,6 +47,54 @@
 #define HEIGHT 480
 #define TITLE "QCPONG"
 
+/* globals */
+void *pixels;
+SDL_Window *window;
+SDL_Texture *texture;
+SDL_Renderer *renderer;
+
+/* draw pixel on screen buffer */
+void export_drawpixel(qcvm_t *qcvm)
+{
+	/* variables */
+	qcvm_vec3 pos, col;
+	unsigned int rgb;
+	unsigned char r, g, b, a;
+	int x, y;
+
+	/* get parms */
+	pos = qcvm_get_parm_vector(qcvm, 0);
+	col = qcvm_get_parm_vector(qcvm, 1);
+
+	/* convert pos values */
+	x = (int)pos.x;
+	y = (int)pos.y;
+
+	/* convert color values */
+	r = (unsigned char)(col.x * 255);
+	g = (unsigned char)(col.y * 255);
+	b = (unsigned char)(col.z * 255);
+	a = 255;
+
+	/* pack color */
+	rgb = (unsigned int)((r << 24) | (g << 16) | (b << 8) | a);
+
+	/* place color */
+	((unsigned int *)pixels)[x * WIDTH + y] = rgb;
+}
+
+/* clear screen buffer */
+void export_clearscreen(qcvm_t *qcvm)
+{
+	memset(pixels, 0, WIDTH * HEIGHT * 4);
+}
+
+/* make screen buffer visible */
+void export_renderscreen(qcvm_t *qcvm)
+{
+	SDL_UpdateTexture(texture, NULL, pixels, WIDTH * 4);
+}
+
 /* error */
 void error(const char *err)
 {
@@ -65,23 +113,24 @@ int main(int argc, char **argv)
 	int func_shutdown;
 	int running;
 	SDL_Event event;
-	SDL_Window *window;
-	SDL_Texture *texture;
-	SDL_Renderer *renderer;
-	void *pixels;
 
 	/*
 	 * startup
 	 */
 
 	/* load qcvm */
-	qcvm = qcvm_open("qcpong.dat");
+	qcvm = qcvm_open("../examples/qcpong/qcpong.dat");
 
 	/* check validity */
 	if (qcvm == NULL) error("Failed to load required QuakeC module!\n");
 
 	/* install qclib */
 	qclib_install(qcvm);
+
+	/* install our own exports */
+	qcvm_add_export(qcvm, export_drawpixel);
+	qcvm_add_export(qcvm, export_clearscreen);
+	qcvm_add_export(qcvm, export_renderscreen);
 
 	/* get function handles */
 	func_draw = qcvm_get_function(qcvm, "draw");
@@ -135,9 +184,6 @@ int main(int argc, char **argv)
 		/* call qc draw function */
 		qcvm_set_parm_vector(qcvm, 0, WIDTH, HEIGHT, 0);
 		qcvm_run(qcvm, func_draw);
-
-		/* update texture */
-		SDL_UpdateTexture(texture, NULL, pixels, WIDTH * 4);
 
 		/* display texture */
 		SDL_RenderClear(renderer);
