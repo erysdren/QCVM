@@ -49,6 +49,30 @@ struct
 
 //
 //
+// our functions
+//
+//
+
+float collides2D(entity a, entity b)
+{
+	return a.origin[0] - a.mins[0] < b.origin[0] + b.maxs[0] &&
+			a.origin[0] + a.maxs[0] > b.origin[0] - b.mins[0] &&
+			a.origin[1] - a.mins[1] < b.origin[1] + b.maxs[1] &&
+			a.origin[1] + a.maxs[1] > b.origin[1] - b.mins[1];
+}
+
+float collides3D(entity a, entity b)
+{
+	return a.origin[0] - a.mins[0] < b.origin[0] + b.maxs[0] &&
+			a.origin[0] + a.maxs[0] > b.origin[0] - b.mins[0] &&
+			a.origin[1] - a.mins[1] < b.origin[1] + b.maxs[1] &&
+			a.origin[1] + a.maxs[1] > b.origin[1] - b.mins[1] &&
+			a.origin[2] - a.mins[2] < b.origin[2] + b.maxs[2] &&
+			a.origin[2] + a.maxs[2] > b.origin[2] - b.mins[2];
+}
+
+//
+//
 // these are called from c
 //
 //
@@ -169,11 +193,25 @@ void draw_game(vector screensize)
 	if (ball.origin[0] < screensize[0] / 2)
 	{
 		// left paddle
+		if (collides2D(ball, left) == TRUE)
+		{
+			if (gamestate.ball_dir == BALL_UPLEFT) gamestate.ball_dir = BALL_UPRIGHT;
+			else if (gamestate.ball_dir == BALL_DOWNLEFT) gamestate.ball_dir = BALL_DOWNRIGHT;
+		}
 	}
 	else
 	{
 		// right paddle
+		if (collides2D(ball, right) == TRUE)
+		{
+			if (gamestate.ball_dir == BALL_UPRIGHT) gamestate.ball_dir = BALL_UPLEFT;
+			else if (gamestate.ball_dir == BALL_DOWNRIGHT) gamestate.ball_dir = BALL_DOWNLEFT;
+		}
 	}
+
+	// right paddle ai
+	if (ball.origin[1] > right.origin[1]) right.origin[1] += PADDLE_SPEED / 2;
+	if (ball.origin[1] < right.origin[1]) right.origin[1] -= PADDLE_SPEED / 2;
 
 	// move ball
 	switch (gamestate.ball_dir)

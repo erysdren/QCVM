@@ -270,7 +270,7 @@ int main(int argc, char **argv)
 	qcvm = qcvm_open(PROGS);
 
 	/* check validity */
-	if (qcvm == NULL) error("Failed to load required QuakeC module!\n");
+	if (qcvm == NULL) error("Failed to load required QuakeC module!");
 
 	/* install qclib */
 	qclib_install(qcvm);
