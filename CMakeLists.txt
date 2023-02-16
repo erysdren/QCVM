@@ -33,6 +33,7 @@ set(CMAKE_BUILD_TYPE Release)
 option(QCVM_BUILD_QC "Build Example QuakeC" ON)
 option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
 option(QCVM_BUILD_QCPONG "Build Example Game" ON)
+option(QCVM_BUILD_GLEXAMPLE "Build OpenGL Example" ON)
 
 ## QCVM Sources
 set(QCVM_SOURCES
@@ -77,6 +78,26 @@ if(QCVM_BUILD_TESTAPP)
 	## Executable
 	add_executable(test ${QCVM_TEST_SOURCES})
 	target_link_libraries(test PUBLIC qcvm_static)
+
+endif()
+
+## QCVM GL Example
+if(QCVM_BUILD_GLEXAMPLE AND NOT DJGPP AND NOT WATCOM)
+
+	## Sources
+	set(GLEXAMPLE_SOURCES
+		examples/glexample/main.c
+	)
+
+	## Dependencies
+	find_package(OpenGL REQUIRED)
+	find_package(glfw3 3.3 REQUIRED)
+
+	## Executable
+	add_executable(glexample ${GLEXAMPLE_SOURCES})
+	target_link_libraries(glexample PUBLIC qcvm_static)
+	target_link_libraries(glexample PUBLIC OpenGL::GL)
+	target_link_libraries(glexample PUBLIC glfw)
 
 endif()
 
