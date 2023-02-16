@@ -193,7 +193,7 @@ void draw(vector screensize)
 			ball.origin[0] += BALL_SPEED;
 			ball.origin[1] += BALL_SPEED;
 			break;
-		
+
 		default:
 			break;
 	}
