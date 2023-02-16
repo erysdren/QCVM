@@ -5,9 +5,17 @@
 //
 //
 
-// macros
+//
+// text macros
+//
+
+// true/false
 #define TRUE 1
 #define FALSE 0
+
+//
+// functions
+//
 
 // print string to stdoout
 void print(string s, ...) = #1;

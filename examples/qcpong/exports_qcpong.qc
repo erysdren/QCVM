@@ -1,11 +1,44 @@
 
 //
 //
-// sdl keyboard scancodes
+// exports
 //
 //
 
-enum sdl_keys
+//
+// functions
+//
+
+// draw a pixel on the screen at the specified coordinates
+void drawpixel(vector pos, vector color) = #7;
+
+// clear screen
+void clearscreen(optional vector color) = #8;
+
+// render screen
+void drawscreen() = #9;
+
+// draw rectangle
+void drawrectangle(vector pos, vector size, vector color, float filled) = #10;
+
+// draw text
+void drawtext(vector pos, vector color, string text) = #11;
+
+//
+// variables
+//
+
+// global time
+__used float time;
+
+// global fps
+__used float fps;
+
+//
+// keyboard scancodes
+//
+
+enum scancodes
 {
 	SC_A = 4,
 	SC_B = 5,

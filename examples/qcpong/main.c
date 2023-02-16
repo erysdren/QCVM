@@ -235,7 +235,7 @@ int main(int argc, char **argv)
 	int global_fps;
 	int running;
 	SDL_Event event;
-	SDL_Rect dst_rect;
+	SDL_Rect dst;
 	int window_x, window_y;
 	Uint64 frame_start;
 	Uint64 frame_end;
@@ -347,40 +347,40 @@ int main(int argc, char **argv)
 		SDL_GetWindowSize(window, &window_x, &window_y);
 		if (window_y < window_x && (window_y * ASPECT1) < window_x)
 		{
-			dst_rect.x = (window_x / 2) - ((window_y * ASPECT1) / 2);
-			dst_rect.y = 0;
+			dst.x = (window_x / 2) - ((window_y * ASPECT1) / 2);
+			dst.y = 0;
 		}
 		else if (window_x / window_y == ASPECT1)
 		{
-			dst_rect.x = 0;
-			dst_rect.y = 0;
+			dst.x = 0;
+			dst.y = 0;
 		}
 		else
 		{
-			dst_rect.x = 0;
-			dst_rect.y = (window_y / 2) - ((window_x * ASPECT2) / 2);
+			dst.x = 0;
+			dst.y = (window_y / 2) - ((window_x * ASPECT2) / 2);
 		}
 
 		/* update dst size */
 		if (window_y < window_x && (window_y * ASPECT1) < window_x)
 		{
-			dst_rect.w = window_y * ASPECT1;
-			dst_rect.h = window_y;
+			dst.w = window_y * ASPECT1;
+			dst.h = window_y;
 		}
 		else if ((window_x / window_y) == ASPECT1)
 		{
-			dst_rect.w = window_x;
-			dst_rect.h = window_y;
+			dst.w = window_x;
+			dst.h = window_y;
 		}
 		else
 		{
-			dst_rect.w = window_x;
-			dst_rect.h = window_x * ASPECT2;
+			dst.w = window_x;
+			dst.h = window_x * ASPECT2;
 		}
 
 		/* copy texture */
 		SDL_RenderClear(renderer);
-		SDL_RenderCopy(renderer, texture, NULL, &dst_rect);
+		SDL_RenderCopy(renderer, texture, NULL, &dst);
 		SDL_RenderPresent(renderer);
 
 		/* update fps global */
