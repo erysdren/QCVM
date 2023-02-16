@@ -88,7 +88,7 @@ There's no automated export to QuakeC yet, but the syntax for this export in Qua
 void my_export() = #N;
 ```
 
-With the N at the end being an integer representing the numerical ID of that builtin. If it was the 7th builtin you added, it would be 7.
+With the N at the end being an integer representing the numerical ID of that export. If it was the 7th export you added, it would be 7.
 
 ### Adding Your Export
 
@@ -102,7 +102,7 @@ int id = qcvm_add_export(qcvm, my_export);
 
 ### Getting Parameters
 
-If your builtin function has parameters, you will get them this way:
+If your exported function has parameters, you will get them this way:
 
 ```c
 void my_export(qcvm_t *qcvm)
