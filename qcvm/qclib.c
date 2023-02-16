@@ -66,14 +66,20 @@ void qclib_strlen(qcvm_t *qcvm)
 void qclib_strcat(qcvm_t *qcvm)
 {
 	/* variables */
-	const char *s1, *s2;
+	const char *s[8];
 	char buf[512];
+	char *ptr;
+	int i;
 
-	/* get strings */
-	s1 = qcvm_get_parm_string(qcvm, 0);
-	s2 = qcvm_get_parm_string(qcvm, 1);
+	ptr = buf;
 
-	sprintf(buf, "%s%s", s1, s2);
+	/* print strings */
+	for (i = 0; i < qcvm_get_argc(qcvm); i++)
+	{
+		s[i] = qcvm_get_parm_string(qcvm, i);
+		sprintf(ptr, "%s", s[i]);
+		ptr += strlen(s[i]);
+	}
 
 	qcvm_return_string(qcvm, buf);
 }

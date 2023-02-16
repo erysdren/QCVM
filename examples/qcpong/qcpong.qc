@@ -38,8 +38,13 @@ entity right;
 
 float first_draw;
 
-#define BALL_SPEED 6
-#define PADDLE_SPEED 6
+string text_score_label1 = "SCORE";
+string text_score_label2;
+string text_score;
+
+#define BALL_SPEED 4
+#define PADDLE_SPEED 4
+#define WIN_SCORE 8
 
 enum
 {
@@ -147,6 +152,8 @@ void draw(vector screensize)
 		// hitting left
 		if (gamestate.ball_dir == BALL_UPLEFT) gamestate.ball_dir = BALL_UPRIGHT;
 		else if (gamestate.ball_dir == BALL_DOWNLEFT) gamestate.ball_dir = BALL_DOWNRIGHT;
+		ball.origin = screensize / 2;
+		right.score += 1;
 	}
 	if (ball.origin[1] - ball.mins[1] <= 0)
 	{
@@ -159,6 +166,8 @@ void draw(vector screensize)
 		// hitting right
 		if (gamestate.ball_dir == BALL_UPRIGHT) gamestate.ball_dir = BALL_UPLEFT;
 		else if (gamestate.ball_dir == BALL_DOWNRIGHT) gamestate.ball_dir = BALL_DOWNLEFT;
+		ball.origin = screensize / 2;
+		left.score += 1;
 	}
 	if (ball.origin[1] + ball.maxs[1] >= screensize[1])
 	{
@@ -204,13 +213,18 @@ void draw(vector screensize)
 			break;
 	}
 
-	// draw debug text
-	drawtext([16, 16], [1, 1, 1], strcat("ball.origin ", vtos(ball.origin)));
-
 	// draw ball & paddles
 	drawrectangle(ball.origin - ball.mins, ball.maxs + ball.mins, ball.color, TRUE);
 	drawrectangle(left.origin - left.mins, left.maxs + left.mins, left.color, TRUE);
 	drawrectangle(right.origin - right.mins, right.maxs + right.mins, right.color, TRUE);
+
+	// draw score text
+	text_score = strcat(ftos(left.score), " | ", ftos(right.score));
+	text_score_label2 = strcat("PLAYING TO ", ftos(WIN_SCORE));
+	drawtext([(screensize[0] / 2) - ((strlen(text_score_label1) / 2) * 8), 16], [1, 1, 1], text_score_label1);
+	drawtext([(screensize[0] / 2) - ((strlen(text_score) / 2) * 8), 32], [1, 1, 1], text_score);
+
+	drawtext([(screensize[0] / 2) - ((strlen(text_score_label2) / 2) * 8), screensize[1] - 16], [1, 1, 1], text_score_label2);
 
 	// draw screen
 	drawscreen();

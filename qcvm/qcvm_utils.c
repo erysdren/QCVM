@@ -38,6 +38,19 @@
 /* qclib */
 #include "qclib.h"
 
+/* print available globals */
+void qcvm_print_globals(qcvm_t *qcvm)
+{
+	int i;
+
+	for (i = 1; i < qcvm->header->num_global_vars; i++)
+	{
+		printf("type: %d\n", qcvm->global_vars[i].type);
+		printf("ofs: %d\n", qcvm->global_vars[i].ofs);
+		printf("name: %s\n\n", GET_STRING_OFS(qcvm->global_vars[i].name));
+	}
+}
+
 /*
  * set parameters
  */
