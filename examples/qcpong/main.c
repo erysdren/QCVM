@@ -231,6 +231,7 @@ int main(int argc, char **argv)
 	int func_update;
 	int func_shutdown;
 	int func_input;
+	int global_time;
 	int running;
 	SDL_Event event;
 	SDL_Rect dst_rect;
@@ -263,12 +264,16 @@ int main(int argc, char **argv)
 	func_shutdown = qcvm_get_function(qcvm, "shutdown");
 	func_input = qcvm_get_function(qcvm, "input");
 
+	/* get global handles */
+	global_time = qcvm_get_global(qcvm, "time");
+
 	/* check validitiy */
-	if (func_draw < 1) error("Failed to find required QuakeC function draw()!");
-	if (func_setup < 1) error("Failed to find required QuakeC function setup()!");
-	if (func_update < 1) error("Failed to find required QuakeC function update()!");
-	if (func_shutdown < 1) error("Failed to find required QuakeC function shutdown()!");
-	if (func_input < 1) error("Failed to find required QuakeC function input()!");
+	if (func_draw < 1) error("Failed to find required QuakeC function \"draw()\"!");
+	if (func_setup < 1) error("Failed to find required QuakeC function \"setup()\"!");
+	if (func_update < 1) error("Failed to find required QuakeC function \"update()\"!");
+	if (func_shutdown < 1) error("Failed to find required QuakeC function \"shutdown()\"!");
+	if (func_input < 1) error("Failed to find required QuakeC function \"input()\"!");
+	if (global_time < 1) error("Failed to find required QuakeC global \"time\"!");
 
 	/* SDL */
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) error("Failed to initialize SDL!");
@@ -321,6 +326,9 @@ int main(int argc, char **argv)
 					break;
 			}
 		}
+
+		/* update time global */
+		qcvm_set_global_float(qcvm, global_time, (float)SDL_GetTicks() / 1000.0f);
 
 		/* call qc draw function */
 		qcvm_set_parm_vector(qcvm, 0, WIDTH, HEIGHT, 0);

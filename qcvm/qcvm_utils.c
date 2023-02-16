@@ -38,17 +38,39 @@
 /* qclib */
 #include "qclib.h"
 
-/* print available globals */
-void qcvm_print_globals(qcvm_t *qcvm)
+/*
+ * globals
+ */
+
+/* set global float by number */
+void qcvm_set_global_float(qcvm_t *qcvm, int ofs, float val)
 {
+	qcvm->globals[ofs] = val;
+}
+
+/* set global vector by number */
+void qcvm_set_global_vector(qcvm_t *qcvm, int ofs, float a, float b, float c)
+{
+	qcvm->globals[ofs] = a;
+	qcvm->globals[ofs + 1] = a;
+	qcvm->globals[ofs + 2] = a;
+}
+
+/* find global by name */
+int qcvm_get_global(qcvm_t *qcvm, const char *name)
+{
+	/* variables */
 	int i;
 
+	/* search globals */
 	for (i = 1; i < qcvm->header->num_global_vars; i++)
 	{
-		printf("type: %d\n", qcvm->global_vars[i].type);
-		printf("ofs: %d\n", qcvm->global_vars[i].ofs);
-		printf("name: %s\n\n", GET_STRING_OFS(qcvm->global_vars[i].name));
+		if (strcmp(GET_STRING_OFS(qcvm->global_vars[i].name), name) == 0)
+			return qcvm->global_vars[i].ofs;
 	}
+
+	/* return failure */
+	return -1;
 }
 
 /*

@@ -20,6 +20,9 @@ void drawrectangle(vector pos, vector size, vector color, float filled) = #10;
 // draw text
 void drawtext(vector pos, vector color, string text) = #11;
 
+// global time
+float time;
+
 //
 //
 // globals
@@ -223,8 +226,10 @@ void draw(vector screensize)
 	text_score_label2 = strcat("PLAYING TO ", ftos(WIN_SCORE));
 	drawtext([(screensize[0] / 2) - ((strlen(text_score_label1) / 2) * 8), 16], [1, 1, 1], text_score_label1);
 	drawtext([(screensize[0] / 2) - ((strlen(text_score) / 2) * 8), 32], [1, 1, 1], text_score);
-
 	drawtext([(screensize[0] / 2) - ((strlen(text_score_label2) / 2) * 8), screensize[1] - 16], [1, 1, 1], text_score_label2);
+
+	// current time
+	drawtext([16, 16], [1, 1, 1], strcat("time: ", ftos(time)));
 
 	// draw screen
 	drawscreen();

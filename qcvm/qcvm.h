@@ -66,8 +66,10 @@ void qcvm_close(qcvm_t *qcvm);
  * qcvm_utils.c
  */
 
-/* print available globals in progs */
-void qcvm_print_globals(qcvm_t *qcvm);
+/* global handling */
+void qcvm_set_global_float(qcvm_t *qcvm, int ofs, float val);
+void qcvm_set_global_vector(qcvm_t *qcvm, int ofs, float a, float b, float c);
+int qcvm_get_global(qcvm_t *qcvm, const char *name);
 
 /* set various parameter types */
 void qcvm_set_parm_vector(qcvm_t *qcvm, int parm, float a, float b, float c);
