@@ -77,6 +77,23 @@ int qcvm_get_global(qcvm_t *qcvm, const char *name)
  * set parameters
  */
 
+/* set string parameter */
+void qcvm_set_parm_string(qcvm_t *qcvm, int parm, const char *s)
+{
+	/* bounds check */
+	if (qcvm->tempstrings_ptr + strlen(s) + 1 > qcvm->tempstrings + TEMPSTRINGS_SIZE)
+		qcvm->tempstrings_ptr = qcvm->tempstrings;
+
+	/* sprintf */
+	sprintf(qcvm->tempstrings_ptr, "%s", s);
+
+	/* return str */
+	GET_INT(OFS_PARM0 + (parm * 3)) = (qcvm->tempstrings_ptr) - qcvm->strings;
+
+	/* advance ptr */
+	qcvm->tempstrings_ptr += strlen(s) + 1;
+}
+
 /* set vector parameter */
 void qcvm_set_parm_vector(qcvm_t *qcvm, int parm, float a, float b, float c)
 {
@@ -181,10 +198,11 @@ void qcvm_return_float(qcvm_t *qcvm, float val)
  */
 
 /* add export */
-void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export)
+int qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export)
 {
 	qcvm->num_exports++;
 	qcvm->exports[qcvm->num_exports] = export;
+	return qcvm->num_exports;
 }
 
 /*

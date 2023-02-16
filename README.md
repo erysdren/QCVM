@@ -15,7 +15,7 @@ A bite-sized QuakeC virtual machine written in C.
 
 ## Usage
 
-See the [Example Implementation](./examples/qcvm_test/main.c) for more inforamtion. Further documentation to come.
+[USAGE.md](./USAGE.md)
 
 ## Bindings
 

@@ -75,6 +75,9 @@ void qcvm_set_global_vector(qcvm_t *qcvm, int ofs, float a, float b, float c);
 /* retrieve the offset of a global by name */
 int qcvm_get_global(qcvm_t *qcvm, const char *name);
 
+/* set the specified parameter of the next function call to a string */
+void qcvm_set_parm_string(qcvm_t *qcvm, int parm, const char *s);
+
 /* set the specified parameter of the next function call to a vector */
 void qcvm_set_parm_vector(qcvm_t *qcvm, int parm, float a, float b, float c);
 
@@ -115,7 +118,7 @@ void qcvm_return_float(qcvm_t *qcvm, float val);
 int qcvm_get_function(qcvm_t *qcvm, const char *name);
 
 /* add export to qcvm */
-void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export);
+int qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export);
 
 /*
  * qcvm_runtime.c
