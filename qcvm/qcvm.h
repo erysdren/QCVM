@@ -66,27 +66,49 @@ void qcvm_close(qcvm_t *qcvm);
  * qcvm_utils.c
  */
 
-/* global handling */
+/* set the global float at the specified offset to the specified value */
 void qcvm_set_global_float(qcvm_t *qcvm, int ofs, float val);
+
+/* set the global vector at the specified offset to the specified value */
 void qcvm_set_global_vector(qcvm_t *qcvm, int ofs, float a, float b, float c);
+
+/* retrieve the offset of a global by name */
 int qcvm_get_global(qcvm_t *qcvm, const char *name);
 
-/* set various parameter types */
+/* set the specified parameter of the next function call to a vector */
 void qcvm_set_parm_vector(qcvm_t *qcvm, int parm, float a, float b, float c);
+
+/* set the specified parameter of the next function call to an int */
 void qcvm_set_parm_int(qcvm_t *qcvm, int parm, int val);
+
+/* set the specified parameter of the next function call to a float */
 void qcvm_set_parm_float(qcvm_t *qcvm, int parm, float val);
 
-/* get various parameter types */
+/* get the argument count of the most recently called function */
 int qcvm_get_argc(qcvm_t *qcvm);
+
+/* retrieve the specified function parameter as a vector */
 qcvm_vec3 qcvm_get_parm_vector(qcvm_t *qcvm, int parm);
+
+/* retrieve the specified function parameter as a string */
 const char *qcvm_get_parm_string(qcvm_t *qcvm, int parm);
+
+/* retrieve the specified function parameter as an int */
 int qcvm_get_parm_int(qcvm_t *qcvm, int parm);
+
+/* retrieve the specified function parameter as a float */
 float qcvm_get_parm_float(qcvm_t *qcvm, int parm);
 
-/* return various types to previous function */
+/* return a string to the function that called this one */
 void qcvm_return_string(qcvm_t *qcvm, const char *s);
+
+/* return a vector to the function that called this one */
 void qcvm_return_vector(qcvm_t *qcvm, float a, float b, float c);
+
+/* return an int to the function that called this one */
 void qcvm_return_int(qcvm_t *qcvm, int val);
+
+/* return a float to the function that called this one */
 void qcvm_return_float(qcvm_t *qcvm, float val);
 
 /* search all functions in the qcvm and return its function number if found */
