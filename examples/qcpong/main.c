@@ -210,6 +210,7 @@ void export_drawtext(qcvm_t *qcvm)
 	for (i = 0; i < strlen(string); i++)
 	{
 		c = string[i];
+		if (c < 0 || c > 127) continue;
 		draw_char((int)pos.x + (i * 8), (int)pos.y, r, g, b, font8x8_basic[c]);
 	}
 }
