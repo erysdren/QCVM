@@ -24,6 +24,12 @@ void drawrectangle(vector pos, vector size, vector color, float filled) = #10;
 // draw text
 void drawtext(vector pos, vector color, string text) = #11;
 
+// exit game
+void exit() = #12;
+
+// take a screenshot
+void screenshot(string filename) = #13;
+
 //
 // variables
 //

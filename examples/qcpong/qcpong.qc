@@ -15,13 +15,18 @@ entity ball;
 entity left;
 entity right;
 
-float first_draw;
+float screenshot_time;
 
 string text_score_label1 = "SCORE";
 string text_score_label2;
 string text_score;
+string text_leftwin = "THE WINNER IS LEFT!";
+string text_rightwin = "THE WINNER IS RIGHT!";
+string text_exit = "Press escape to exit.";
 
 float developer;
+float gameover;
+float first_draw;
 
 #define BALL_SPEED 4
 #define PADDLE_SPEED 4
@@ -103,8 +108,20 @@ void input(float key, float pressed)
 			gamestate.movedown = pressed ? TRUE : FALSE;
 			break;
 
-		case SC_ESCAPE:
+		case SC_D:
 			if (pressed) developer = developer ? FALSE : TRUE;
+			break;
+
+		case SC_ESCAPE:
+			if (pressed) exit();
+			break;
+		
+		case SC_F12:
+			if (pressed && time > screenshot_time)
+			{
+				screenshot("screenshot.png");
+				screenshot_time = time + 2;
+			}
 			break;
 
 		default:
@@ -112,21 +129,8 @@ void input(float key, float pressed)
 	}
 }
 
-// called every draw frame
-void draw(vector screensize)
+void draw_game(vector screensize)
 {
-	// clear screen
-	clearscreen([0.1, 0.1, 0.1]);
-
-	// hack
-	if (first_draw)
-	{
-		left.origin = [32, screensize[1] / 2];
-		right.origin = [screensize[0] - 32, screensize[1] / 2];
-		ball.origin = screensize / 2;
-		first_draw = FALSE;
-	}
-
 	// process inputs
 	if (gamestate.moveup) left.origin[1] -= PADDLE_SPEED;
 	if (gamestate.movedown) left.origin[1] += PADDLE_SPEED;
@@ -210,6 +214,43 @@ void draw(vector screensize)
 	drawtext([(screensize[0] / 2) - ((strlen(text_score) / 2) * 8), 32], [1, 1, 1], text_score);
 	drawtext([(screensize[0] / 2) - ((strlen(text_score_label2) / 2) * 8), screensize[1] - 16], [1, 1, 1], text_score_label2);
 
+	// draw exit text
+	drawtext([(screensize[0] / 2) - ((strlen(text_exit) / 2) * 8), screensize[1] - 8], [1, 1, 1], text_exit);
+}
+
+void draw_gameover(vector screensize)
+{
+	// who won
+	if (left.score >= WIN_SCORE)
+		drawtext([(screensize[0] / 2) - ((strlen(text_leftwin) / 2) * 8), (screensize[1] / 2) - 4], [1, 1, 1], text_leftwin);
+	else if (right.score >= WIN_SCORE)
+		drawtext([(screensize[0] / 2) - ((strlen(text_rightwin) / 2) * 8), (screensize[1] / 2) - 4], [1, 1, 1], text_rightwin);
+
+	// draw exit text
+	drawtext([(screensize[0] / 2) - ((strlen(text_exit) / 2) * 8), (screensize[1] / 2) + 16], [1, 1, 1], text_exit);
+}
+
+// called every draw frame
+void draw(vector screensize)
+{
+	// clear screen
+	clearscreen([0.1, 0.1, 0.1]);
+
+	// hack
+	if (first_draw)
+	{
+		left.origin = [32, screensize[1] / 2];
+		right.origin = [screensize[0] - 32, screensize[1] / 2];
+		ball.origin = screensize / 2;
+		first_draw = FALSE;
+	}
+
+	// draw game or gameover
+	if (gameover)
+		draw_gameover(screensize);
+	else
+		draw_game(screensize);
+
 	// developer text
 	if (developer)
 	{
@@ -220,7 +261,7 @@ void draw(vector screensize)
 	// check if someone has won
 	if (left.score >= WIN_SCORE || right.score >= WIN_SCORE)
 	{
-		drawtext(screensize / 2, [1, 1, 1], "somebody won!");
+		gameover = TRUE;
 	}
 
 	// draw screen

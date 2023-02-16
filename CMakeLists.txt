@@ -91,6 +91,7 @@ if(QCVM_BUILD_QCPONG)
 	## Sources
 	set(QCPONG_SOURCES
 		examples/qcpong/main.c
+		examples/qcpong/stb_image_write.c
 	)
 
 	## Dependencies

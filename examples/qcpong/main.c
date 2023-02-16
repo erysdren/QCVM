@@ -46,6 +46,9 @@
 /* https://github.com/dhepper/font8x8 */
 #include "font8x8_basic.h"
 
+/* https://github.com/nothings/stb */
+#include "stb_image_write.h"
+
 /* constants */
 #define WIDTH 640
 #define HEIGHT 480
@@ -64,6 +67,7 @@ void *pixels;
 SDL_Window *window;
 SDL_Texture *texture;
 SDL_Renderer *renderer;
+int running;
 
 /* set memory area to a 32 bit value */
 void *memset32(void *s, unsigned int c, size_t n)
@@ -216,6 +220,22 @@ void export_drawtext(qcvm_t *qcvm)
 	}
 }
 
+/* exit game */
+void export_exit(qcvm_t *qcvm)
+{
+	running = 0;
+}
+
+/* take a screenshot */
+void export_screenshot(qcvm_t *qcvm)
+{
+	const char *filename;
+
+	filename = qcvm_get_parm_string(qcvm, 0);
+
+	stbi_write_png(filename, WIDTH, HEIGHT, 4, pixels, WIDTH * sizeof(int));
+}
+
 /* hard exit without freeing anything */
 void error(const char *err)
 {
@@ -235,7 +255,6 @@ int main(int argc, char **argv)
 	int func_input;
 	int global_time;
 	int global_fps;
-	int running;
 	SDL_Event event;
 	SDL_Rect dst;
 	int window_x, window_y;
@@ -262,6 +281,8 @@ int main(int argc, char **argv)
 	qcvm_add_export(qcvm, export_drawscreen);
 	qcvm_add_export(qcvm, export_drawrectangle);
 	qcvm_add_export(qcvm, export_drawtext);
+	qcvm_add_export(qcvm, export_exit);
+	qcvm_add_export(qcvm, export_screenshot);
 
 	/* get function handles */
 	func_draw = qcvm_get_function(qcvm, "draw");
