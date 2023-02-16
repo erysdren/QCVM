@@ -26,6 +26,14 @@ See the [Example Implementation](./examples/qcvm_test/main.c) for more inforamti
 - [Discord](https://discord.gg/5MwE3xMcdN)
 - [Email](mailto:jaycie@erysdren.me)
 
+## Todo
+
+- Dump user-added builtin functions to properly formatted QC file.
+- Add support for HexenC and FTEQCC's extended opcodes.
+- Add support for the QTest progs format.
+- Bindings for other languages.
+- Add formatted string return function.
+
 ## License
 
 MIT License
