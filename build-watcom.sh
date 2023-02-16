@@ -6,5 +6,5 @@ then
 fi
 
 cd cmake-build-watcom
-cmake -G "Watcom WMake" -D CMAKE_SYSTEM_NAME=DOS ..
+cmake -G "Watcom WMake" -D WATCOM=1 -D CMAKE_SYSTEM_NAME=DOS ..
 wmake

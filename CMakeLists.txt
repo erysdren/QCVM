@@ -42,12 +42,15 @@ set(QCVM_SOURCES
 	qcvm/qcvm_utils.c
 )
 
-## QCVM Library
+## QCVM Library (static)
 add_library(qcvm_static ${QCVM_SOURCES})
 target_include_directories(qcvm_static PUBLIC qcvm/)
 
-add_library(qcvm_shared SHARED ${QCVM_SOURCES})
-target_include_directories(qcvm_shared PUBLIC qcvm/)
+## QCVM Library (shared)
+if(NOT WATCOM AND NOT DJGPP)
+	add_library(qcvm_shared SHARED ${QCVM_SOURCES})
+	target_include_directories(qcvm_shared PUBLIC qcvm/)
+endif()
 
 ## Compile QC test environment
 if(QCVM_BUILD_QC)
@@ -59,7 +62,7 @@ if(QCVM_BUILD_QC)
 		COMMAND fteqcc64 ${CMAKE_SOURCE_DIR}/qc/testqc.src
 	)
 
-	add_custom_target(testqc ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/testqc.dat)
+	add_custom_target(testqc_dat ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/testqc.dat)
 
 endif()
 
@@ -78,7 +81,7 @@ if(QCVM_BUILD_TESTAPP)
 endif()
 
 ## QCVM Example Game
-if(QCVM_BUILD_QCPONG)
+if(QCVM_BUILD_QCPONG AND NOT DJGPP AND NOT WATCOM)
 
 	## QC
 	find_program(fteqcc64 fteqcc64 REQUIRED)

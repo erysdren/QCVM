@@ -6,5 +6,5 @@ then
 fi
 
 cd cmake-build-djgpp
-cmake -D CMAKE_TOOLCHAIN_FILE=../cmake/i586-pc-msdosdjgpp.cmake ..
+cmake -D DJGPP=1 -D CMAKE_TOOLCHAIN_FILE=../cmake/i586-pc-msdosdjgpp.cmake ..
 make
