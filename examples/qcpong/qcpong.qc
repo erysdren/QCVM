@@ -21,7 +21,10 @@ void drawrectangle(vector pos, vector size, vector color, float filled) = #10;
 void drawtext(vector pos, vector color, string text) = #11;
 
 // global time
-float time;
+__used float time;
+
+// global fps
+__used float fps;
 
 //
 //
@@ -44,6 +47,8 @@ float first_draw;
 string text_score_label1 = "SCORE";
 string text_score_label2;
 string text_score;
+
+float developer;
 
 #define BALL_SPEED 4
 #define PADDLE_SPEED 4
@@ -124,7 +129,11 @@ void input(float key, float pressed)
 		case SC_S:
 			gamestate.movedown = pressed ? TRUE : FALSE;
 			break;
-		
+
+		case SC_ESCAPE:
+			if (pressed) developer = developer ? FALSE : TRUE;
+			break;
+
 		default:
 			break;
 	}
@@ -228,8 +237,18 @@ void draw(vector screensize)
 	drawtext([(screensize[0] / 2) - ((strlen(text_score) / 2) * 8), 32], [1, 1, 1], text_score);
 	drawtext([(screensize[0] / 2) - ((strlen(text_score_label2) / 2) * 8), screensize[1] - 16], [1, 1, 1], text_score_label2);
 
-	// current time
-	drawtext([16, 16], [1, 1, 1], strcat("time: ", ftos(time)));
+	// developer text
+	if (developer)
+	{
+		drawtext([16, 16], [1, 1, 1], strcat("time: ", ftos(time)));
+		drawtext([16, 24], [1, 1, 1], strcat("fps: ", ftos(fps)));
+	}
+
+	// check if someone has won
+	if (left.score >= WIN_SCORE || right.score >= WIN_SCORE)
+	{
+		drawtext(screensize / 2, [1, 1, 1], "somebody won!");
+	}
 
 	// draw screen
 	drawscreen();

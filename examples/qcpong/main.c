@@ -232,10 +232,14 @@ int main(int argc, char **argv)
 	int func_shutdown;
 	int func_input;
 	int global_time;
+	int global_fps;
 	int running;
 	SDL_Event event;
 	SDL_Rect dst_rect;
 	int window_x, window_y;
+	Uint64 frame_start;
+	Uint64 frame_end;
+	float fps;
 
 	/*
 	 * startup
@@ -266,6 +270,7 @@ int main(int argc, char **argv)
 
 	/* get global handles */
 	global_time = qcvm_get_global(qcvm, "time");
+	global_fps = qcvm_get_global(qcvm, "fps");
 
 	/* check validitiy */
 	if (func_draw < 1) error("Failed to find required QuakeC function \"draw()\"!");
@@ -274,6 +279,7 @@ int main(int argc, char **argv)
 	if (func_shutdown < 1) error("Failed to find required QuakeC function \"shutdown()\"!");
 	if (func_input < 1) error("Failed to find required QuakeC function \"input()\"!");
 	if (global_time < 1) error("Failed to find required QuakeC global \"time\"!");
+	if (global_fps < 1) error("Failed to find required QuakeC global \"fps\"!");
 
 	/* SDL */
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) error("Failed to initialize SDL!");
@@ -302,6 +308,9 @@ int main(int argc, char **argv)
 	running = 1;
 	while (running)
 	{
+		/* get frame start time */
+		frame_start = SDL_GetPerformanceCounter();
+
 		while (SDL_PollEvent(&event))
 		{
 			switch (event.type)
@@ -373,6 +382,11 @@ int main(int argc, char **argv)
 		SDL_RenderClear(renderer);
 		SDL_RenderCopy(renderer, texture, NULL, &dst_rect);
 		SDL_RenderPresent(renderer);
+
+		/* update fps global */
+		frame_end = SDL_GetPerformanceCounter();
+		fps = 1.0f / ((frame_end - frame_start) / (float)SDL_GetPerformanceFrequency());
+		qcvm_set_global_float(qcvm, global_fps, fps);
 	}
 
 	/*
