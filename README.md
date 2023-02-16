@@ -15,7 +15,7 @@ A bite-sized QuakeC virtual machine written in C.
 
 ## Usage
 
-[USAGE.md](./USAGE.md)
+- [USAGE.md](./USAGE.md)
 
 ## Bindings
 
