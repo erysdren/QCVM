@@ -34,6 +34,7 @@
 #include <string.h>
 
 /* sdl */
+#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 
 /* qcvm */
