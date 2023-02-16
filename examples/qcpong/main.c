@@ -102,7 +102,7 @@ void export_drawpixel(qcvm_t *qcvm)
 	b = (unsigned char)(color.z * 255);
 
 	/* place color */
-	PIXEL(pos.x, pos.y) = RGBA(r, g, b, 255);
+	PIXEL(pos.x, pos.y) = ARGB(r, g, b, 255);
 }
 
 /* clear screen buffer */
@@ -124,7 +124,7 @@ void export_clearscreen(qcvm_t *qcvm)
 		b = (unsigned char)(color.z * 255);
 
 		/* fancy memset */
-		memset32(pixels, RGBA(r, g, b, 255), WIDTH * HEIGHT);
+		memset32(pixels, ARGB(r, g, b, 255), WIDTH * HEIGHT);
 	}
 	else
 	{
@@ -167,7 +167,7 @@ void export_drawrectangle(qcvm_t *qcvm)
 		{
 			if (x < 0 || y < 0) continue;
 			if (x > WIDTH - 1 || y > HEIGHT - 1) continue;
-			PIXEL(x, y) = RGBA(r, g, b, 255);
+			PIXEL(x, y) = ARGB(r, g, b, 255);
 		}
 	}
 }
@@ -186,7 +186,7 @@ void draw_char(int x, int y, unsigned char r, unsigned char g, unsigned char b, 
 			if (x + cy > WIDTH - 1 || y + cx > HEIGHT - 1) return;
 
 			if (bitmap[cx] & 1 << cy)
-				PIXEL(x + cy, y + cx) = RGBA(r, g, b, 255);
+				PIXEL(x + cy, y + cx) = ARGB(r, g, b, 255);
 		}
 	}
 }
@@ -308,7 +308,7 @@ int main(int argc, char **argv)
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) error("Failed to initialize SDL!");
 	window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
+	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
 
 	/* check validity */
 	if (window == NULL) error("SDL window is NULL!");

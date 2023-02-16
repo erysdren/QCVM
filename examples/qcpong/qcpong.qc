@@ -144,6 +144,7 @@ void input(float key, float pressed)
 			if (pressed && time > screenshot_time)
 			{
 				screenshot("screenshot.png");
+				print("Took a screenshot.\n");
 				screenshot_time = time + 2;
 			}
 			break;
