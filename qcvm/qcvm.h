@@ -102,6 +102,9 @@ int qcvm_get_parm_int(qcvm_t *qcvm, int parm);
 /* retrieve the specified function parameter as a float */
 float qcvm_get_parm_float(qcvm_t *qcvm, int parm);
 
+/* return a new entity */
+int qcvm_return_entity(qcvm_t *qcvm);
+
 /* return a string to the function that called this one */
 void qcvm_return_string(qcvm_t *qcvm, const char *s);
 

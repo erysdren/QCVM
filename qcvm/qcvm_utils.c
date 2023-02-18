@@ -158,6 +158,14 @@ float qcvm_get_parm_float(qcvm_t *qcvm, int parm)
  * return values 
  */
 
+/* return a new entity */
+int qcvm_return_entity(qcvm_t *qcvm)
+{
+	RETURN_ENTITY(&qcvm->entities[qcvm->num_entities]);
+	qcvm->num_entities++;
+	return qcvm->num_entities - 1;
+}
+
 /* return a string to the previous function */
 void qcvm_return_string(qcvm_t *qcvm, const char *s)
 {
