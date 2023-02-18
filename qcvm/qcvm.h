@@ -66,14 +66,29 @@ void qcvm_close(qcvm_t *qcvm);
  * qcvm_utils.c
  */
 
+/* set the global int at the specified offset to the specified value */
+void qcvm_set_global_int(qcvm_t *qcvm, int global, int val);
+
 /* set the global float at the specified offset to the specified value */
-void qcvm_set_global_float(qcvm_t *qcvm, int ofs, float val);
+void qcvm_set_global_float(qcvm_t *qcvm, int global, float val);
 
 /* set the global vector at the specified offset to the specified value */
-void qcvm_set_global_vector(qcvm_t *qcvm, int ofs, float a, float b, float c);
+void qcvm_set_global_vector(qcvm_t *qcvm, int global, float a, float b, float c);
+
+/* retrieve global entity */
+int qcvm_get_global_entity(qcvm_t *qcvm, int global);
+
+/* retrieve global int */
+int qcvm_get_global_int(qcvm_t *qcvm, int global);
+
+/* retrieve global float */
+float qcvm_get_global_float(qcvm_t *qcvm, int global);
+
+/* retrieve global vector */
+qcvm_vec3 qcvm_get_global_vector(qcvm_t *qcvm, int global);
 
 /* retrieve the offset of a global by name */
-int qcvm_get_global(qcvm_t *qcvm, const char *name);
+int qcvm_find_global(qcvm_t *qcvm, const char *name);
 
 /* set the specified parameter of the next function call to a string */
 void qcvm_set_parm_string(qcvm_t *qcvm, int parm, const char *s);
@@ -89,6 +104,9 @@ void qcvm_set_parm_float(qcvm_t *qcvm, int parm, float val);
 
 /* get the argument count of the most recently called function */
 int qcvm_get_argc(qcvm_t *qcvm);
+
+/* retrieve the specified function parameter as an entity id */
+int qcvm_get_parm_entity(qcvm_t *qcvm, int parm);
 
 /* retrieve the specified function parameter as a vector */
 qcvm_vec3 qcvm_get_parm_vector(qcvm_t *qcvm, int parm);
@@ -118,7 +136,7 @@ void qcvm_return_int(qcvm_t *qcvm, int val);
 void qcvm_return_float(qcvm_t *qcvm, float val);
 
 /* search all functions in the qcvm and return its function number if found */
-int qcvm_get_function(qcvm_t *qcvm, const char *name);
+int qcvm_find_function(qcvm_t *qcvm, const char *name);
 
 /* add export to qcvm */
 int qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export);

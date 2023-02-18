@@ -285,15 +285,15 @@ int main(int argc, char **argv)
 	qcvm_add_export(qcvm, export_screenshot);
 
 	/* get function handles */
-	func_draw = qcvm_get_function(qcvm, "draw");
-	func_setup = qcvm_get_function(qcvm, "setup");
-	func_update = qcvm_get_function(qcvm, "update");
-	func_shutdown = qcvm_get_function(qcvm, "shutdown");
-	func_input = qcvm_get_function(qcvm, "input");
+	func_draw = qcvm_find_function(qcvm, "draw");
+	func_setup = qcvm_find_function(qcvm, "setup");
+	func_update = qcvm_find_function(qcvm, "update");
+	func_shutdown = qcvm_find_function(qcvm, "shutdown");
+	func_input = qcvm_find_function(qcvm, "input");
 
 	/* get global handles */
-	global_time = qcvm_get_global(qcvm, "time");
-	global_fps = qcvm_get_global(qcvm, "fps");
+	global_time = qcvm_find_global(qcvm, "time");
+	global_fps = qcvm_find_global(qcvm, "fps");
 
 	/* check validitiy */
 	if (func_draw < 1) error("Failed to find required QuakeC function \"draw()\"!");

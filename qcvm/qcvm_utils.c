@@ -42,22 +42,58 @@
  * globals
  */
 
-/* set global float by number */
-void qcvm_set_global_float(qcvm_t *qcvm, int ofs, float val)
+/* set global int by number */
+void qcvm_set_global_int(qcvm_t *qcvm, int global, int val)
 {
-	qcvm->globals[ofs] = val;
+	GET_INT(global) = val;
+}
+
+/* set global float by number */
+void qcvm_set_global_float(qcvm_t *qcvm, int global, float val)
+{
+	GET_FLOAT(global) = val;
 }
 
 /* set global vector by number */
-void qcvm_set_global_vector(qcvm_t *qcvm, int ofs, float a, float b, float c)
+void qcvm_set_global_vector(qcvm_t *qcvm, int global, float a, float b, float c)
 {
-	qcvm->globals[ofs] = a;
-	qcvm->globals[ofs + 1] = a;
-	qcvm->globals[ofs + 2] = a;
+	GET_FLOAT(global) = a;
+	GET_FLOAT(global + 1) = b;
+	GET_FLOAT(global + 2) = c;
+}
+
+/* retrieve global entity */
+int qcvm_get_global_entity(qcvm_t *qcvm, int global)
+{
+	return GET_INT(global);
+}
+
+/* retrieve global int */
+int qcvm_get_global_int(qcvm_t *qcvm, int global)
+{
+	return GET_INT(global);
+}
+
+/* retrieve global float */
+float qcvm_get_global_float(qcvm_t *qcvm, int global)
+{
+	return GET_FLOAT(global);
+}
+
+/* retrieve global vector */
+qcvm_vec3 qcvm_get_global_vector(qcvm_t *qcvm, int global)
+{
+	qcvm_vec3 ret;
+
+	ret.x = GET_FLOAT(global);
+	ret.y = GET_FLOAT(global + 1);
+	ret.z = GET_FLOAT(global + 2);
+
+	return ret;
 }
 
 /* find global by name */
-int qcvm_get_global(qcvm_t *qcvm, const char *name)
+int qcvm_find_global(qcvm_t *qcvm, const char *name)
 {
 	/* variables */
 	int i;
@@ -122,6 +158,12 @@ void qcvm_set_parm_float(qcvm_t *qcvm, int parm, float val)
 int qcvm_get_argc(qcvm_t *qcvm)
 {
 	return qcvm->function_argc;
+}
+
+/* get entity parameter */
+int qcvm_get_parm_entity(qcvm_t *qcvm, int parm)
+{
+	return GET_INT(OFS_PARM0 + (parm * 3));
 }
 
 /* get vector parameter */
@@ -218,7 +260,7 @@ int qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export)
  */
 
 /* get function by name search */
-int qcvm_get_function(qcvm_t *qcvm, const char *name)
+int qcvm_find_function(qcvm_t *qcvm, const char *name)
 {
 	/* variables */
 	int i;

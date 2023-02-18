@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 	qclib_install(qcvm);
 
 	/* run function test() */
-	qcvm_run(qcvm, qcvm_get_function(qcvm, "test"));
+	qcvm_run(qcvm, qcvm_find_function(qcvm, "test"));
 
 	/* close qcvm */
 	qcvm_close(qcvm);
