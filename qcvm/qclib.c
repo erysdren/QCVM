@@ -33,7 +33,7 @@
 #include <string.h>
 
 /* qcvm */
-#include "qcvm_private.h"
+#include "qcvm.h"
 
 /* qclib */
 #include "qclib.h"
@@ -43,23 +43,22 @@ void qclib_print(qcvm_t *qcvm)
 {
 	int i;
 
-	for (i = 0; i < qcvm->function_argc; i++)
+	for (i = 0; i < qcvm_get_argc(qcvm); i++)
 	{
-		printf("%s", GET_STRING(OFS_PARM0 + i * 3));
+		printf("%s", qcvm_get_parm_string(qcvm, i));
 	}
 }
 
 /* spawn entity */
 void qclib_spawn(qcvm_t *qcvm)
 {
-	RETURN_ENTITY(&qcvm->entities[qcvm->num_entities]);
-	qcvm->num_entities++;
+	qcvm_return_entity(qcvm);
 }
 
 /* get length of string */
 void qclib_strlen(qcvm_t *qcvm)
 {
-	RETURN_FLOAT((float)strlen(qcvm_get_parm_string(qcvm, 0)));
+	qcvm_return_float(qcvm, (float)strlen(qcvm_get_parm_string(qcvm, 0)));
 }
 
 /* return a concat of two strings */
@@ -124,13 +123,10 @@ void qclib_vtos(qcvm_t *qcvm)
 /* install qclib default builtin functions */
 void qclib_install(qcvm_t *qcvm)
 {
-	qcvm->exports[0] = NULL;
-	qcvm->exports[1] = qclib_print;
-	qcvm->exports[2] = qclib_spawn;
-	qcvm->exports[3] = qclib_strlen;
-	qcvm->exports[4] = qclib_strcat;
-	qcvm->exports[5] = qclib_ftos;
-	qcvm->exports[6] = qclib_vtos;
-
-	qcvm->num_exports = 6;
+	qcvm_add_export(qcvm, qclib_print);
+	qcvm_add_export(qcvm, qclib_spawn);
+	qcvm_add_export(qcvm, qclib_strlen);
+	qcvm_add_export(qcvm, qclib_strcat);
+	qcvm_add_export(qcvm, qclib_ftos);
+	qcvm_add_export(qcvm, qclib_vtos);
 }
