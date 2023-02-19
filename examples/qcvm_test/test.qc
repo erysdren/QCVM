@@ -47,7 +47,6 @@ void test()
 	entity ent;
 	float x, y, z;
 
-	gtest = spawn();
 	gtest.field1 = 4643;
 	gtest.field2 = "hello world!";
 

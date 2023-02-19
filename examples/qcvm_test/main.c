@@ -68,14 +68,16 @@ int main(int argc, char **argv)
 	/* install qclib */
 	qclib_install(qcvm);
 
-	/* run function test() */
-	qcvm_run(qcvm, qcvm_find_function(qcvm, "test"));
-
 	/* entity fields test */
 	qcvm_field_field1 = qcvm_find_field(qcvm, "field1");
 	qcvm_field_field2 = qcvm_find_field(qcvm, "field2");
 	qcvm_global_gtest = qcvm_find_global(qcvm, "gtest");
+	qcvm_set_global_entity(qcvm, qcvm_global_gtest, qcvm_add_entity(qcvm));
 	qcvm_entity_gtest = qcvm_get_global_entity(qcvm, qcvm_global_gtest);
+
+	/* run function test() */
+	qcvm_run(qcvm, qcvm_find_function(qcvm, "test"));
+
 	field1 = qcvm_get_field_float(qcvm, qcvm_entity_gtest, qcvm_field_field1);
 	field2 = qcvm_get_field_string(qcvm, qcvm_entity_gtest, qcvm_field_field2);
 

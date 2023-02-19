@@ -54,7 +54,7 @@ void qclib_print(qcvm_t *qcvm)
 /* spawn entity */
 void qclib_spawn(qcvm_t *qcvm)
 {
-	qcvm_return_entity(qcvm);
+	qcvm_return_entity(qcvm, qcvm_add_entity(qcvm));
 }
 
 /* get length of string */

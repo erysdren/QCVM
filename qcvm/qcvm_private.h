@@ -87,7 +87,7 @@
 #define GET_VECTOR(o) (&qcvm->globals[o])
 #define GET_STRING(o) (qcvm->strings + *(int *)&qcvm->globals[o])
 #define GET_FUNCTION(o) (*(int *)&qcvm->globals[o])
-#define GET_ENTITY(o) ((*(int *)&qcvm->globals[o]) / sizeof(qcvm_entity_t))
+#define GET_ENTITY(o) (*(int *)&qcvm->globals[o])
 
 #define	ENTITY_TO_QC(e) ((unsigned char *)(e) - (unsigned char *)qcvm->entities)
 #define QC_TO_ENTITY(e) ((qcvm_entity_t *)((unsigned char *)qcvm->entities + (e)))

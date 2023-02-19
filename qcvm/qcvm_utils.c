@@ -39,6 +39,17 @@
 #include "qclib.h"
 
 /*
+ * entities
+ */
+
+/* add entity and return id */
+int qcvm_add_entity(qcvm_t *qcvm)
+{
+	qcvm->num_entities++;
+	return qcvm->num_entities - 1;
+}
+
+/*
  * entity fields
  */
 
@@ -113,6 +124,12 @@ int qcvm_find_field(qcvm_t *qcvm, const char *name)
  * globals
  */
 
+/* set global entity by number */
+void qcvm_set_global_entity(qcvm_t *qcvm, int global, int entity)
+{
+	GET_ENTITY(global) = entity * sizeof(qcvm_entity_t);
+}
+
 /* set global int by number */
 void qcvm_set_global_int(qcvm_t *qcvm, int global, int val)
 {
@@ -136,7 +153,7 @@ void qcvm_set_global_vector(qcvm_t *qcvm, int global, float a, float b, float c)
 /* retrieve global entity */
 int qcvm_get_global_entity(qcvm_t *qcvm, int global)
 {
-	return GET_ENTITY(global);
+	return GET_ENTITY(global) / sizeof(qcvm_entity_t);
 }
 
 /* retrieve global int */
@@ -234,7 +251,7 @@ int qcvm_get_argc(qcvm_t *qcvm)
 /* get entity parameter */
 int qcvm_get_parm_entity(qcvm_t *qcvm, int parm)
 {
-	return GET_ENTITY(OFS_PARM0 + (parm * 3));
+	return GET_ENTITY(OFS_PARM0 + (parm * 3)) / sizeof(qcvm_entity_t);
 }
 
 /* get vector parameter */
@@ -272,11 +289,9 @@ float qcvm_get_parm_float(qcvm_t *qcvm, int parm)
  */
 
 /* return a new entity */
-int qcvm_return_entity(qcvm_t *qcvm)
+void qcvm_return_entity(qcvm_t *qcvm, int entity)
 {
-	RETURN_ENTITY(&qcvm->entities[qcvm->num_entities]);
-	qcvm->num_entities++;
-	return qcvm->num_entities - 1;
+	RETURN_ENTITY(&qcvm->entities[entity]);
 }
 
 /* return a string to the previous function */
