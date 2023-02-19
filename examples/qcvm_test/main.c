@@ -49,15 +49,21 @@ int main(int argc, char **argv)
 	int qcvm_entity_gtest;
 	int qcvm_global_gtest;
 	float field1;
+	const char *field2;
 
 	/* load qcvm */
 	qcvm = qcvm_open("../examples/qcvm_test/test.dat");
 
 	/* check validity */
 	if (qcvm == NULL)
-		fprintf(stderr, "oh noes!\n");
+	{
+		fprintf(stderr, "failed to load test.dat\n");
+		return 1;
+	}
 	else
-		fprintf(stdout, "progs.dat successfully loaded\n");
+	{
+		fprintf(stdout, "test.dat successfully loaded\n");
+	}
 
 	/* install qclib */
 	qclib_install(qcvm);
@@ -71,8 +77,11 @@ int main(int argc, char **argv)
 	qcvm_global_gtest = qcvm_find_global(qcvm, "gtest");
 	qcvm_entity_gtest = qcvm_get_global_entity(qcvm, qcvm_global_gtest);
 	field1 = qcvm_get_field_float(qcvm, qcvm_entity_gtest, qcvm_field_field1);
+	field2 = qcvm_get_field_string(qcvm, qcvm_entity_gtest, qcvm_field_field2);
 
-	printf("%s\n", qcvm_get_field_string(qcvm, qcvm_entity_gtest, qcvm_field_field2));
+	/* print field2 string */
+	printf("gtest.field1 = %0.0f\n", field1);
+	printf("gtest.field2 = %s\n", field2);
 
 	/* close qcvm */
 	qcvm_close(qcvm);
