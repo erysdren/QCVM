@@ -105,7 +105,6 @@
 /* small typedefs to make it easier to read certain parts of the code */
 typedef int qcvm_string_t;
 typedef float qcvm_global_t;
-typedef void (*qcvm_export_t)(qcvm_t *qcvm);
 
 /*
  *

@@ -37,8 +37,19 @@
 /* qcvm */
 #include "qcvm_private.h"
 
-/* qclib */
-#include "qclib.h"
+/* find export by name */
+int qcvm_find_export(qcvm_t *qcvm, const char *name)
+{
+	int i;
+
+	for (i = 0; i < qcvm->num_exports; i++)
+	{
+		if (strcmp(name, qcvm->exports[i].name) == 0)
+			return i;
+	}
+
+	return -1;
+}
 
 /* setup function */
 int qcvm_function_setup(qcvm_t *qcvm, qcvm_function_t *func)
@@ -624,10 +635,22 @@ void qcvm_run(qcvm_t *qcvm, int func)
 				/* assign next function value */
 				nextfunction = &qcvm->functions[eval1->function];
 
+				/* check if this is a named builtin */
+				if (nextfunction->first_statement == 0)
+				{
+					export = qcvm_find_export(qcvm, GET_STRING_OFS(nextfunction->name));
+					printf("finding export...\n");
+					if (export < 0) break;
+					qcvm->exports[export].func(qcvm);
+					nextfunction->first_statement = -export;
+					break;
+				}
+
 				/* negative statements are functions exported from c */
 				if (nextfunction->first_statement < 0)
 				{
 					export = -nextfunction->first_statement;
+					printf("calling export directly...\n");
 
 					if (!export || !qcvm->exports)
 					{
@@ -635,7 +658,7 @@ void qcvm_run(qcvm_t *qcvm, int func)
 						break;
 					}
 
-					qcvm->exports[export](qcvm);
+					qcvm->exports[export].func(qcvm);
 					break;
 				}
 

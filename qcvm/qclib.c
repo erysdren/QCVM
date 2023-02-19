@@ -51,17 +51,35 @@ void qclib_print(qcvm_t *qcvm)
 	fflush(stdout);
 }
 
+qcvm_export_t export_print =
+{
+	.func = qclib_print,
+	.name = "print"
+};
+
 /* spawn entity */
 void qclib_spawn(qcvm_t *qcvm)
 {
 	qcvm_return_entity(qcvm, qcvm_add_entity(qcvm));
 }
 
+qcvm_export_t export_spawn =
+{
+	.func = qclib_spawn,
+	.name = "spawn"
+};
+
 /* get length of string */
 void qclib_strlen(qcvm_t *qcvm)
 {
 	qcvm_return_float(qcvm, (float)strlen(qcvm_get_parm_string(qcvm, 0)));
 }
+
+qcvm_export_t export_strlen =
+{
+	.func = qclib_strlen,
+	.name = "strlen"
+};
 
 /* return a concat of two strings */
 void qclib_strcat(qcvm_t *qcvm)
@@ -85,6 +103,12 @@ void qclib_strcat(qcvm_t *qcvm)
 	qcvm_return_string(qcvm, buf);
 }
 
+qcvm_export_t export_strcat =
+{
+	.func = qclib_strcat,
+	.name = "strcat"
+};
+
 /* float to string */
 void qclib_ftos(qcvm_t *qcvm)
 {
@@ -105,6 +129,12 @@ void qclib_ftos(qcvm_t *qcvm)
 	qcvm_return_string(qcvm, buf);
 }
 
+qcvm_export_t export_ftos =
+{
+	.func = qclib_ftos,
+	.name = "ftos"
+};
+
 /* vector to string */
 void qclib_vtos(qcvm_t *qcvm)
 {
@@ -122,13 +152,47 @@ void qclib_vtos(qcvm_t *qcvm)
 	qcvm_return_string(qcvm, buf);
 }
 
+qcvm_export_t export_vtos =
+{
+	.func = qclib_vtos,
+	.name = "vtos"
+};
+
+/* get substring */
+void qclib_substring(qcvm_t *qcvm)
+{
+	/* variables */
+	char buf[512];
+	int start;
+	int len;
+	const char *str;
+
+	/* get parms */
+	str = qcvm_get_parm_string(qcvm, 0);
+	start = (int)qcvm_get_parm_float(qcvm, 1);
+	len = (int)qcvm_get_parm_float(qcvm, 2);
+
+	/* copy string */
+	memcpy(buf, str + start, len);
+
+	/* return */
+	qcvm_return_string(qcvm, buf);
+}
+
+qcvm_export_t export_substring =
+{
+	.func = qclib_substring,
+	.name = "substring"
+};
+
 /* install qclib default builtin functions */
 void qclib_install(qcvm_t *qcvm)
 {
-	qcvm_add_export(qcvm, qclib_print);
-	qcvm_add_export(qcvm, qclib_spawn);
-	qcvm_add_export(qcvm, qclib_strlen);
-	qcvm_add_export(qcvm, qclib_strcat);
-	qcvm_add_export(qcvm, qclib_ftos);
-	qcvm_add_export(qcvm, qclib_vtos);
+	qcvm_add_export(qcvm, export_print);
+	qcvm_add_export(qcvm, export_spawn);
+	qcvm_add_export(qcvm, export_strlen);
+	qcvm_add_export(qcvm, export_strcat);
+	qcvm_add_export(qcvm, export_substring);
+	qcvm_add_export(qcvm, export_vtos);
+	qcvm_add_export(qcvm, export_ftos);
 }

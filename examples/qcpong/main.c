@@ -243,6 +243,14 @@ void error(const char *err)
 	exit(1);
 }
 
+qcvm_export_t _export_drawpixel = { .func = export_drawpixel, .name = "drawpixel" };
+qcvm_export_t _export_clearscreen = { .func = export_clearscreen, .name = "clearscreen" };
+qcvm_export_t _export_drawscreen = { .func = export_drawscreen, .name = "drawscreen" };
+qcvm_export_t _export_drawrectangle = { .func = export_drawrectangle, .name = "drawrectangle" };
+qcvm_export_t _export_drawtext = { .func = export_drawtext, .name = "drawtext" };
+qcvm_export_t _export_exit = { .func = export_exit, .name = "exit" };
+qcvm_export_t _export_screenshot = { .func = export_screenshot, .name = "screenshot" };
+
 /* main */
 int main(int argc, char **argv)
 {
@@ -276,13 +284,13 @@ int main(int argc, char **argv)
 	qclib_install(qcvm);
 
 	/* install our own exports */
-	qcvm_add_export(qcvm, export_drawpixel);
-	qcvm_add_export(qcvm, export_clearscreen);
-	qcvm_add_export(qcvm, export_drawscreen);
-	qcvm_add_export(qcvm, export_drawrectangle);
-	qcvm_add_export(qcvm, export_drawtext);
-	qcvm_add_export(qcvm, export_exit);
-	qcvm_add_export(qcvm, export_screenshot);
+	qcvm_add_export(qcvm, _export_drawpixel);
+	qcvm_add_export(qcvm, _export_clearscreen);
+	qcvm_add_export(qcvm, _export_drawscreen);
+	qcvm_add_export(qcvm, _export_drawrectangle);
+	qcvm_add_export(qcvm, _export_drawtext);
+	qcvm_add_export(qcvm, _export_exit);
+	qcvm_add_export(qcvm, _export_screenshot);
 
 	/* get function handles */
 	func_draw = qcvm_find_function(qcvm, "draw");

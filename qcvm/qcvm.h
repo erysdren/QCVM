@@ -37,8 +37,17 @@
 /* qcvm runtime */
 typedef struct qcvm_runtime qcvm_t;
 
-/* export */
-typedef void (*qcvm_export_t)(qcvm_t *qcvm);
+/* export func */
+typedef void (*qcvm_export_func_t)(qcvm_t *);
+
+/* export structure */
+typedef struct qcvm_export_t
+{
+	const char *name;
+	qcvm_export_func_t func;
+
+} qcvm_export_t;
+
 
 /* vector */
 typedef struct qcvm_vec3
@@ -169,7 +178,7 @@ void qcvm_return_float(qcvm_t *qcvm, float val);
 int qcvm_find_function(qcvm_t *qcvm, const char *name);
 
 /* add export to qcvm */
-int qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export);
+void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export);
 
 /*
  * qcvm_runtime.c

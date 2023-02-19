@@ -334,11 +334,10 @@ void qcvm_return_float(qcvm_t *qcvm, float val)
  */
 
 /* add export */
-int qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export)
+void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export)
 {
-	qcvm->num_exports++;
 	qcvm->exports[qcvm->num_exports] = export;
-	return qcvm->num_exports;
+	qcvm->num_exports++;
 }
 
 /*

@@ -10,25 +10,25 @@
 //
 
 // draw a pixel on the screen at the specified coordinates
-void drawpixel(vector pos, vector color) = #7;
+void drawpixel(vector pos, vector color) = #0 : drawpixel;
 
 // clear screen
-void clearscreen(optional vector color) = #8;
+void clearscreen(optional vector color) = #0 : clearscreen;
 
 // render screen
-void drawscreen() = #9;
+void drawscreen() = #0 : drawscreen;
 
 // draw rectangle
-void drawrectangle(vector pos, vector size, vector color, float filled) = #10;
+void drawrectangle(vector pos, vector size, vector color, float filled) = #0 : drawrectangle;
 
 // draw text
-void drawtext(vector pos, vector color, string text) = #11;
+void drawtext(vector pos, vector color, string text) = #0 : drawtext;
 
 // exit game
-void exit() = #12;
+void exit() = #0 : exit;
 
 // take a screenshot
-void screenshot(string filename) = #13;
+void screenshot(string filename) = #0 : screenshot;
 
 //
 // variables

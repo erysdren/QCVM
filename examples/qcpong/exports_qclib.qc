@@ -17,20 +17,10 @@
 // functions
 //
 
-// print string to stdoout
-void print(string s, ...) = #1;
-
-// acquire entity handle from the engine
-entity spawn() = #2;
-
-// get length of string
-float strlen(string s) = #3;
-
-// join two strings 
-string strcat(string s1, string s2, ...) = #4;
-
-// float to string 
-string ftos(float f) = #5;
-
-// vector to string
-string vtos(vector v) = #6;
+void print(string s, ...) = #0 : print;
+entity spawn() = #0 : spawn;
+float strlen(string s) = #0 : strlen;
+string strcat(string s1, string s2, ...) = #0 : strcat;
+string ftos(float f) = #0 : ftos;
+string vtos(vector v) = #0 : vtos;
+string substring(string s, float start, float len) = #0 : substring;
