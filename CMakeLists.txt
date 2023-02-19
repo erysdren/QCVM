@@ -30,7 +30,6 @@ project(QCVM LANGUAGES C)
 set(CMAKE_BUILD_TYPE Release)
 
 ## Options
-option(QCVM_BUILD_QC "Build Example QuakeC" ON)
 option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
 option(QCVM_BUILD_QCPONG "Build Example Game" ON)
 option(QCVM_BUILD_GLEXAMPLE "Build OpenGL Example" ON)
@@ -44,8 +43,8 @@ set(QCVM_SOURCES
 )
 
 ## QCVM Library (static)
-add_library(qcvm_static ${QCVM_SOURCES})
-target_include_directories(qcvm_static PUBLIC qcvm/)
+add_library(qcvm ${QCVM_SOURCES})
+target_include_directories(qcvm PUBLIC qcvm/)
 
 ## QCVM Library (shared)
 if(NOT WATCOM AND NOT DJGPP)
@@ -53,22 +52,16 @@ if(NOT WATCOM AND NOT DJGPP)
 	target_include_directories(qcvm_shared PUBLIC qcvm/)
 endif()
 
-## Compile QC test environment
-if(QCVM_BUILD_QC)
-
-	find_program(fteqcc64 fteqcc64 REQUIRED)
-
-	add_custom_command(
-		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/testqc.dat
-		COMMAND fteqcc64 ${CMAKE_SOURCE_DIR}/qc/testqc.src
-	)
-
-	add_custom_target(testqc_dat ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/testqc.dat)
-
-endif()
-
 ## QCVM Test Application
 if(QCVM_BUILD_TESTAPP)
+
+	## QC
+	find_program(fteqcc64 fteqcc64 REQUIRED)
+	add_custom_command(
+		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/test.dat
+		COMMAND fteqcc64 ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcvm_test/test.src
+	)
+	add_custom_target(test_dat ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/test.dat)
 
 	## Sources
 	set(QCVM_TEST_SOURCES
@@ -77,7 +70,7 @@ if(QCVM_BUILD_TESTAPP)
 
 	## Executable
 	add_executable(test ${QCVM_TEST_SOURCES})
-	target_link_libraries(test PUBLIC qcvm_static)
+	target_link_libraries(test PUBLIC qcvm)
 
 endif()
 
@@ -95,7 +88,7 @@ if(QCVM_BUILD_GLEXAMPLE AND NOT DJGPP AND NOT WATCOM)
 
 	## Executable
 	add_executable(glexample ${GLEXAMPLE_SOURCES})
-	target_link_libraries(glexample PUBLIC qcvm_static)
+	target_link_libraries(glexample PUBLIC qcvm)
 	target_link_libraries(glexample PUBLIC OpenGL::GL)
 	target_link_libraries(glexample PUBLIC glfw)
 
@@ -108,7 +101,7 @@ if(QCVM_BUILD_QCPONG AND NOT DJGPP AND NOT WATCOM)
 	find_program(fteqcc64 fteqcc64 REQUIRED)
 	add_custom_command(
 		OUTPUT ${CMAKE_BINARY_DIR}/qcpong.dat
-		COMMAND fteqcc64 ${CMAKE_SOURCE_DIR}/examples/qcpong/qcpong.src
+		COMMAND fteqcc64 ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcpong/qcpong.src
 	)
 	add_custom_target(qcpong_dat ALL DEPENDS ${CMAKE_BINARY_DIR}/qcpong.dat)
 
@@ -124,7 +117,7 @@ if(QCVM_BUILD_QCPONG AND NOT DJGPP AND NOT WATCOM)
 
 	## Executable
 	add_executable(qcpong ${QCPONG_SOURCES})
-	target_link_libraries(qcpong PUBLIC qcvm_static)
+	target_link_libraries(qcpong PUBLIC qcvm)
 	target_link_libraries(qcpong PUBLIC OpenGL::GL)
 	target_link_libraries(qcpong PUBLIC SDL2::SDL2)
 

@@ -28,12 +28,12 @@
 #pragma warning disable Q208
 
 // output file
-#pragma progs_dat testqc.dat
+#pragma progs_dat test.dat
 
 // autoproto
 #pragma autoproto
 
 // qc file list
 #includelist
-	testqc.qc
+	test.qc
 #endlist
