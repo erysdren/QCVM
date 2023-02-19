@@ -42,7 +42,13 @@
 /* main */
 int main(int argc, char **argv)
 {
+	/* variables */
 	qcvm_t *qcvm;
+	int qcvm_field_field1;
+	int qcvm_field_field2;
+	int qcvm_entity_gtest;
+	int qcvm_global_gtest;
+	float field1;
 
 	/* load qcvm */
 	qcvm = qcvm_open("../qc/testqc.dat");
@@ -58,6 +64,15 @@ int main(int argc, char **argv)
 
 	/* run function test() */
 	qcvm_run(qcvm, qcvm_find_function(qcvm, "test"));
+
+	/* entity fields test */
+	qcvm_field_field1 = qcvm_find_field(qcvm, "field1");
+	qcvm_field_field2 = qcvm_find_field(qcvm, "field2");
+	qcvm_global_gtest = qcvm_find_global(qcvm, "gtest");
+	qcvm_entity_gtest = qcvm_get_global_entity(qcvm, qcvm_global_gtest);
+	field1 = qcvm_get_field_float(qcvm, qcvm_entity_gtest, qcvm_field_field1);
+
+	printf("%s\n", qcvm_get_field_string(qcvm, qcvm_entity_gtest, qcvm_field_field2));
 
 	/* close qcvm */
 	qcvm_close(qcvm);

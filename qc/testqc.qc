@@ -24,16 +24,32 @@
 // 
 //==============================================================================
 
+// qclib
+void print(string s, ...) = #1;
+entity spawn() = #2;
+float strlen(string s) = #3;
+string strcat(string s1, string s2, ...) = #4;
+string ftos(float f) = #5;
+string vtos(vector v) = #6;
+
+// ent fields
+.float field3;
+.float field4;
+.float field6;
 .float field1;
 .string field2;
 
-void print(string s, ...) = #1;
-entity spawn() = #2;
+// globals
+entity gtest;
 
 void test()
 {
 	entity ent;
 	float x, y, z;
+
+	gtest = spawn();
+	gtest.field1 = 4643;
+	gtest.field2 = "hello world!";
 
 	x = 1;
 	y = x * 4;

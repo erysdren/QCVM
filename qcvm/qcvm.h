@@ -66,6 +66,30 @@ void qcvm_close(qcvm_t *qcvm);
  * qcvm_utils.c
  */
 
+/* get entity field string */
+const char *qcvm_get_field_string(qcvm_t *qcvm, int entity, int field);
+
+/* get entity field vector */
+qcvm_vec3 qcvm_get_field_vector(qcvm_t *qcvm, int entity, int field);
+
+/* get entity field float */
+float qcvm_get_field_float(qcvm_t *qcvm, int entity, int field);
+
+/* get entity field int */
+int qcvm_get_field_int(qcvm_t *qcvm, int entity, int field);
+
+/* set entity field vector */
+void qcvm_set_field_vector(qcvm_t *qcvm, int entity, int field, float a, float b, float c);
+
+/* set entity field float */
+void qcvm_set_field_float(qcvm_t *qcvm, int entity, int field, float val);
+
+/* set entity field int */
+void qcvm_set_field_int(qcvm_t *qcvm, int entity, int field, int val);
+
+/* find entity field by name */
+int qcvm_find_field(qcvm_t *qcvm, const char *name);
+
 /* set the global int at the specified offset to the specified value */
 void qcvm_set_global_int(qcvm_t *qcvm, int global, int val);
 
