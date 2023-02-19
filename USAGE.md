@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 	}
 
 	// get handle of function "main()"
-	int function_main = qcvm_get_function(qcvm, "main");
+	int function_main = qcvm_find_function(qcvm, "main");
 
 	// check validity
 	if (function_main < 1)
@@ -141,7 +141,7 @@ QuakeC can have global variables that are both readable and writeable. To write 
 
 ```c
 // get global handle
-int my_global_float = qcvm_get_global(qcvm, "my_global_float");
+int my_global_float = qcvm_find_global(qcvm, "my_global_float");
 
 // set global
 qcvm_set_global_float(qcvm, my_global_float, 123);
@@ -151,7 +151,7 @@ A vector global field:
 
 ```c
 // get global handle
-int my_global_vector = qcvm_get_global(qcvm, "my_global_vector");
+int my_global_vector = qcvm_find_global(qcvm, "my_global_vector");
 
 // set global
 qcvm_set_global_vector(qcvm, my_global_vector, 1, 2, 3);
