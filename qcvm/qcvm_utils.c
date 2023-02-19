@@ -136,7 +136,7 @@ void qcvm_set_global_vector(qcvm_t *qcvm, int global, float a, float b, float c)
 /* retrieve global entity */
 int qcvm_get_global_entity(qcvm_t *qcvm, int global)
 {
-	return GET_INT(global);
+	return GET_ENTITY(global);
 }
 
 /* retrieve global int */
@@ -234,7 +234,7 @@ int qcvm_get_argc(qcvm_t *qcvm)
 /* get entity parameter */
 int qcvm_get_parm_entity(qcvm_t *qcvm, int parm)
 {
-	return GET_INT(OFS_PARM0 + (parm * 3));
+	return GET_ENTITY(OFS_PARM0 + (parm * 3));
 }
 
 /* get vector parameter */
