@@ -639,7 +639,6 @@ void qcvm_run(qcvm_t *qcvm, int func)
 				if (nextfunction->first_statement == 0)
 				{
 					export = qcvm_find_export(qcvm, GET_STRING_OFS(nextfunction->name));
-					printf("finding export...\n");
 					if (export < 0) break;
 					qcvm->exports[export].func(qcvm);
 					nextfunction->first_statement = -export;
@@ -650,7 +649,6 @@ void qcvm_run(qcvm_t *qcvm, int func)
 				if (nextfunction->first_statement < 0)
 				{
 					export = -nextfunction->first_statement;
-					printf("calling export directly...\n");
 
 					if (!export || !qcvm->exports)
 					{
