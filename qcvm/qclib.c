@@ -45,8 +45,10 @@ void qclib_print(qcvm_t *qcvm)
 
 	for (i = 0; i < qcvm_get_argc(qcvm); i++)
 	{
-		printf("%s", qcvm_get_parm_string(qcvm, i));
+		fprintf(stdout, "%s", qcvm_get_parm_string(qcvm, i));
 	}
+
+	fflush(stdout);
 }
 
 /* spawn entity */

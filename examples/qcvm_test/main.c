@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 	float field1;
 
 	/* load qcvm */
-	qcvm = qcvm_open("../qc/testqc.dat");
+	qcvm = qcvm_open("../examples/qcvm_test/test.dat");
 
 	/* check validity */
 	if (qcvm == NULL)
