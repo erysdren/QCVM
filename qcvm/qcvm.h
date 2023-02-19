@@ -75,6 +75,9 @@ void qcvm_close(qcvm_t *qcvm);
  * qcvm_utils.c
  */
 
+/* find global entity by name */
+int qcvm_find_entity(qcvm_t *qcvm, const char *name);
+
 /* add entity and return id */
 int qcvm_add_entity(qcvm_t *qcvm);
 

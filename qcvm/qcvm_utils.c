@@ -42,6 +42,20 @@
  * entities
  */
 
+/* find global entity by name */
+int qcvm_find_entity(qcvm_t *qcvm, const char *name)
+{
+	int i;
+
+	for (i = 1; i < qcvm->header->num_global_vars; i++)
+	{
+		if (qcvm->global_vars[i].type == 32772 && strcmp(name, GET_STRING_OFS(qcvm->global_vars[i].name)) == 0)
+			return i;
+	}
+
+	return -1;
+}
+
 /* add entity and return id */
 int qcvm_add_entity(qcvm_t *qcvm)
 {
