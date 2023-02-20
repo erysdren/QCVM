@@ -40,14 +40,38 @@ typedef struct qcvm_runtime qcvm_t;
 /* export func */
 typedef void (*qcvm_export_func_t)(qcvm_t *);
 
+/* export return type */
+typedef enum qcvm_export_type_t
+{
+
+	QCVM_VOID,
+	QCVM_FLOAT,
+	QCVM_INT,
+	QCVM_ENTITY,
+	QCVM_STRING,
+	QCVM_VECTOR,
+	QCVM_VARGS
+
+} qcvm_export_type_t;
+
+/* arg for export */
+typedef struct qcvm_export_arg_t
+{
+	const char *name;
+	qcvm_export_type_t type;
+
+} qcvm_export_arg_t;
+
 /* export structure */
 typedef struct qcvm_export_t
 {
 	const char *name;
 	qcvm_export_func_t func;
+	qcvm_export_type_t type;
+	int argc;
+	qcvm_export_arg_t args[8];
 
 } qcvm_export_t;
-
 
 /* vector */
 typedef struct qcvm_vec3
