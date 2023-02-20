@@ -28,12 +28,12 @@ A bite-sized QuakeC virtual machine written in C.
 
 ## Todo
 
-- Dump user-added builtin functions to properly formatted QC file.
-- Add support for HexenC and FTEQCC's extended opcodes.
-- Add support for the QTest progs format.
-- Bindings for other languages.
-- Add formatted string return function.
-- Split up `qcvm_utils.c` into seperate files for easier browsing and modification.
+- [ ] Dump user-added builtin functions to properly formatted QC file.
+- [ ] Add support for HexenC and FTEQCC's extended opcodes.
+- [ ] Add support for the QTest progs format.
+- [ ] Bindings for other languages.
+- [ ] Add formatted string return function.
+- [ ] Split up `qcvm_utils.c` into seperate files for easier browsing and modification.
 
 ## License
 

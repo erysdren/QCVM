@@ -1,10 +1,10 @@
-program qcvm_test;
+program pascal_test;
 
 uses
 	qcvm;
 
 const
-	progs = 'testqc.dat';
+	progs = 'test.dat';
 
 var
 	qc : qcvm_t;
@@ -39,7 +39,7 @@ begin
 	qcvm_add_export(qc, @pascal_export_test);
 
 	{ get function id }
-	fn := qcvm_get_function(qc, 'test');
+	fn := qcvm_find_function(qc, 'test');
 
 	if fn < 1 then
 	begin

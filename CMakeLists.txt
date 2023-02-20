@@ -31,6 +31,7 @@ set(CMAKE_BUILD_TYPE Release)
 
 ## Options
 option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
+option(QCVM_BUILD_PASCAL_TESTAPP "Build Pascal Test Application" OFF)
 option(QCVM_BUILD_QCPONG "Build Example Game" ON)
 option(QCVM_BUILD_GLEXAMPLE "Build OpenGL Example" ON)
 
@@ -50,6 +51,26 @@ target_include_directories(qcvm PUBLIC qcvm/)
 if(NOT WATCOM AND NOT DJGPP)
 	add_library(qcvm_shared SHARED ${QCVM_SOURCES})
 	target_include_directories(qcvm_shared PUBLIC qcvm/)
+endif()
+
+## QCVM Pascal Test Application
+if(QCVM_BUILD_PASCAL_TESTAPP)
+
+	## FPC
+	find_program(fpc fpc REQUIRED)
+
+	## Sources
+	set(QCVM_PASCAL_TEST_SOURCES
+		${CMAKE_CURRENT_SOURCE_DIR}/examples/pascal/pascal_test.pas
+	)
+
+	## Executable
+	add_custom_command(
+		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pascal_test
+		COMMAND fpc -FE${CMAKE_CURRENT_BINARY_DIR} -Fu${CMAKE_CURRENT_SOURCE_DIR}/bindings/pascal ${QCVM_PASCAL_TEST_SOURCES}
+	)
+	add_custom_target(pascal_test ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pascal_test)
+
 endif()
 
 ## QCVM Test Application

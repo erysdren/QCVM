@@ -1,5 +1,9 @@
 unit qcvm;
 
+{ link c library }
+{$linklib c}
+
+{ interface }
 interface
 
 { uses }
@@ -40,7 +44,7 @@ procedure qcvm_return_string(qcvm : qcvm_t; s : pchar); cdecl; external 'qcvm';
 procedure qcvm_return_vector(qcvm : qcvm_t; a : real; b : real; c : real); cdecl; external 'qcvm';
 procedure qcvm_return_int(qcvm : qcvm_t; val : integer); cdecl; external 'qcvm';
 procedure qcvm_return_float(qcvm : qcvm_t; val : real); cdecl; external 'qcvm';
-function qcvm_get_function(qcvm : qcvm_t; fname : pchar) : integer; cdecl; external 'qcvm';
+function qcvm_find_function(qcvm : qcvm_t; fname : pchar) : integer; cdecl; external 'qcvm';
 procedure qcvm_add_export(qcvm : qcvm_t; exp : qcvm_export_t); cdecl; external 'qcvm';
 
 { qclib.c }
