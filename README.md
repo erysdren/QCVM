@@ -34,6 +34,7 @@ A bite-sized QuakeC virtual machine written in C.
 - [ ] Bindings for other languages.
 - [ ] Add formatted string return function.
 - [ ] Split up `qcvm_utils.c` into seperate files for easier browsing and modification.
+- [ ] Keep USAGE.MD updated.
 
 ## License
 
