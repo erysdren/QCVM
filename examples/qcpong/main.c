@@ -53,7 +53,7 @@
 #define WIDTH 640
 #define HEIGHT 480
 #define TITLE "QCPONG"
-#define PROGS "../examples/qcpong/qcpong.dat"
+#define PROGS "qcpong.dat"
 #define ASPECT1 (float)(WIDTH) / (float)(HEIGHT)
 #define ASPECT2 (float)(HEIGHT) / (float)(WIDTH)
 

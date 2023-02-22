@@ -89,7 +89,7 @@ if(QCVM_BUILD_TESTAPP)
 	find_program(fteqcc64 fteqcc64 REQUIRED)
 	add_custom_command(
 		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/test.dat
-		COMMAND fteqcc64 ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcvm_test/test.src
+		COMMAND fteqcc64 ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcvm_test/test.src -o ${CMAKE_CURRENT_BINARY_DIR}/test.dat
 	)
 	add_custom_target(test_dat ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/test.dat)
 
@@ -111,7 +111,7 @@ if(QCVM_BUILD_QCPONG AND NOT DJGPP AND NOT WATCOM)
 	find_program(fteqcc64 fteqcc64 REQUIRED)
 	add_custom_command(
 		OUTPUT ${CMAKE_BINARY_DIR}/qcpong.dat
-		COMMAND fteqcc64 ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcpong/qcpong.src
+		COMMAND fteqcc64 ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcpong/qcpong.src -o ${CMAKE_CURRENT_BINARY_DIR}/qcpong.dat
 	)
 	add_custom_target(qcpong_dat ALL DEPENDS ${CMAKE_BINARY_DIR}/qcpong.dat)
 

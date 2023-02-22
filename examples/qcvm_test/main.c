@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 	const char *field2;
 
 	/* load qcvm */
-	qcvm = qcvm_open("../examples/qcvm_test/test.dat");
+	qcvm = qcvm_open("test.dat");
 
 	/* check validity */
 	if (qcvm == NULL)
