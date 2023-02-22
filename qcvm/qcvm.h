@@ -96,6 +96,13 @@ qcvm_t *qcvm_open(const char *filename);
 void qcvm_close(qcvm_t *qcvm);
 
 /*
+ * qcvm_exports.c
+ */
+
+/* dump exports to properly formatted qc */
+void qcvm_dump_exports(qcvm_t *qcvm, const char *filename);
+
+/*
  * qcvm_utils.c
  */
 

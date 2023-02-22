@@ -36,9 +36,6 @@
 /* qcvm */
 #include "qcvm_private.h"
 
-/* qclib */
-#include "qclib.h"
-
 /* load progs.dat and return handle */
 qcvm_t *qcvm_open(const char *filename)
 {

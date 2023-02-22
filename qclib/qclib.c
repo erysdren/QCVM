@@ -54,7 +54,11 @@ void qclib_print(qcvm_t *qcvm)
 qcvm_export_t export_print =
 {
 	.func = qclib_print,
-	.name = "print"
+	.name = "print",
+	.type = QCVM_VOID,
+	.argc = 2,
+	.args[0] = {.name = "s", .type = QCVM_STRING},
+	.args[1] = {.name = "...", .type = QCVM_VARGS}
 };
 
 /* spawn entity */
@@ -66,7 +70,9 @@ void qclib_spawn(qcvm_t *qcvm)
 qcvm_export_t export_spawn =
 {
 	.func = qclib_spawn,
-	.name = "spawn"
+	.name = "spawn",
+	.type = QCVM_ENTITY,
+	.argc = 0
 };
 
 /* get length of string */
@@ -78,7 +84,10 @@ void qclib_strlen(qcvm_t *qcvm)
 qcvm_export_t export_strlen =
 {
 	.func = qclib_strlen,
-	.name = "strlen"
+	.name = "strlen",
+	.type = QCVM_FLOAT,
+	.argc = 1,
+	.args[0] = {.name = "s", .type = QCVM_STRING}
 };
 
 /* return a concat of two strings */
@@ -106,7 +115,12 @@ void qclib_strcat(qcvm_t *qcvm)
 qcvm_export_t export_strcat =
 {
 	.func = qclib_strcat,
-	.name = "strcat"
+	.name = "strcat",
+	.type = QCVM_STRING,
+	.argc = 3,
+	.args[0] = {.name = "s1", .type = QCVM_STRING},
+	.args[1] = {.name = "s2", .type = QCVM_STRING},
+	.args[2] = {.name = "...", .type = QCVM_VARGS}
 };
 
 /* float to string */
@@ -132,7 +146,10 @@ void qclib_ftos(qcvm_t *qcvm)
 qcvm_export_t export_ftos =
 {
 	.func = qclib_ftos,
-	.name = "ftos"
+	.name = "ftos",
+	.type = QCVM_STRING,
+	.argc = 1,
+	.args[0] = {.name = "f", .type = QCVM_FLOAT}
 };
 
 /* vector to string */
@@ -155,7 +172,10 @@ void qclib_vtos(qcvm_t *qcvm)
 qcvm_export_t export_vtos =
 {
 	.func = qclib_vtos,
-	.name = "vtos"
+	.name = "vtos",
+	.type = QCVM_STRING,
+	.argc = 1,
+	.args[0] = {.name = "v", .type = QCVM_VECTOR}
 };
 
 /* get substring */
@@ -182,7 +202,12 @@ void qclib_substring(qcvm_t *qcvm)
 qcvm_export_t export_substring =
 {
 	.func = qclib_substring,
-	.name = "substring"
+	.name = "substring",
+	.type = QCVM_STRING,
+	.argc = 3,
+	.args[0] = {.name = "s", .type = QCVM_STRING},
+	.args[1] = {.name = "start", .type = QCVM_FLOAT},
+	.args[2] = {.name = "len", .type = QCVM_FLOAT}
 };
 
 /* install qclib default builtin functions */

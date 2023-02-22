@@ -37,9 +37,9 @@ option(QCVM_BUILD_QCPONG "Build Example Game" ON)
 ## QCVM Sources
 set(QCVM_SOURCES
 	qcvm/qcvm_bootstrap.c
-	qcvm/qclib.c
 	qcvm/qcvm_runtime.c
 	qcvm/qcvm_utils.c
+	qcvm/qcvm_exports.c
 )
 
 ## QCVM Library (static)
@@ -51,6 +51,16 @@ if(NOT WATCOM AND NOT DJGPP)
 	add_library(qcvm_shared SHARED ${QCVM_SOURCES})
 	target_include_directories(qcvm_shared PUBLIC qcvm/)
 endif()
+
+## QCLIB Sources
+set(QCVM_SOURCES
+	qclib/qclib.c
+)
+
+## QCLIB (static)
+add_library(qclib ${QCVM_SOURCES})
+target_link_libraries(qclib PUBLIC qcvm)
+target_include_directories(qclib PUBLIC qclib/)
 
 ## QCVM Pascal Test Application
 if(QCVM_BUILD_PASCAL_TESTAPP)
@@ -90,7 +100,7 @@ if(QCVM_BUILD_TESTAPP)
 
 	## Executable
 	add_executable(test ${QCVM_TEST_SOURCES})
-	target_link_libraries(test PUBLIC qcvm)
+	target_link_libraries(test PUBLIC qcvm qclib)
 
 endif()
 
@@ -116,7 +126,7 @@ if(QCVM_BUILD_QCPONG AND NOT DJGPP AND NOT WATCOM)
 
 	## Executable
 	add_executable(qcpong ${QCPONG_SOURCES})
-	target_link_libraries(qcpong PUBLIC qcvm)
+	target_link_libraries(qcpong PUBLIC qcvm qclib)
 	target_link_libraries(qcpong PUBLIC SDL2::SDL2)
 
 endif()

@@ -35,9 +35,6 @@
 /* qcvm */
 #include "qcvm_private.h"
 
-/* qclib */
-#include "qclib.h"
-
 /*
  * entities
  */

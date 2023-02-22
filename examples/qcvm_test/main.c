@@ -85,6 +85,9 @@ int main(int argc, char **argv)
 	printf("gtest.field1 = %0.0f\n", field1);
 	printf("gtest.field2 = %s\n", field2);
 
+	/* dump qclib exports */
+	qcvm_dump_exports(qcvm, "../qclib/qclib.qc");
+
 	/* close qcvm */
 	qcvm_close(qcvm);
 
