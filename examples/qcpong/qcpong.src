@@ -29,7 +29,7 @@
 #pragma autoproto
 
 #includelist
-	exports_qclib.qc
+	../../qclib/qclib.qc
 	exports_qcpong.qc
 	qcpong.qc
 #endlist
