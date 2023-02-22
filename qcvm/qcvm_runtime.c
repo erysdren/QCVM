@@ -639,7 +639,13 @@ void qcvm_run(qcvm_t *qcvm, int func)
 				if (nextfunction->first_statement == 0)
 				{
 					export = qcvm_find_export(qcvm, GET_STRING_OFS(nextfunction->name));
-					if (export < 0) break;
+
+					if (export < 0)
+					{
+						fprintf(stderr, "error: null function\n");
+						break;
+					}
+
 					qcvm->exports[export].func(qcvm);
 					nextfunction->first_statement = -export;
 					break;
