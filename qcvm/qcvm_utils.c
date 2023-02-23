@@ -369,5 +369,5 @@ int qcvm_find_function(qcvm_t *qcvm, const char *name)
 	}
 
 	/* return failure */
-	return 0;
+	return -1;
 }
