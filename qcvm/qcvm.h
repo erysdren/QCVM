@@ -96,21 +96,28 @@ qcvm_t *qcvm_open(const char *filename);
 void qcvm_close(qcvm_t *qcvm);
 
 /*
+ * qcvm_entities.c
+ */
+
+/* add entity and return id */
+int qcvm_add_entity(qcvm_t *qcvm);
+
+/* find global entity by name */
+int qcvm_find_entity(qcvm_t *qcvm, const char *name);
+
+/*
  * qcvm_exports.c
  */
+
+/* add export to qcvm */
+void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export);
 
 /* dump exports to properly formatted qc */
 void qcvm_dump_exports(qcvm_t *qcvm, const char *filename);
 
 /*
- * qcvm_utils.c
+ * qcvm_fields.c
  */
-
-/* find global entity by name */
-int qcvm_find_entity(qcvm_t *qcvm, const char *name);
-
-/* add entity and return id */
-int qcvm_add_entity(qcvm_t *qcvm);
 
 /* get entity field string */
 const char *qcvm_get_field_string(qcvm_t *qcvm, int entity, int field);
@@ -135,6 +142,17 @@ void qcvm_set_field_int(qcvm_t *qcvm, int entity, int field, int val);
 
 /* find entity field by name */
 int qcvm_find_field(qcvm_t *qcvm, const char *name);
+
+/*
+ * qcvm_functions.c
+ */
+
+/* search all functions in the qcvm and return its function number if found */
+int qcvm_find_function(qcvm_t *qcvm, const char *name);
+
+/*
+ * qcvm_globals.c
+ */
 
 /* set global entity by number */
 void qcvm_set_global_entity(qcvm_t *qcvm, int global, int entity);
@@ -162,6 +180,10 @@ qcvm_vec3 qcvm_get_global_vector(qcvm_t *qcvm, int global);
 
 /* retrieve the offset of a global by name */
 int qcvm_find_global(qcvm_t *qcvm, const char *name);
+
+/*
+ * qcvm_parameters.c
+ */
 
 /* set the specified parameter of the next function call to a string */
 void qcvm_set_parm_string(qcvm_t *qcvm, int parm, const char *s);
@@ -193,6 +215,10 @@ int qcvm_get_parm_int(qcvm_t *qcvm, int parm);
 /* retrieve the specified function parameter as a float */
 float qcvm_get_parm_float(qcvm_t *qcvm, int parm);
 
+/*
+ * qcvm_return.c
+ */
+
 /* return a new entity */
 void qcvm_return_entity(qcvm_t *qcvm, int entity);
 
@@ -207,12 +233,6 @@ void qcvm_return_int(qcvm_t *qcvm, int val);
 
 /* return a float to the function that called this one */
 void qcvm_return_float(qcvm_t *qcvm, float val);
-
-/* search all functions in the qcvm and return its function number if found */
-int qcvm_find_function(qcvm_t *qcvm, const char *name);
-
-/* add export to qcvm */
-void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export);
 
 /*
  * qcvm_runtime.c

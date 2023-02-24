@@ -38,8 +38,13 @@ option(QCVM_BUILD_QCPONG "Build Example Game" ON)
 set(QCVM_SOURCES
 	qcvm/qcvm_bootstrap.c
 	qcvm/qcvm_runtime.c
-	qcvm/qcvm_utils.c
+	qcvm/qcvm_entities.c
 	qcvm/qcvm_exports.c
+	qcvm/qcvm_return.c
+	qcvm/qcvm_parameters.c
+	qcvm/qcvm_fields.c
+	qcvm/qcvm_globals.c
+	qcvm/qcvm_functions.c
 )
 
 ## QCVM Library (static)

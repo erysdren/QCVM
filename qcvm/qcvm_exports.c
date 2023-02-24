@@ -39,6 +39,13 @@
  * exports
  */
 
+/* add export */
+void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export)
+{
+	qcvm->exports[qcvm->num_exports] = export;
+	qcvm->num_exports++;
+}
+
 /* dump exports to properly formatted qc */
 void qcvm_dump_exports(qcvm_t *qcvm, const char *filename)
 {
