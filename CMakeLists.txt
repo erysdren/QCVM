@@ -28,6 +28,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(QCVM LANGUAGES C)
 set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_C_STANDARD 90)
 
 ## Options
 option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
