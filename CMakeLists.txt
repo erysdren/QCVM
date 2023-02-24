@@ -37,14 +37,14 @@ option(QCVM_BUILD_QCPONG "Build Example Game" ON)
 ## QCVM Sources
 set(QCVM_SOURCES
 	qcvm/qcvm_bootstrap.c
-	qcvm/qcvm_runtime.c
 	qcvm/qcvm_entities.c
 	qcvm/qcvm_exports.c
-	qcvm/qcvm_return.c
-	qcvm/qcvm_parameters.c
 	qcvm/qcvm_fields.c
-	qcvm/qcvm_globals.c
 	qcvm/qcvm_functions.c
+	qcvm/qcvm_globals.c
+	qcvm/qcvm_parameters.c
+	qcvm/qcvm_return.c
+	qcvm/qcvm_runtime.c
 )
 
 ## QCVM Library (static)
@@ -55,6 +55,7 @@ target_include_directories(qcvm PUBLIC qcvm/)
 if(NOT WATCOM AND NOT DJGPP)
 	add_library(qcvm_shared SHARED ${QCVM_SOURCES})
 	target_include_directories(qcvm_shared PUBLIC qcvm/)
+	set_target_properties(qcvm_shared PROPERTIES OUTPUT_NAME qcvm)
 endif()
 
 ## QCLIB Sources
