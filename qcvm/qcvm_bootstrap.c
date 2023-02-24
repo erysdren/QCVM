@@ -113,8 +113,10 @@ qcvm_t *qcvm_open(const char *filename)
 
 	#if ALLOCATE_EXPORTS
 	qcvm->exports = malloc(sizeof(qcvm_export_t) * NUM_EXPORTS);
+	qcvm->num_exports = 0;
 	#else
 	qcvm->exports = NULL;
+	qcvm->num_exports = -1;
 	#endif
 
 	/* close file pointer */
