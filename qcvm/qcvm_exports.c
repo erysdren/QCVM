@@ -31,6 +31,7 @@
 /* std */
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /* qcvm */
 #include "qcvm_private.h"
@@ -39,10 +40,57 @@
  * exports
  */
 
-/* add export */
-void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export)
+/* add an argument to export */
+void qcvm_add_export_arg(qcvm_export_t *export, const char *name, qcvm_export_type_t type)
 {
-	qcvm->exports[qcvm->num_exports] = export;
+	/* sanity check */
+	if (export->argc >= 7) return;
+
+	/* set type */
+	export->args[export->argc].type = type;
+
+	/* copy name string */
+	strcpy(export->args[export->argc].name, name);
+
+	/* update arg count */
+	export->argc++;
+}
+
+/* create new export */
+qcvm_export_t *qcvm_create_export(const char *name, qcvm_export_func_t func, qcvm_export_type_t type)
+{
+	/* variables */
+	qcvm_export_t *export;
+
+	/* allocate it */
+	export = (qcvm_export_t *)malloc(sizeof(qcvm_export_t));
+
+	/* set type */
+	export->type = type;
+
+	/* set func */
+	export->func = func;
+
+	/* copy name string */
+	strcpy(export->name, name);
+
+	/* set argc */
+	export->argc = 0;
+
+	/* return ptr */
+	return export;
+}
+
+/* free export */
+void qcvm_free_export(qcvm_export_t *export)
+{
+	free(export);
+}
+
+/* add export */
+void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t *export)
+{
+	qcvm->exports[qcvm->num_exports] = *export;
 	qcvm->num_exports++;
 }
 

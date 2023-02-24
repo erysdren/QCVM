@@ -36,7 +36,7 @@ A bite-sized QuakeC virtual machine written in C.
 - [x] Split up `qcvm_utils.c` into seperate files for easier browsing and modification.
 - [ ] Keep USAGE.MD updated.
 - [ ] Add support to automatically compile QuakeC by calling FTEQCC.
-- [ ] Convert exports to an allocated pointer, for easier conversion to Pascal.
+- [x] Convert exports to an allocated pointer, for easier conversion to Pascal.
 
 ## Feedback
 

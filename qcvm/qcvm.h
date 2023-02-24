@@ -57,7 +57,7 @@ typedef enum qcvm_export_type_t
 /* arg for export */
 typedef struct qcvm_export_arg_t
 {
-	const char *name;
+	char name[32];
 	qcvm_export_type_t type;
 
 } qcvm_export_arg_t;
@@ -65,7 +65,7 @@ typedef struct qcvm_export_arg_t
 /* export structure */
 typedef struct qcvm_export_t
 {
-	const char *name;
+	char name[32];
 	qcvm_export_func_t func;
 	qcvm_export_type_t type;
 	int argc;
@@ -109,8 +109,17 @@ int qcvm_find_entity(qcvm_t *qcvm, const char *name);
  * qcvm_exports.c
  */
 
+/* add an argument to export */
+void qcvm_add_export_arg(qcvm_export_t *export, const char *name, qcvm_export_type_t type);
+
+/* create new export */
+qcvm_export_t *qcvm_create_export(const char *name, qcvm_export_func_t func, qcvm_export_type_t type);
+
+/* free export */
+void qcvm_free_export(qcvm_export_t *export);
+
 /* add export to qcvm */
-void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t export);
+void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t *export);
 
 /* dump exports to properly formatted qc */
 void qcvm_dump_exports(qcvm_t *qcvm, const char *filename);

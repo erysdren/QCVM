@@ -213,11 +213,11 @@ qcvm_export_t export_substring =
 /* install qclib default builtin functions */
 void qclib_install(qcvm_t *qcvm)
 {
-	qcvm_add_export(qcvm, export_print);
-	qcvm_add_export(qcvm, export_spawn);
-	qcvm_add_export(qcvm, export_strlen);
-	qcvm_add_export(qcvm, export_strcat);
-	qcvm_add_export(qcvm, export_substring);
-	qcvm_add_export(qcvm, export_vtos);
-	qcvm_add_export(qcvm, export_ftos);
+	qcvm_add_export(qcvm, &export_print);
+	qcvm_add_export(qcvm, &export_spawn);
+	qcvm_add_export(qcvm, &export_strlen);
+	qcvm_add_export(qcvm, &export_strcat);
+	qcvm_add_export(qcvm, &export_substring);
+	qcvm_add_export(qcvm, &export_vtos);
+	qcvm_add_export(qcvm, &export_ftos);
 }

@@ -284,13 +284,13 @@ int main(int argc, char **argv)
 	qclib_install(qcvm);
 
 	/* install our own exports */
-	qcvm_add_export(qcvm, _export_drawpixel);
-	qcvm_add_export(qcvm, _export_clearscreen);
-	qcvm_add_export(qcvm, _export_drawscreen);
-	qcvm_add_export(qcvm, _export_drawrectangle);
-	qcvm_add_export(qcvm, _export_drawtext);
-	qcvm_add_export(qcvm, _export_exit);
-	qcvm_add_export(qcvm, _export_screenshot);
+	qcvm_add_export(qcvm, &_export_drawpixel);
+	qcvm_add_export(qcvm, &_export_clearscreen);
+	qcvm_add_export(qcvm, &_export_drawscreen);
+	qcvm_add_export(qcvm, &_export_drawrectangle);
+	qcvm_add_export(qcvm, &_export_drawtext);
+	qcvm_add_export(qcvm, &_export_exit);
+	qcvm_add_export(qcvm, &_export_screenshot);
 
 	/* get function handles */
 	func_draw = qcvm_find_function(qcvm, "draw");
