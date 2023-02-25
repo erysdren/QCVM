@@ -42,7 +42,7 @@
 /* get entity field string */
 const char *qcvm_get_field_string(qcvm_t *qcvm, int entity, int field)
 {
-	return GET_STRING_OFS(((int *)qcvm->entities[entity].v)[field]);
+	return GET_STRING_OFS(FIELD_INT(entity, field));
 }
 
 /* get entity field vector */
@@ -50,9 +50,9 @@ qcvm_vec3 qcvm_get_field_vector(qcvm_t *qcvm, int entity, int field)
 {
 	qcvm_vec3 ret;
 
-	ret.x = ((float *)qcvm->entities[entity].v)[field];
-	ret.y = ((float *)qcvm->entities[entity].v)[field + 1];
-	ret.z = ((float *)qcvm->entities[entity].v)[field + 2];
+	ret.x = FIELD_FLOAT(entity, field);
+	ret.y = FIELD_FLOAT(entity, field + 1);
+	ret.z = FIELD_FLOAT(entity, field + 2);
 
 	return ret;
 }
@@ -60,33 +60,33 @@ qcvm_vec3 qcvm_get_field_vector(qcvm_t *qcvm, int entity, int field)
 /* get entity field float */
 float qcvm_get_field_float(qcvm_t *qcvm, int entity, int field)
 {
-	return ((float *)qcvm->entities[entity].v)[field];
+	return FIELD_FLOAT(entity, field);
 }
 
 /* get entity field int */
 int qcvm_get_field_int(qcvm_t *qcvm, int entity, int field)
 {
-	return ((int *)qcvm->entities[entity].v)[field];
+	return FIELD_INT(entity, field);
 }
 
 /* set entity field vector */
 void qcvm_set_field_vector(qcvm_t *qcvm, int entity, int field, float a, float b, float c)
 {
-	((float *)qcvm->entities[entity].v)[field] = a;
-	((float *)qcvm->entities[entity].v)[field + 1] = b;
-	((float *)qcvm->entities[entity].v)[field + 2] = c;
+	FIELD_FLOAT(entity, field) = a;
+	FIELD_FLOAT(entity, field + 1) = b;
+	FIELD_FLOAT(entity, field + 2) = c;
 }
 
 /* set entity field float */
 void qcvm_set_field_float(qcvm_t *qcvm, int entity, int field, float val)
 {
-	((float *)qcvm->entities[entity].v)[field] = val;
+	FIELD_FLOAT(entity, field) = val;
 }
 
 /* set entity field int */
 void qcvm_set_field_int(qcvm_t *qcvm, int entity, int field, int val)
 {
-	((int *)qcvm->entities[entity].v)[field] = val;
+	FIELD_INT(entity, field) = val;
 }
 
 /* find entity field by name */

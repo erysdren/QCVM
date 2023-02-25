@@ -92,6 +92,10 @@
 #define	ENTITY_TO_QC(e) ((unsigned char *)(e) - (unsigned char *)qcvm->entities)
 #define QC_TO_ENTITY(e) ((qcvm_entity_t *)((unsigned char *)qcvm->entities + (e)))
 
+/* retrieve values from entity fields */
+#define FIELD_FLOAT(e, f) (((float *)qcvm->entities[e].v)[f])
+#define FIELD_INT(e, f) (((int *)qcvm->entities[e].v)[f])
+
 /* return from function */
 #define RETURN_FLOAT(a) (GET_FLOAT(OFS_RETURN) = (a))
 #define RETURN_INT(a) (GET_INT(OFS_RETURN) = (a))
