@@ -34,6 +34,7 @@ set(CMAKE_C_STANDARD 90)
 option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
 option(QCVM_BUILD_PASCAL_TESTAPP "Build Pascal Test Application" OFF)
 option(QCVM_BUILD_QCPONG "Build Example Game" ON)
+option(QCVM_BUILD_MODULE_TESTAPP "Build Module Test Application" ON)
 
 ## QCVM Sources
 set(QCVM_SOURCES
@@ -77,15 +78,15 @@ if(QCVM_BUILD_PASCAL_TESTAPP)
 
 	## Sources
 	set(QCVM_PASCAL_TEST_SOURCES
-		${CMAKE_CURRENT_SOURCE_DIR}/examples/pascal/pascal_test.pas
+		${PROJECT_SOURCE_DIR}/examples/pascal/pascal_test.pas
 	)
 
 	## Executable
 	add_custom_command(
-		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/pascal_test
-		COMMAND fpc -FE${CMAKE_CURRENT_BINARY_DIR} -Fu${CMAKE_CURRENT_SOURCE_DIR}/bindings/pascal ${QCVM_PASCAL_TEST_SOURCES}
+		OUTPUT ${PROJECT_BINARY_DIR}/pascal_test
+		COMMAND fpc -FE${PROJECT_BINARY_DIR} -Fu${PROJECT_SOURCE_DIR}/bindings/pascal ${QCVM_PASCAL_TEST_SOURCES}
 	)
-	add_custom_target(pascal_test ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/pascal_test)
+	add_custom_target(pascal_test ALL DEPENDS ${PROJECT_BINARY_DIR}/pascal_test)
 
 endif()
 
@@ -95,10 +96,10 @@ if(QCVM_BUILD_TESTAPP)
 	## QC
 	find_program(fteqcc64 fteqcc64 REQUIRED)
 	add_custom_command(
-		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/test.dat
-		COMMAND fteqcc64 ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcvm_test/test.src -o ${CMAKE_CURRENT_BINARY_DIR}/test.dat
+		OUTPUT ${PROJECT_BINARY_DIR}/test.dat
+		COMMAND fteqcc64 ${PROJECT_SOURCE_DIR}/examples/qcvm_test/test.src -o ${PROJECT_BINARY_DIR}/test.dat
 	)
-	add_custom_target(test_dat ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/test.dat)
+	add_custom_target(test_dat ALL DEPENDS ${PROJECT_BINARY_DIR}/test.dat)
 
 	## Sources
 	set(QCVM_TEST_SOURCES
@@ -111,6 +112,33 @@ if(QCVM_BUILD_TESTAPP)
 
 endif()
 
+## QCVM Module Test Application
+if(QCVM_BUILD_MODULE_TESTAPP)
+
+	## QC
+	find_program(fteqcc64 fteqcc64 REQUIRED)
+	add_custom_command(
+		OUTPUT ${PROJECT_BINARY_DIR}/module1.dat
+		COMMAND fteqcc64 ${PROJECT_SOURCE_DIR}/examples/module_test/module1.src -o ${PROJECT_BINARY_DIR}/module1.dat
+	)
+	add_custom_command(
+		OUTPUT ${PROJECT_BINARY_DIR}/module2.dat
+		COMMAND fteqcc64 ${PROJECT_SOURCE_DIR}/examples/module_test/module2.src -o ${PROJECT_BINARY_DIR}/module2.dat
+	)
+	add_custom_target(module1_dat ALL DEPENDS ${PROJECT_BINARY_DIR}/module1.dat)
+	add_custom_target(module2_dat ALL DEPENDS ${PROJECT_BINARY_DIR}/module2.dat)
+
+	## Sources
+	set(QCVM_MODULE_TEST_SOURCES
+		examples/module_test/module_test.c
+	)
+
+	## Executable
+	add_executable(module_test ${QCVM_MODULE_TEST_SOURCES})
+	target_link_libraries(module_test PUBLIC qcvm qclib)
+
+endif()
+
 ## QCVM Example Game
 if(QCVM_BUILD_QCPONG AND NOT DJGPP AND NOT WATCOM)
 
@@ -118,7 +146,7 @@ if(QCVM_BUILD_QCPONG AND NOT DJGPP AND NOT WATCOM)
 	find_program(fteqcc64 fteqcc64 REQUIRED)
 	add_custom_command(
 		OUTPUT ${CMAKE_BINARY_DIR}/qcpong.dat
-		COMMAND fteqcc64 ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcpong/qcpong.src -o ${CMAKE_CURRENT_BINARY_DIR}/qcpong.dat
+		COMMAND fteqcc64 ${PROJECT_SOURCE_DIR}/examples/qcpong/qcpong.src -o ${PROJECT_BINARY_DIR}/qcpong.dat
 	)
 	add_custom_target(qcpong_dat ALL DEPENDS ${CMAKE_BINARY_DIR}/qcpong.dat)
 
