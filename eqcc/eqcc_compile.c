@@ -139,14 +139,28 @@ void print_token(stb_lexer *lexer)
 	}
 }
 
-/* check if token is equal to user token, if its valid move keep parsing */
-int check(stb_lexer *lexer, const char *token)
+/* check if token is equal to specified token */
+int check_token(stb_lexer *lexer, int token)
 {
-	/* do string compare */
-	if (strcmp(lexer->string, token) != 0)
+	/* do compare on lexer token */
+	if (lexer->token != token)
 		return 0;
 
-	/* lex forward */
+	/* parse forward */
+	stb_c_lexer_get_token(lexer);
+
+	/* return success */
+	return 1;
+}
+
+/* check if token is equal to specified keyword */
+int check_keyword(stb_lexer *lexer, const char *keyword)
+{
+	/* do string compare on lexer token */
+	if (strcmp(lexer->string, keyword) != 0)
+		return 0;
+
+	/* parse forward */
 	stb_c_lexer_get_token(lexer);
 
 	/* return success */
