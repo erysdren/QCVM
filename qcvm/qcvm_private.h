@@ -24,10 +24,15 @@
  * 
  ******************************************************************************/
 
+/* guard */
 #pragma once
 #ifndef _QCVM_PRIVATE_H_
 #define _QCVM_PRIVATE_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
+/* include public header */
 #include "qcvm.h"
 
 /* allocate tempstrings table */
@@ -311,6 +316,12 @@ struct qcvm_runtime
 
 };
 
+/* qcvm opcode function */
+typedef void (*qcvm_opcode_func_t)(qcvm_t *, qcvm_evaluator_t *, qcvm_evaluator_t *, qcvm_evaluator_t *);
+
+/* array of opcode functions */
+extern qcvm_opcode_func_t qcvm_opcode_funcs[];
+
 /* qcvm opcodes */
 typedef enum qcvm_opcodes_t
 {
@@ -425,4 +436,8 @@ typedef enum qcvm_opcodes_t
 
 } qcvm_opcodes_t;
 
+/* guard */
+#ifdef __cplusplus
+}
+#endif
 #endif /* _QCVM_PRIVATE_H_ */

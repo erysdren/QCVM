@@ -24,9 +24,13 @@
  * 
  ******************************************************************************/
 
+/* guard */
 #pragma once
 #ifndef _QCVM_H_
 #define _QCVM_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  *
@@ -250,4 +254,8 @@ void qcvm_return_float(qcvm_t *qcvm, float val);
 /* execute qcvm runtime loop */
 void qcvm_run(qcvm_t *qcvm, int func);
 
+/* guard */
+#ifdef __cplusplus
+}
+#endif
 #endif /* _QCVM_H_ */

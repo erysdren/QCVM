@@ -44,6 +44,7 @@ set(QCVM_SOURCES
 	qcvm/qcvm_fields.c
 	qcvm/qcvm_functions.c
 	qcvm/qcvm_globals.c
+	qcvm/qcvm_opcodes.c
 	qcvm/qcvm_parameters.c
 	qcvm/qcvm_return.c
 	qcvm/qcvm_runtime.c
