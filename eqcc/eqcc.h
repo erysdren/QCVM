@@ -26,8 +26,8 @@
 
 /* guard */
 #pragma once
-#ifndef _QCLIB_H_
-#define _QCLIB_H_
+#ifndef _EQCC_H_
+#define _EQCC_H_
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -58,20 +58,10 @@ extern "C" {
  */
 
 /* eqcc_compile.c */
-extern char strings[MAX_STRINGS];
-extern int ofs_strings;
-extern qcvm_statement_t statements[MAX_STATEMENTS];
-extern int num_statemnts;
-extern qcvm_function_t functions[MAX_FUNCTIONS];
-extern int num_functions;
-
-/* eqcc_utils.c */
-void *load_file(const char *filename, int *buffer_len);
-void error(const char *fmt, ...);
-void print_help_text();
+int eqcc_compile(const char *filename);
 
 /* guard */
 #ifdef __cplusplus
 }
 #endif
-#endif /* _QCLIB_H_ */
+#endif /* _EQCC_H_ */

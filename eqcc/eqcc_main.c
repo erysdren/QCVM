@@ -35,7 +35,7 @@
 #include <string.h>
 
 /* eqcc */
-#include "eqcc.h"
+#include "eqcc_private.h"
 
 /*
  * functions
@@ -54,6 +54,10 @@ int main(int argc, char **argv)
 		if (strcmp(argv[i], "--help") == 0 || strcmp(argv[i], "-h") == 0)
 			print_help_text();
 	}
+
+	/* compile */
+	if (!eqcc_compile(argv[1]))
+		error("failed to compile \"%s\"", argv[1]);
 
 	/* exit gracefully */
 	return 0;

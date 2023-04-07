@@ -38,7 +38,7 @@
 #include "qcvm_private.h"
 
 /* eqcc */
-#include "eqcc.h"
+#include "eqcc_private.h"
 
 /* stb */
 #define STB_C_LEXER_IMPLEMENTATION
@@ -63,3 +63,84 @@ int num_functions;
 /*
  * functions
  */
+
+/* print lex tokens */
+static void print_token(stb_lexer *lexer)
+{
+	switch (lexer->token)
+	{
+		/* valid lex tokens */
+		case CLEX_id: printf("_%s", lexer->string); break;
+		case CLEX_eq: printf("=="); break;
+		case CLEX_noteq: printf("!="); break;
+		case CLEX_lesseq: printf("<="); break;
+		case CLEX_greatereq: printf(">="); break;
+		case CLEX_andand: printf("&&"); break;
+		case CLEX_oror: printf("||"); break;
+		case CLEX_shl: printf("<<"); break;
+		case CLEX_shr: printf(">>"); break;
+		case CLEX_plusplus: printf("++"); break;
+		case CLEX_minusminus: printf("--"); break;
+		case CLEX_arrow: printf("->"); break;
+		case CLEX_andeq: printf("&="); break;
+		case CLEX_oreq: printf("|="); break;
+		case CLEX_xoreq: printf("^="); break;
+		case CLEX_pluseq: printf("+="); break;
+		case CLEX_minuseq: printf("-="); break;
+		case CLEX_muleq: printf("*="); break;
+		case CLEX_diveq: printf("/="); break;
+		case CLEX_modeq: printf("%%="); break;
+		case CLEX_shleq: printf("<<="); break;
+		case CLEX_shreq: printf(">>="); break;
+		case CLEX_eqarrow: printf("=>"); break;
+		case CLEX_dqstring: printf("\"%s\"", lexer->string); break;
+		case CLEX_sqstring: printf("'\"%s\"'", lexer->string); break;
+		case CLEX_charlit: printf("'%s'", lexer->string); break;
+		case CLEX_intlit: printf("#%ld", lexer->int_number); break;
+		case CLEX_floatlit: printf("%g", lexer->real_number); break;
+
+		/* invalid token */
+		default:
+		{
+			if (lexer->token >= 0 && lexer->token < 256)
+				printf("%c", (int)lexer->token);
+			else
+				printf("<<<UNKNOWN TOKEN %ld >>>\n", lexer->token);
+
+			break;
+		}
+	}
+}
+
+/* compile qc file */
+int eqcc_compile(const char *filename)
+{
+	/* variables */
+	void *buffer;
+	int buffer_len;
+	char *buffer_start;
+	char *buffer_end;
+	stb_lexer lex;
+	char string_store[128];
+
+	/* load file */
+	buffer = load_file(filename, &buffer_len);
+	if (!buffer) return 0;
+
+	/* init lexer */
+	buffer_start = (char *)buffer;
+	buffer_end = buffer_start + buffer_len;
+	stb_c_lexer_init(&lex, buffer_start, buffer_end, string_store, 128);
+
+	/* do lex */
+	while (stb_c_lexer_get_token(&lex))
+	{
+		print_token(&lex);
+	}
+
+	/* free memory */
+	free(buffer);
+
+	/* return success */
+	return 1;
+}

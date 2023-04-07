@@ -24,86 +24,57 @@
  * 
  ******************************************************************************/
 
+/* guard */
+#pragma once
+#ifndef _EQCC_PRIVATE_H_
+#define _EQCC_PRIVATE_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * headers
  */
 
-/* std */
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
+/* qcvm */
+#include "qcvm_private.h"
+
+/* stb */
+#include "stb_c_lexer.h"
 
 /* eqcc */
-#include "eqcc_private.h"
+#include "eqcc.h"
 
 /*
- * globals
+ * macros
  */
 
-/* help text */
-static const char help_text[] = \
-	"\nEQCC - Erysdren's QuakeC Compiler\n\n" \
-	"Usage:\n\teqcc file.qc\n\n" \
-	"Other Commands:\n\t-h, --help\n\n";
+/* max values */
+#define	MAX_STRINGS 0x10000
+#define	MAX_GLOBALS 0x4000
+#define	MAX_FIELDS 0x400
+#define	MAX_STATEMENTS 0x10000
+#define	MAX_FUNCTIONS 0x2000
 
 /*
- * functions
+ * prototypes
  */
 
-/* load entire file into memory */
-void *load_file(const char *filename, int *buffer_len)
-{
-	/* variables */
-	FILE *file;
-	void *buffer;
-	int len_file;
+/* eqcc_compile.c */
+extern char strings[MAX_STRINGS];
+extern int ofs_strings;
+extern qcvm_statement_t statements[MAX_STATEMENTS];
+extern int num_statemnts;
+extern qcvm_function_t functions[MAX_FUNCTIONS];
+extern int num_functions;
 
-	/* open file */
-	file = fopen(filename, "rb");
-	if (!file) return NULL;
+/* eqcc_utils.c */
+void *load_file(const char *filename, int *buffer_len);
+void error(const char *fmt, ...);
+void print_help_text();
 
-	/* get file len */
-	fseek(file, 0L, SEEK_END);
-	len_file = ftell(file);
-	fseek(file, 0L, SEEK_SET);
-
-	/* allocate space and read file */
-	buffer = malloc(len_file);
-	fread(buffer, len_file, 1, file);
-
-	/* close file */
-	fclose(file);
-
-	/* set file len */
-	if (buffer_len) *buffer_len = len_file;
-
-	/* return pointer to buffer */
-	return buffer;
+/* guard */
+#ifdef __cplusplus
 }
-
-/* print formatted error and exit */
-void error(const char *fmt, ...)
-{
-	/* variables */
-	va_list ap;
-	char str[128];
-
-	/* do vargs */
-	va_start(ap, fmt);
-	vsnprintf(str, sizeof(str), fmt, ap);
-	va_end(ap);
-
-	/* print message */
-	fprintf(stderr, "err: %s\n", str);
-
-	/* exit with error code 1 */
-	exit(1);
-}
-
-/* print help text */
-void print_help_text()
-{
-	printf("%s", help_text);
-	exit(0);
-}
+#endif
+#endif /* _EQCC_PRIVATE_H_ */
