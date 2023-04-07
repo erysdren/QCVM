@@ -26,7 +26,11 @@
 
 #include "test.qch"
 
-// this is using old style qc
+float() MyReturnFunction =
+{
+	return 0.5;
+};
+
 void(float InVal) MyFunction =
 {
 	float MyVal;

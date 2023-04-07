@@ -64,12 +64,35 @@ int num_statemnts;
 qcvm_function_t functions[MAX_FUNCTIONS];
 int num_functions;
 
+/* reserved keywords */
+const char *keywords[] =
+{
+	"if",
+	"else",
+	"switch",
+	"break",
+	"continue",
+	"do",
+	"while",
+	"enum",
+	"enumflags",
+	"typedef",
+	"case",
+	"return",
+	"union",
+	"struct",
+	"for",
+	"void",
+	"int",
+	"float"
+};
+
 /*
  * functions
  */
 
 /* print lex tokens */
-static void print_token(stb_lexer *lexer)
+void print_token(stb_lexer *lexer)
 {
 	switch (lexer->token)
 	{
@@ -114,6 +137,20 @@ static void print_token(stb_lexer *lexer)
 			break;
 		}
 	}
+}
+
+/* check if token is equal to user token, if its valid move keep parsing */
+int check(stb_lexer *lexer, const char *token)
+{
+	/* do string compare */
+	if (strcmp(lexer->string, token) != 0)
+		return 0;
+
+	/* lex forward */
+	stb_c_lexer_get_token(lexer);
+
+	/* return success */
+	return 1;
 }
 
 /* compile qc file */
