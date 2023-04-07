@@ -140,31 +140,33 @@ void print_token(stb_lexer *lexer)
 }
 
 /* check if token is equal to specified token */
-int check_token(stb_lexer *lexer, int token)
+int check_token(stb_lexer *lexer, const char *token)
 {
-	/* do compare on lexer token */
-	if (lexer->token != token)
-		return 0;
+	/* check if its a one-char string (valid ascii char) */
+	if (token[0] >= 0 && token[0] < 256 && token[1] == '\0')
+	{
+		/* do int compare */
+		if (lexer->token != (int)token[0])
+			return 0;
 
-	/* parse forward */
-	stb_c_lexer_get_token(lexer);
+		/* parse forward */
+		stb_c_lexer_get_token(lexer);
 
-	/* return success */
-	return 1;
-}
+		/* return success */
+		return 1;
+	}
+	else
+	{
+		/* do string compare on lexer token */
+		if (strcmp(lexer->string, token) != 0)
+			return 0;
 
-/* check if token is equal to specified keyword */
-int check_keyword(stb_lexer *lexer, const char *keyword)
-{
-	/* do string compare on lexer token */
-	if (strcmp(lexer->string, keyword) != 0)
-		return 0;
+		/* parse forward */
+		stb_c_lexer_get_token(lexer);
 
-	/* parse forward */
-	stb_c_lexer_get_token(lexer);
-
-	/* return success */
-	return 1;
+		/* return success */
+		return 1;
+	}
 }
 
 /* compile qc file */
