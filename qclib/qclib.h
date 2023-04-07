@@ -24,9 +24,13 @@
  * 
  ******************************************************************************/
 
+/* guard */
 #pragma once
 #ifndef _QCLIB_H_
 #define _QCLIB_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  *
@@ -36,4 +40,8 @@
 
 void qclib_install(qcvm_t *qcvm);
 
+/* guard */
+#ifdef __cplusplus
+}
+#endif
 #endif /* _QCLIB_H_ */
