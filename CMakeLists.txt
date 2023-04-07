@@ -61,6 +61,18 @@ if(NOT WATCOM AND NOT DJGPP)
 	set_target_properties(qcvm_shared PROPERTIES OUTPUT_NAME qcvm)
 endif()
 
+## EQCC Sources
+set(EQCC_SOURCES
+	eqcc/eqcc_compile.c
+	eqcc/eqcc_main.c
+	eqcc/eqcc_utils.c
+)
+
+## EQCC Executable
+add_executable(eqcc ${EQCC_SOURCES})
+target_link_libraries(eqcc PUBLIC qcvm qclib)
+configure_file(eqcc/test.qc ${PROJECT_BINARY_DIR}/test.qc COPYONLY)
+
 ## QCLIB Sources
 set(QCVM_SOURCES
 	qclib/qclib.c
