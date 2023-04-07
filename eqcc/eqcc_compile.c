@@ -125,7 +125,7 @@ int eqcc_compile(const char *filename)
 	char *buffer_start;
 	char *buffer_end;
 	stb_lexer lex;
-	char string_store[128];
+	char store[MAX_STORE];
 
 	/* load file */
 	buffer = load_file(filename, &buffer_len);
@@ -134,7 +134,7 @@ int eqcc_compile(const char *filename)
 	/* init lexer */
 	buffer_start = (char *)buffer;
 	buffer_end = buffer_start + buffer_len;
-	stb_c_lexer_init(&lex, buffer_start, buffer_end, string_store, 128);
+	stb_c_lexer_init(&lex, buffer_start, buffer_end, store, MAX_STORE);
 
 	/* do lex */
 	while (stb_c_lexer_get_token(&lex))
@@ -142,6 +142,7 @@ int eqcc_compile(const char *filename)
 		print_token(&lex);
 	}
 
+	/* end it with a newline */
 	printf("\n");
 
 	/* free memory */

@@ -56,6 +56,7 @@ extern "C" {
 #define	MAX_STATEMENTS 0x10000
 #define	MAX_FUNCTIONS 0x2000
 #define MAX_TOKENS 0x10000
+#define MAX_STORE 0x40
 
 /*
  * prototypes
