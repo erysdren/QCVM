@@ -71,7 +71,8 @@ set(EQCC_SOURCES
 ## EQCC Executable
 add_executable(eqcc ${EQCC_SOURCES})
 target_link_libraries(eqcc PUBLIC qcvm qclib)
-configure_file(eqcc/test.qc ${PROJECT_BINARY_DIR}/test.qc COPYONLY)
+configure_file(eqcc/test.qcs ${PROJECT_BINARY_DIR}/test.qcs COPYONLY)
+configure_file(eqcc/test.qch ${PROJECT_BINARY_DIR}/test.qch COPYONLY)
 
 ## QCLIB Sources
 set(QCVM_SOURCES

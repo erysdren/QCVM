@@ -24,10 +24,4 @@
 // 
 //==============================================================================
 
-// this is using old style qc
-void(float InVal) MyFunction =
-{
-	float MyVal;
-
-	MyVal = InVal * 2.02;
-};
+const float MyGlobal = 0.4432;
