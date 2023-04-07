@@ -35,3 +35,18 @@
 
 /* qcvm */
 #include "qcvm_private.h"
+
+/*
+ * macros
+ */
+
+/* shorthand */
+#define OPCODE(n) void (n)(qcvm_t *qcvm, qcvm_evaluator_t *eval1, qcvm_evaluator_t *eval2, qcvm_evaluator_t *eval3)
+
+/*
+ * functions
+ */
+
+OPCODE(op_done) { }
+OPCODE(op_mul_f) { eval3->float_ = eval1->float_ * eval2->float_; }
+OPCODE(op_mul_v) { eval3->float_ = eval1->vector[0] * eval2->vector[0] + eval1->vector[1] * eval2->vector[1] + eval1->vector[2] * eval2->vector[2]; }
