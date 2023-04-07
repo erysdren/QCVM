@@ -55,12 +55,15 @@ extern "C" {
 #define	MAX_FIELDS 0x400
 #define	MAX_STATEMENTS 0x10000
 #define	MAX_FUNCTIONS 0x2000
+#define MAX_TOKENS 0x10000
 
 /*
  * prototypes
  */
 
 /* eqcc_compile.c */
+extern int tokens[MAX_TOKENS];
+extern int num_tokens;
 extern char strings[MAX_STRINGS];
 extern int ofs_strings;
 extern qcvm_statement_t statements[MAX_STATEMENTS];

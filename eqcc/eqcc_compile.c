@@ -48,6 +48,10 @@
  * globals
  */
 
+/* tokens */
+int tokens[MAX_TOKENS];
+int num_tokens;
+
 /* strings */
 char strings[MAX_STRINGS];
 int ofs_strings;
@@ -137,6 +141,8 @@ int eqcc_compile(const char *filename)
 	{
 		print_token(&lex);
 	}
+
+	printf("\n");
 
 	/* free memory */
 	free(buffer);
