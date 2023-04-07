@@ -45,6 +45,7 @@
  * .qco : QuakeC Object
  * .qcm : QuakeC Module
  * .qcl : QuakeC Library
+ * .qce : QuakeC Executable
  */
 
 /*
