@@ -38,6 +38,16 @@
 #include "eqcc_private.h"
 
 /*
+ * proposed file extensions:
+ * .qc  : QuakeC Source
+ * .qcs : QuakeC Source
+ * .qch : QuakeC Header
+ * .qco : QuakeC Object
+ * .qcm : QuakeC Module
+ * .qcl : QuakeC Library
+ */
+
+/*
  * functions
  */
 
