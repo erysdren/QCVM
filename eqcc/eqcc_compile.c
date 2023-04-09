@@ -84,7 +84,8 @@ const char *keywords[] =
 	"for",
 	"void",
 	"int",
-	"float"
+	"float",
+	"vector"
 };
 
 /*
