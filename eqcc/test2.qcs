@@ -1,0 +1,8 @@
+float(float InVal) MyFunction =
+{
+	float MyVal;
+
+	MyVal = InVal * 2.02;
+
+	return MyVal;
+};
