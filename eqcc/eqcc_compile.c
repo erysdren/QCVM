@@ -64,7 +64,12 @@ int num_statemnts;
 qcvm_function_t functions[MAX_FUNCTIONS];
 int num_functions;
 
-/* reserved keywords */
+/* 
+ * reserved keywords
+ */
+
+int num_keywords = 18;
+
 const char *keywords[] =
 {
 	"if",
@@ -79,13 +84,36 @@ const char *keywords[] =
 	"typedef",
 	"case",
 	"return",
-	"union",
 	"struct",
 	"for",
 	"void",
 	"int",
 	"float",
 	"vector"
+};
+
+/* reserved keywords */
+enum keywords_t
+{
+	KEYWORD_NULL = -1,
+	KEYWORD_IF,
+	KEYWORD_ELSE,
+	KEYWORD_SWITCH,
+	KEYWORD_BREAK,
+	KEYWORD_CONTINUE,
+	KEYWORD_DO,
+	KEYWORD_WHILE,
+	KEYWORD_ENUM,
+	KEYWORD_ENUMFLAGS,
+	KEYWORD_TYPEDEF,
+	KEYWORD_CASE,
+	KEYWORD_RETURN,
+	KEYWORD_STRUCT,
+	KEYWORD_FOR,
+	KEYWORD_VOID,
+	KEYWORD_INT,
+	KEYWORD_FLOAT,
+	KEYWORD_VECTOR
 };
 
 /*
@@ -141,27 +169,111 @@ void print_token(stb_lexer *lexer)
 }
 
 /* check if token is equal to specified token */
-int check_token(stb_lexer *lexer, const char *token)
+int check(stb_lexer *lexer, const char *token)
 {
 	/* check if its a one-char string (valid ascii char) */
 	if (token[0] >= 0 && token[0] < 256 && token[1] == '\0')
 	{
 		/* do int compare */
 		if (lexer->token != (int)token[0])
-			return 0;
+			return EQCC_FALSE;
 	}
 	else
 	{
 		/* do string compare on lexer token */
 		if (strcmp(lexer->string, token) != 0)
-			return 0;
+			return EQCC_FALSE;
 	}
 
-	/* parse forward */
+	/* return success */
+	return EQCC_TRUE;
+}
+
+/* figure out if its a keyword */
+int keyword(stb_lexer *lexer)
+{
+	/* variables */
+	int i;
+
+	/* loop */
+	for (i = 0; i < num_keywords; i++)
+	{
+		/* return keyword enum */
+		if (strcmp(lexer->string, keywords[i]) == 0)
+			return i;
+	}
+
+	/* return failure */
+	return KEYWORD_NULL;
+}
+
+/* parse function */
+int parse_function(stb_lexer *lexer)
+{
+	/* variables */
+	int num_args;
+
+	/* advance check for open bracket */
 	stb_c_lexer_get_token(lexer);
+	if (!check(lexer, "("))
+		return EQCC_FALSE;
+
+	/* parse args */
+	for (num_args = 1; num_args < 9; num_args++)
+	{
+		/* advance */
+		stb_c_lexer_get_token(lexer);
+
+		/* check if end */
+		if (check(lexer, ")")) break;
+
+		/* check if keyword */
+		switch (keyword(lexer))
+		{
+			/* vector */
+			case KEYWORD_VECTOR:
+				stb_c_lexer_get_token(lexer);
+				printf("vector: %s\n", lexer->string);
+				break;
+
+			/* float */
+			case KEYWORD_FLOAT:
+				stb_c_lexer_get_token(lexer);
+				printf("float: %s\n", lexer->string);
+				break;
+
+			/* error */
+			case KEYWORD_NULL:
+			default:
+				return EQCC_FALSE;
+		}
+	}
+
+	/* expect name of function here */
+	stb_c_lexer_get_token(lexer);
+	printf("functon: %s\n", lexer->string);
+
+	/* check for equals sign */
+	stb_c_lexer_get_token(lexer);
+	if (!check(lexer, "="))
+		return EQCC_FALSE;
+
+	/* check for opening bracket */
+	stb_c_lexer_get_token(lexer);
+	if (!check(lexer, "{"))
+		return EQCC_FALSE;
+
+	/* skip function body for now */
+	printf("skipping function body...\n");
+	while (!check(lexer, "}"))
+	{
+		stb_c_lexer_get_token(lexer);
+	}
+
+	printf("function parsed successfully\n");
 
 	/* return success */
-	return 1;
+	return EQCC_TRUE;
 }
 
 /* compile qc file */
@@ -187,7 +299,25 @@ int eqcc_compile(const char *filename)
 	/* do lex */
 	while (stb_c_lexer_get_token(&lexer))
 	{
-		print_token(&lexer);
+		/* print_token(&lexer); */
+
+		switch (keyword(&lexer))
+		{
+			case KEYWORD_FLOAT:
+			case KEYWORD_VECTOR:
+			case KEYWORD_VOID:
+				if (parse_function(&lexer))
+					printf("its a function\n");
+				else
+					printf("its not a function\n");
+				break;
+
+			/* error */
+			case KEYWORD_NULL:
+			default:
+				printf("parse error\n");
+				break;
+		}
 	}
 
 	/* end it with a newline */

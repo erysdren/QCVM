@@ -58,6 +58,9 @@ extern "C" {
 #define MAX_TOKENS 0x10000
 #define MAX_STORE 0x40
 
+/* true/false */
+enum {EQCC_FALSE, EQCC_TRUE};
+
 /*
  * prototypes
  */
