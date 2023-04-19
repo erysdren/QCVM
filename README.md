@@ -38,6 +38,7 @@ A bite-sized QuakeC virtual machine written in C.
 - [ ] Add support to automatically compile QuakeC by calling FTEQCC.
 - [x] Convert exports to an allocated pointer, for easier conversion to Pascal.
 - [ ] Add more examples and a robust framework for inter-module communication.
+- [ ] Shove the whole thing in one header, STB style.
 
 ## Feedback
 
