@@ -33,56 +33,55 @@ set(CMAKE_C_STANDARD 90)
 ## Options
 option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
 option(QCVM_BUILD_PASCAL_TESTAPP "Build Pascal Test Application" OFF)
-option(QCVM_BUILD_QCPONG "Build Example Game" ON)
-option(QCVM_BUILD_MODULE_TESTAPP "Build Module Test Application" ON)
+option(QCVM_BUILD_QCPONG "Build Example Game" OFF)
+option(QCVM_BUILD_MODULE_TESTAPP "Build Module Test Application" OFF)
 
 ## QCVM Sources
 set(QCVM_SOURCES
-	qcvm/qcvm_bootstrap.c
-	qcvm/qcvm_entities.c
-	qcvm/qcvm_exports.c
-	qcvm/qcvm_fields.c
-	qcvm/qcvm_functions.c
-	qcvm/qcvm_globals.c
-	qcvm/qcvm_opcodes.c
-	qcvm/qcvm_parameters.c
-	qcvm/qcvm_return.c
-	qcvm/qcvm_runtime.c
+	${PROJECT_SOURCE_DIR}/qcvm/qcvm_bootstrap.c
+	${PROJECT_SOURCE_DIR}/qcvm/qcvm_entities.c
+	${PROJECT_SOURCE_DIR}/qcvm/qcvm_exports.c
+	${PROJECT_SOURCE_DIR}/qcvm/qcvm_fields.c
+	${PROJECT_SOURCE_DIR}/qcvm/qcvm_functions.c
+	${PROJECT_SOURCE_DIR}/qcvm/qcvm_globals.c
+	${PROJECT_SOURCE_DIR}/qcvm/qcvm_parameters.c
+	${PROJECT_SOURCE_DIR}/qcvm/qcvm_return.c
+	${PROJECT_SOURCE_DIR}/qcvm/qcvm_runtime.c
 )
 
 ## QCVM Library (static)
 add_library(qcvm ${QCVM_SOURCES})
-target_include_directories(qcvm PUBLIC qcvm/)
+target_include_directories(qcvm PUBLIC ${PROJECT_SOURCE_DIR}/qcvm)
 
 ## QCVM Library (shared)
 if(NOT WATCOM AND NOT DJGPP)
 	add_library(qcvm_shared SHARED ${QCVM_SOURCES})
-	target_include_directories(qcvm_shared PUBLIC qcvm/)
+	target_include_directories(qcvm_shared PUBLIC ${PROJECT_SOURCE_DIR}/qcvm)
 	set_target_properties(qcvm_shared PROPERTIES OUTPUT_NAME qcvm)
 endif()
 
 ## EQCC Sources
 set(EQCC_SOURCES
-	eqcc/eqcc_compile.c
-	eqcc/eqcc_main.c
-	eqcc/eqcc_utils.c
+	${PROJECT_SOURCE_DIR}/eqcc/eqcc_compile.c
+	${PROJECT_SOURCE_DIR}/eqcc/eqcc_main.c
+	${PROJECT_SOURCE_DIR}/eqcc/eqcc_utils.c
 )
 
 ## EQCC Executable
 add_executable(eqcc ${EQCC_SOURCES})
 target_link_libraries(eqcc PUBLIC qcvm qclib)
-configure_file(eqcc/test.qcs ${PROJECT_BINARY_DIR}/test.qcs COPYONLY)
-configure_file(eqcc/test.qch ${PROJECT_BINARY_DIR}/test.qch COPYONLY)
+configure_file(${PROJECT_SOURCE_DIR}/eqcc/test.qcs ${PROJECT_BINARY_DIR}/test.qcs COPYONLY)
+configure_file(${PROJECT_SOURCE_DIR}/eqcc/test.qch ${PROJECT_BINARY_DIR}/test.qch COPYONLY)
 
 ## QCLIB Sources
 set(QCVM_SOURCES
-	qclib/qclib.c
+	${PROJECT_SOURCE_DIR}/qclib/qclib.c
 )
 
 ## QCLIB (static)
 add_library(qclib ${QCVM_SOURCES})
 target_link_libraries(qclib PUBLIC qcvm)
-target_include_directories(qclib PUBLIC qclib/)
+target_include_directories(qclib PUBLIC ${PROJECT_SOURCE_DIR}/qclib)
 
 ## QCVM Pascal Test Application
 if(QCVM_BUILD_PASCAL_TESTAPP)
@@ -117,7 +116,7 @@ if(QCVM_BUILD_TESTAPP)
 
 	## Sources
 	set(QCVM_TEST_SOURCES
-		examples/qcvm_test/main.c
+		${PROJECT_SOURCE_DIR}/examples/qcvm_test/main.c
 	)
 
 	## Executable
@@ -144,7 +143,7 @@ if(QCVM_BUILD_MODULE_TESTAPP)
 
 	## Sources
 	set(QCVM_MODULE_TEST_SOURCES
-		examples/module_test/module_test.c
+		${PROJECT_SOURCE_DIR}/examples/module_test/module_test.c
 	)
 
 	## Executable
@@ -154,7 +153,8 @@ if(QCVM_BUILD_MODULE_TESTAPP)
 endif()
 
 ## QCVM Example Game
-if(QCVM_BUILD_QCPONG AND NOT DJGPP AND NOT WATCOM)
+find_package(SDL2)
+if(QCVM_BUILD_QCPONG AND SDL2_FOUND)
 
 	## QC
 	find_program(fteqcc64 fteqcc64 REQUIRED)
@@ -166,12 +166,9 @@ if(QCVM_BUILD_QCPONG AND NOT DJGPP AND NOT WATCOM)
 
 	## Sources
 	set(QCPONG_SOURCES
-		examples/qcpong/main.c
-		examples/qcpong/stb_image_write.c
+		${PROJECT_SOURCE_DIR}/examples/qcpong/main.c
+		${PROJECT_SOURCE_DIR}/examples/qcpong/stb_image_write.c
 	)
-
-	## Dependencies
-	find_package(SDL2 REQUIRED)
 
 	## Executable
 	add_executable(qcpong ${QCPONG_SOURCES})
