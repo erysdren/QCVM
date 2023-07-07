@@ -26,13 +26,12 @@
 
 ## CMake
 cmake_minimum_required(VERSION 3.13)
-project(QCVM LANGUAGES C)
+project(QCVM DESCRIPTION "QuakeC Virtual Machine" HOMEPAGE_URL https://github.com/erysdren/QCVM LANGUAGES C VERSION 0.0.1)
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_C_STANDARD 90)
 
 ## Options
 option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
-option(QCVM_BUILD_PASCAL_TESTAPP "Build Pascal Test Application" OFF)
 option(QCVM_BUILD_QCPONG "Build Example Game" OFF)
 option(QCVM_BUILD_MODULE_TESTAPP "Build Module Test Application" OFF)
 
@@ -49,59 +48,33 @@ set(QCVM_SOURCES
 	${PROJECT_SOURCE_DIR}/qcvm/qcvm_runtime.c
 )
 
-## QCVM Library (static)
+## QCVM Library
 add_library(qcvm ${QCVM_SOURCES})
 target_include_directories(qcvm PUBLIC ${PROJECT_SOURCE_DIR}/qcvm)
 
-## QCVM Library (shared)
-if(NOT WATCOM AND NOT DJGPP)
-	add_library(qcvm_shared SHARED ${QCVM_SOURCES})
-	target_include_directories(qcvm_shared PUBLIC ${PROJECT_SOURCE_DIR}/qcvm)
-	set_target_properties(qcvm_shared PROPERTIES OUTPUT_NAME qcvm)
-endif()
-
-## EQCC Sources
-set(EQCC_SOURCES
-	${PROJECT_SOURCE_DIR}/eqcc/eqcc_compile.c
-	${PROJECT_SOURCE_DIR}/eqcc/eqcc_main.c
-	${PROJECT_SOURCE_DIR}/eqcc/eqcc_utils.c
-)
-
-## EQCC Executable
-add_executable(eqcc ${EQCC_SOURCES})
-target_link_libraries(eqcc PUBLIC qcvm qclib)
-configure_file(${PROJECT_SOURCE_DIR}/eqcc/test.qcs ${PROJECT_BINARY_DIR}/test.qcs COPYONLY)
-configure_file(${PROJECT_SOURCE_DIR}/eqcc/test.qch ${PROJECT_BINARY_DIR}/test.qch COPYONLY)
-
 ## QCLIB Sources
-set(QCVM_SOURCES
+set(QCLIB_SOURCES
 	${PROJECT_SOURCE_DIR}/qclib/qclib.c
 )
 
-## QCLIB (static)
-add_library(qclib ${QCVM_SOURCES})
+## QCLIB library
+add_library(qclib ${QCLIB_SOURCES})
 target_link_libraries(qclib PUBLIC qcvm)
 target_include_directories(qclib PUBLIC ${PROJECT_SOURCE_DIR}/qclib)
 
-## QCVM Pascal Test Application
-if(QCVM_BUILD_PASCAL_TESTAPP)
+# pkg-config
+configure_file(${PROJECT_SOURCE_DIR}/cmake/qcvm.pc.in ${PROJECT_BINARY_DIR}/qcvm.pc @ONLY) 
 
-	## FPC
-	find_program(fpc fpc REQUIRED)
+# headers
+set(QCVM_HEADERS
+	${PROJECT_SOURCE_DIR}/qcvm/qcvm.h
+	${PROJECT_SOURCE_DIR}/qclib/qclib.h
+)
 
-	## Sources
-	set(QCVM_PASCAL_TEST_SOURCES
-		${PROJECT_SOURCE_DIR}/examples/pascal/pascal_test.pas
-	)
-
-	## Executable
-	add_custom_command(
-		OUTPUT ${PROJECT_BINARY_DIR}/pascal_test
-		COMMAND fpc -FE${PROJECT_BINARY_DIR} -Fu${PROJECT_SOURCE_DIR}/bindings/pascal ${QCVM_PASCAL_TEST_SOURCES}
-	)
-	add_custom_target(pascal_test ALL DEPENDS ${PROJECT_BINARY_DIR}/pascal_test)
-
-endif()
+# install
+install(TARGETS qcvm qclib DESTINATION ${CMAKE_INSTALL_PREFIX}/qcvm/lib)
+install(FILES ${QCVM_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/qcvm/include/qcvm)
+install(FILES ${PROJECT_BINARY_DIR}/qcvm.pc DESTINATION lib/pkgconfig)
 
 ## QCVM Test Application
 if(QCVM_BUILD_TESTAPP)
