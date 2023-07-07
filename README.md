@@ -17,14 +17,10 @@ A bite-sized QuakeC virtual machine written in C.
 
 - [USAGE.md](./USAGE.md)
 
-## Bindings
-
-- [FreePascal](./bindings/pascal/qcvm.pas)
-
 ## Contact
 
 - [Discord](https://discord.gg/5MwE3xMcdN)
-- [Email](mailto:jaycie@erysdren.me)
+- [Email](mailto:erysdren@gmail.com)
 
 ## Todo
 
