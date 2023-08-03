@@ -84,9 +84,9 @@ float qcvm_get_global_float(qcvm_t *qcvm, int global)
 }
 
 /* retrieve global vector */
-qcvm_vec3 qcvm_get_global_vector(qcvm_t *qcvm, int global)
+qcvm_vec3_t qcvm_get_global_vector(qcvm_t *qcvm, int global)
 {
-	qcvm_vec3 ret;
+	qcvm_vec3_t ret;
 
 	ret.x = GET_FLOAT(global);
 	ret.y = GET_FLOAT(global + 1);

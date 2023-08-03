@@ -93,9 +93,9 @@ int qcvm_get_parm_entity(qcvm_t *qcvm, int parm)
 }
 
 /* get vector parameter */
-qcvm_vec3 qcvm_get_parm_vector(qcvm_t *qcvm, int parm)
+qcvm_vec3_t qcvm_get_parm_vector(qcvm_t *qcvm, int parm)
 {
-	qcvm_vec3 ret;
+	qcvm_vec3_t ret;
 
 	ret.x = GET_FLOAT(OFS_PARM0 + (parm * 3));
 	ret.y = GET_FLOAT(OFS_PARM0 + (parm * 3) + 1);

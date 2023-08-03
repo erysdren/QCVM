@@ -78,10 +78,10 @@ typedef struct qcvm_export_t
 } qcvm_export_t;
 
 /* vector */
-typedef struct qcvm_vec3
+typedef struct qcvm_vec3_t
 {
 	float x, y, z;
-} qcvm_vec3;
+} qcvm_vec3_t;
 
 /*
  *
@@ -136,7 +136,7 @@ void qcvm_dump_exports(qcvm_t *qcvm, const char *filename);
 const char *qcvm_get_field_string(qcvm_t *qcvm, int entity, int field);
 
 /* get entity field vector */
-qcvm_vec3 qcvm_get_field_vector(qcvm_t *qcvm, int entity, int field);
+qcvm_vec3_t qcvm_get_field_vector(qcvm_t *qcvm, int entity, int field);
 
 /* get entity field float */
 float qcvm_get_field_float(qcvm_t *qcvm, int entity, int field);
@@ -189,7 +189,7 @@ int qcvm_get_global_int(qcvm_t *qcvm, int global);
 float qcvm_get_global_float(qcvm_t *qcvm, int global);
 
 /* retrieve global vector */
-qcvm_vec3 qcvm_get_global_vector(qcvm_t *qcvm, int global);
+qcvm_vec3_t qcvm_get_global_vector(qcvm_t *qcvm, int global);
 
 /* retrieve the offset of a global by name */
 int qcvm_find_global(qcvm_t *qcvm, const char *name);
@@ -217,7 +217,7 @@ int qcvm_get_argc(qcvm_t *qcvm);
 int qcvm_get_parm_entity(qcvm_t *qcvm, int parm);
 
 /* retrieve the specified function parameter as a vector */
-qcvm_vec3 qcvm_get_parm_vector(qcvm_t *qcvm, int parm);
+qcvm_vec3_t qcvm_get_parm_vector(qcvm_t *qcvm, int parm);
 
 /* retrieve the specified function parameter as a string */
 const char *qcvm_get_parm_string(qcvm_t *qcvm, int parm);

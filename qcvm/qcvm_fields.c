@@ -46,9 +46,9 @@ const char *qcvm_get_field_string(qcvm_t *qcvm, int entity, int field)
 }
 
 /* get entity field vector */
-qcvm_vec3 qcvm_get_field_vector(qcvm_t *qcvm, int entity, int field)
+qcvm_vec3_t qcvm_get_field_vector(qcvm_t *qcvm, int entity, int field)
 {
-	qcvm_vec3 ret;
+	qcvm_vec3_t ret;
 
 	ret.x = FIELD_FLOAT(entity, field);
 	ret.y = FIELD_FLOAT(entity, field + 1);
