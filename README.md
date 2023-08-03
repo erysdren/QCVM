@@ -24,17 +24,11 @@ A bite-sized QuakeC virtual machine written in C.
 
 ## Todo
 
-- [x] Dump user-added builtin functions to properly formatted QC file.
 - [ ] Add support for HexenC and FTEQCC's extended opcodes.
 - [ ] Add support for the QTest progs format.
 - [ ] Bindings for other languages.
 - [ ] Add formatted string return function.
-- [x] Split up `qcvm_utils.c` into seperate files for easier browsing and modification.
-- [ ] Keep USAGE.MD updated.
 - [ ] Add support to automatically compile QuakeC by calling FTEQCC.
-- [x] Convert exports to an allocated pointer, for easier conversion to Pascal.
-- [ ] Add more examples and a robust framework for inter-module communication.
-- [ ] Shove the whole thing in one header, STB style.
 
 ## Feedback
 
