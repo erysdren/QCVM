@@ -156,7 +156,7 @@ qcvm_export_t export_ftos =
 void qclib_vtos(qcvm_t *qcvm)
 {
 	/* variables */
-	qcvm_vec3 v;
+	qcvm_vec3_t v;
 	char buf[64];
 
 	/* get parms */
