@@ -17,10 +17,17 @@ A bite-sized QuakeC virtual machine written in C.
 
 - [USAGE.md](./USAGE.md)
 
-## Contact
+## Building
 
-- [Discord](https://discord.gg/5MwE3xMcdN)
-- [Email](mailto:erysdren@gmail.com)
+QCVM is built via CMake:
+
+Linux:
+
+```
+mkdir build && cd build
+cmake ..
+make
+```
 
 ## Todo
 
