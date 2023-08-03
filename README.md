@@ -33,7 +33,6 @@ make
 - [ ] Add support for HexenC and FTEQCC's extended opcodes.
 - [ ] Add support for the QTest progs format.
 - [ ] Bindings for other languages.
-- [ ] Add formatted string return function.
 - [ ] Add support to automatically compile QuakeC by calling FTEQCC.
 
 ## Feedback

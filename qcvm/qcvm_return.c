@@ -31,6 +31,7 @@
 /* std */
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
 
 /* qcvm */
 #include "qcvm_private.h"
@@ -60,6 +61,22 @@ void qcvm_return_string(qcvm_t *qcvm, const char *s)
 
 	/* advance ptr */
 	qcvm->tempstrings_ptr += strlen(s) + 1;
+}
+
+/* return a formatted string to the previous function */
+void qcvm_return_stringf(qcvm_t *qcvm, const char *s, ...)
+{
+	/* variables */
+	static char buffer[1024];
+	va_list ap;
+
+	/* do vargs */
+	va_start(ap, s);
+	vsnprintf(buffer, 1024, s, ap);
+	va_end(ap);
+
+	/* return string */
+	qcvm_return_string(qcvm, buffer);
 }
 
 /* return a vector to the previous function */

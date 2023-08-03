@@ -238,6 +238,9 @@ void qcvm_return_entity(qcvm_t *qcvm, int entity);
 /* return a string to the function that called this one */
 void qcvm_return_string(qcvm_t *qcvm, const char *s);
 
+/* return a formatted string to the function that called this one */
+void qcvm_return_stringf(qcvm_t *qcvm, const char *s, ...);
+
 /* return a vector to the function that called this one */
 void qcvm_return_vector(qcvm_t *qcvm, float a, float b, float c);
 
