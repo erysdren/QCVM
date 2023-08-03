@@ -90,7 +90,7 @@ void qcvm_free_export(qcvm_export_t *export)
 /* add export */
 void qcvm_add_export(qcvm_t *qcvm, qcvm_export_t *export)
 {
-	qcvm->exports[qcvm->num_exports] = *export;
+	memcpy(&qcvm->exports[qcvm->num_exports], export, sizeof(qcvm_export_t));
 	qcvm->num_exports++;
 }
 

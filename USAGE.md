@@ -76,36 +76,47 @@ qcvm_run(qcvm, function_main);
 The basic format of a C -> QuakeC function is this:
 
 ```c
-void my_export(qcvm_t *qcvm)
+void my_export_func(qcvm_t *qcvm)
 {
 	// do something in C
 }
 ```
-
-There's no automated export to QuakeC yet, but the syntax for this export in QuakeC would be:
-
-```c
-void my_export() = #N;
-```
-
-With the N at the end being an integer representing the numerical ID of that export. If it was the 7th export you added, it would be 7.
 
 ### Adding Your Export
 
 To add your export to the list of functions callable by QuakeC, you can do this:
 
 ```c
-int id = qcvm_add_export(qcvm, my_export);
+
+// create a structure in memory with the relevent information
+qcvm_export_t my_export_struct =
+{
+	.func = my_export_func,
+	.name = "my_export",
+	.type = QCVM_VOID,
+	.argc = 0
+};
+
+// add it to the qcvm memory
+int my_export_id = qcvm_add_export(qcvm, &my_export_struct);
 ```
 
-`id` will be the ID of the export you just added.
+`my_export_id` will be the ID of the export you just added.
+
+### Exposing your export to QuakeC
+
+This cannot be done at runtime, but this function will automatically write a QuakeC file with your exports:
+
+```c
+qcvm_dump_exports(qcvm, "exports.qc");
+```
 
 ### Getting Parameters
 
 If your exported function has parameters, you will get them this way:
 
 ```c
-void my_export(qcvm_t *qcvm)
+void my_export_func(qcvm_t *qcvm)
 {
 	// get parm 0 as float
 	float f = qcvm_get_parm_float(qcvm, 0);
@@ -125,7 +136,7 @@ void my_export(qcvm_t *qcvm)
 To return a value back to QuakeC, you can do it this way:
 
 ```c
-void my_export(qcvm_t *qcvm)
+void my_export_func(qcvm_t *qcvm)
 {
 	// get first parm
 	float f = qcvm_get_parm_float(qcvm, 0);
