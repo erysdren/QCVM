@@ -19,10 +19,9 @@ A bite-sized QuakeC virtual machine written in C.
 
 ## Building
 
-QCVM is built via CMake:
+QCVM is built via CMake.
 
 Linux:
-
 ```
 mkdir build && cd build
 cmake ..
