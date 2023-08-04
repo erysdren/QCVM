@@ -122,7 +122,7 @@ void my_export_func(qcvm_t *qcvm)
 	float f = qcvm_get_parm_float(qcvm, 0);
 
 	// get parm 1 as vector
-	qcvm_vec3 v = qcvm_get_parm_vector(qcvm, 1);
+	qcvm_vec3_t v = qcvm_get_parm_vector(qcvm, 1);
 
 	// get parm 2 as string
 	const char *s = qcvm_get_parm_string(qcvm, 2);

@@ -86,7 +86,7 @@ void *memset32(void *s, unsigned int c, size_t n)
 void export_drawpixel(qcvm_t *qcvm)
 {
 	/* variables */
-	qcvm_vec3 pos, color;
+	qcvm_vec3_t pos, color;
 	unsigned char r, g, b;
 
 	/* get parms */
@@ -109,7 +109,7 @@ void export_drawpixel(qcvm_t *qcvm)
 void export_clearscreen(qcvm_t *qcvm)
 {
 	/* variables */
-	qcvm_vec3 color;
+	qcvm_vec3_t color;
 	unsigned char r, g, b;
 
 	/* if the user defined a color */
@@ -143,7 +143,7 @@ void export_drawscreen(qcvm_t *qcvm)
 void export_drawrectangle(qcvm_t *qcvm)
 {
 	/* variables */
-	qcvm_vec3 pos, size, color;
+	qcvm_vec3_t pos, size, color;
 	float filled;
 	int x, y;
 	unsigned char r, g, b;
@@ -195,7 +195,7 @@ void draw_char(int x, int y, unsigned char r, unsigned char g, unsigned char b, 
 void export_drawtext(qcvm_t *qcvm)
 {
 	/* variables */
-	qcvm_vec3 pos, color;
+	qcvm_vec3_t pos, color;
 	const char *string;
 	int i;
 	char c;
