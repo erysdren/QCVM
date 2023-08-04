@@ -36,6 +36,37 @@
 /* qcvm */
 #include "qcvm_private.h"
 
+/*
+ * globals
+ */
+
+enum
+{
+	QCVM_ERROR_NONE,
+	QCVM_ERROR_FOPEN,
+	QCVM_ERROR_MALLOC,
+	QCVM_ERROR_VERSION
+};
+
+int qcvm_error = QCVM_ERROR_NONE;
+
+const char *qcvm_error_strings[] = {
+	"None",
+	"Could not open file",
+	"Could not allocate memory",
+	"Invalid version in header"
+};
+
+/*
+ * functions
+ */
+
+/* set error */
+void qcvm_set_error(int e)
+{
+	qcvm_error = e;
+}
+
 /* load progs.dat and return handle */
 qcvm_t *qcvm_open(const char *filename)
 {
@@ -48,6 +79,7 @@ qcvm_t *qcvm_open(const char *filename)
 	file = fopen(filename, "rb");
 	if (file == NULL)
 	{
+		qcvm_set_error(QCVM_ERROR_FOPEN);
 		return NULL;
 	}
 
@@ -55,6 +87,7 @@ qcvm_t *qcvm_open(const char *filename)
 	qcvm = malloc(sizeof(qcvm_t));
 	if (qcvm == NULL)
 	{
+		qcvm_set_error(QCVM_ERROR_MALLOC);
 		fclose(file);
 		return NULL;
 	}
@@ -68,6 +101,7 @@ qcvm_t *qcvm_open(const char *filename)
 	qcvm->pool = malloc(len_file);
 	if (qcvm->pool == NULL)
 	{
+		qcvm_set_error(QCVM_ERROR_MALLOC);
 		fclose(file);
 		free(qcvm);
 		return NULL;
@@ -81,6 +115,7 @@ qcvm_t *qcvm_open(const char *filename)
 	qcvm->header = (qcvm_header_t *)qcvm->pool;
 	if (qcvm->header->version != 6)
 	{
+		qcvm_set_error(QCVM_ERROR_VERSION);
 		fclose(file);
 		free(qcvm->pool);
 		free(qcvm);
@@ -152,4 +187,10 @@ void qcvm_close(qcvm_t *qcvm)
 		/* free struct */
 		free(qcvm);
 	}
+}
+
+/* get error */
+const char *qcvm_get_error(void)
+{
+	return qcvm_error_strings[qcvm_error];
 }

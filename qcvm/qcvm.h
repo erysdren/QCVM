@@ -114,6 +114,9 @@ qcvm_t *qcvm_open(const char *filename);
 /* destroy qcvm runtime handle */
 void qcvm_close(qcvm_t *qcvm);
 
+/* get error */
+const char *qcvm_get_error(void);
+
 /*
  * qcvm_entities.c
  */
