@@ -41,6 +41,21 @@ extern "C" {
 /* qcvm runtime */
 typedef struct qcvm_runtime qcvm_t;
 
+/* var type */
+typedef enum qcvm_var_type_t
+{
+
+	QCVM_VAR_VOID,
+	QCVM_VAR_STRING,
+	QCVM_VAR_FLOAT,
+	QCVM_VAR_VECTOR,
+	QCVM_VAR_ENTITY,
+	QCVM_VAR_FIELD,
+	QCVM_VAR_FUNCTION,
+	QCVM_VAR_POINTER
+
+} qcvm_var_type_t;
+
 /* export func */
 typedef void (*qcvm_export_func_t)(qcvm_t *);
 
