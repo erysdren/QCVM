@@ -53,7 +53,8 @@ int qcvm_find_entity(qcvm_t *qcvm, const char *name)
 
 	for (i = 1; i < qcvm->header->num_global_vars; i++)
 	{
-		if (qcvm->global_vars[i].type == 32772 && strcmp(name, GET_STRING_OFS(qcvm->global_vars[i].name)) == 0)
+		if ((qcvm->global_vars[i].type & ~32768) == QCVM_ENTITY
+			&& strcmp(name, GET_STRING_OFS(qcvm->global_vars[i].name)) == 0)
 			return i;
 	}
 
