@@ -1,11 +1,9 @@
-prefix="@CMAKE_INSTALL_PREFIX@/qcvm"
-exec_prefix="${prefix}"
-libdir="${prefix}/lib"
-includedir="${prefix}/include"
+libdir="@CMAKE_INSTALL_FULL_LIBDIR@/qcvm"
+includedir="@CMAKE_INSTALL_FULL_INCLUDEDIR@/qcvm"
 
 Name: @PROJECT_NAME@
 Description: @CMAKE_PROJECT_DESCRIPTION@
 URL: @CMAKE_PROJECT_HOMEPAGE_URL@
 Version: @PROJECT_VERSION@
 Cflags: -I"${includedir}"
-Libs: -L"${libdir}" -lqcvm -lqclib
+Libs: -L"${libdir}" -lqclib -lqcvm
