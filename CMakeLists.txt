@@ -35,6 +35,7 @@ set(CMAKE_C_STANDARD_REQUIRED TRUE)
 option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
 option(QCVM_BUILD_QCPONG "Build Example Game" OFF)
 option(QCVM_BUILD_MODULE_TESTAPP "Build Module Test Application" OFF)
+option(QCVM_INSTALL_TARGET "Enable install target" ON)
 
 ## QCVM Sources
 set(QCVM_SOURCES
@@ -63,22 +64,15 @@ add_library(qclib ${QCLIB_SOURCES})
 target_link_libraries(qclib PUBLIC qcvm)
 target_include_directories(qclib PUBLIC ${PROJECT_SOURCE_DIR}/qclib)
 
-# add gnu install dirs
-include(GNUInstallDirs)
-
-# pkg-config
-configure_file(${PROJECT_SOURCE_DIR}/cmake/qcvm.pc.in ${PROJECT_BINARY_DIR}/qcvm.pc @ONLY) 
-
 # headers
 set(QCVM_HEADERS
 	${PROJECT_SOURCE_DIR}/qcvm/qcvm.h
 	${PROJECT_SOURCE_DIR}/qclib/qclib.h
 )
 
-# install
-install(TARGETS qcvm qclib DESTINATION ${CMAKE_INSTALL_LIBDIR}/qcvm)
-install(FILES ${QCVM_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qcvm)
-install(FILES ${PROJECT_BINARY_DIR}/qcvm.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+if(QCVM_INSTALL_TARGET)
+	include(${PROJECT_SOURCE_DIR}/cmake/install.cmake)
+endif()
 
 ## QCVM Test Application
 if(QCVM_BUILD_TESTAPP)
