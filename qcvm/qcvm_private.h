@@ -309,6 +309,19 @@ struct qcvm_runtime
 	qcvm_entity_t *entities;		/* pointer to entities buffer */
 	int num_entities;
 
+	/* runtime */
+
+	qcvm_evaluator_t *eval_p[4];
+	int exit_depth;
+	int statement_i;
+	int export_i;
+	int fail;
+	int done;
+	qcvm_statement_t *statement_p;
+	qcvm_function_t *function_p;
+	qcvm_function_t *nextfunction_p;
+	qcvm_entity_t *entity_p;
+
 	/* memory pool */
 
 	void *pool;						/* pointer to memory pool */
@@ -316,125 +329,35 @@ struct qcvm_runtime
 
 };
 
-/* qcvm opcode function */
-typedef void (*qcvm_opcode_func_t)(qcvm_t *, qcvm_evaluator_t *, qcvm_evaluator_t *, qcvm_evaluator_t *);
-
-/* array of opcode functions */
-extern qcvm_opcode_func_t qcvm_opcode_funcs[];
-
 /* qcvm opcodes */
-typedef enum qcvm_opcodes_t
+#define QCVM_OPCODE(o) OPCODE_##o,
+typedef enum qcvm_opcode_t
 {
-	/* vanilla opcodes */
-	OPCODE_DONE,
-	OPCODE_MUL_F,
-	OPCODE_MUL_V,
-	OPCODE_MUL_FV,
-	OPCODE_MUL_VF,
-	OPCODE_DIV_F,
-	OPCODE_ADD_F,
-	OPCODE_ADD_V,
-	OPCODE_SUB_F,
-	OPCODE_SUB_V,
-	OPCODE_EQ_F,
-	OPCODE_EQ_V,
-	OPCODE_EQ_S,
-	OPCODE_EQ_E,
-	OPCODE_EQ_FNC,
-	OPCODE_NE_F,
-	OPCODE_NE_V,
-	OPCODE_NE_S,
-	OPCODE_NE_E,
-	OPCODE_NE_FNC,
-	OPCODE_LE,
-	OPCODE_GE,
-	OPCODE_LT,
-	OPCODE_GT,
-	OPCODE_LOAD_F,
-	OPCODE_LOAD_V,
-	OPCODE_LOAD_S,
-	OPCODE_LOAD_ENT,
-	OPCODE_LOAD_FLD,
-	OPCODE_LOAD_FNC,
-	OPCODE_ADDRESS,
-	OPCODE_STORE_F,
-	OPCODE_STORE_V,
-	OPCODE_STORE_S,
-	OPCODE_STORE_ENT,
-	OPCODE_STORE_FLD,
-	OPCODE_STORE_FNC,
-	OPCODE_STOREP_F,
-	OPCODE_STOREP_V,
-	OPCODE_STOREP_S,
-	OPCODE_STOREP_ENT,
-	OPCODE_STOREP_FLD,
-	OPCODE_STOREP_FNC,
-	OPCODE_RETURN,
-	OPCODE_NOT_F,
-	OPCODE_NOT_V,
-	OPCODE_NOT_S,
-	OPCODE_NOT_ENT,
-	OPCODE_NOT_FNC,
-	OPCODE_IF,
-	OPCODE_IFNOT,
-	OPCODE_CALL0,
-	OPCODE_CALL1,
-	OPCODE_CALL2,
-	OPCODE_CALL3,
-	OPCODE_CALL4,
-	OPCODE_CALL5,
-	OPCODE_CALL6,
-	OPCODE_CALL7,
-	OPCODE_CALL8,
-	OPCODE_STATE,
-	OPCODE_GOTO,
-	OPCODE_AND,
-	OPCODE_OR,
-	OPCODE_BITAND,
-	OPCODE_BITOR,
+	#include "qcvm_opcodes.h"
+	QCVM_OPCODE(MAX)
+} qcvm_opcode_t;
+#undef QCVM_OPCODE
 
-	/* hexenc opcodes */
-	OPCODE_MULSTORE_F,
-	OPCODE_MULSTORE_V,
-	OPCODE_MULSTOREP_F,
-	OPCODE_MULSTOREP_V,
-	OPCODE_DIVSTORE_F,
-	OPCODE_DIVSTOREP_F,
-	OPCODE_ADDSTORE_F,
-	OPCODE_ADDSTORE_V,
-	OPCODE_ADDSTOREP_F,
-	OPCODE_ADDSTOREP_V,
-	OPCODE_SUBSTORE_F,
-	OPCODE_SUBSTORE_V,
-	OPCODE_SUBSTOREP_F,
-	OPCODE_SUBSTOREP_V,
-	OPCODE_FETCH_GBL_F,
-	OPCODE_FETCH_GBL_V,
-	OPCODE_FETCH_GBL_S,
-	OPCODE_FETCH_GBL_E,
-	OPCODE_FETCH_GBL_FNC,
-	OPCODE_CSTATE,
-	OPCODE_CWSTATE,
-	OPCODE_THINKTIME,
-	OPCODE_BITSET,
-	OPCODE_BITSETP,
-	OPCODE_BITCLR,
-	OPCODE_BITCLRP,
-	OPCODE_RAND0,
-	OPCODE_RAND1,
-	OPCODE_RAND2,
-	OPCODE_RANDV0,
-	OPCODE_RANDV1,
-	OPCODE_RANDV2,
-	OPCODE_SWITCH_F,
-	OPCODE_SWITCH_V,
-	OPCODE_SWITCH_S,
-	OPCODE_SWITCH_E,
-	OPCODE_SWITCH_FNC,
-	OPCODE_CASE,
-	OPCODE_CASERANGE
+/* qcvm opcode function */
+typedef void qcvm_opcode_func_t(qcvm_t *qcvm);
 
-} qcvm_opcodes_t;
+/* qcvm opcode function table entry */
+typedef struct qcvm_opcode_table_entry_t
+{
+
+	/* function to execute */
+	qcvm_opcode_func_t *func;
+
+	/* integer value of opcode */
+	qcvm_opcode_t op;
+
+	/* printable name of opcode */
+	const char *name;
+
+} qcvm_opcode_table_entry_t;
+
+/* qcvm opcode function table */
+extern qcvm_opcode_table_entry_t qcvm_opcode_table[];
 
 /* guard */
 #ifdef __cplusplus

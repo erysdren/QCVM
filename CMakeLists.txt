@@ -45,6 +45,7 @@ set(QCVM_SOURCES
 	${PROJECT_SOURCE_DIR}/qcvm/qcvm_fields.c
 	${PROJECT_SOURCE_DIR}/qcvm/qcvm_functions.c
 	${PROJECT_SOURCE_DIR}/qcvm/qcvm_globals.c
+	${PROJECT_SOURCE_DIR}/qcvm/qcvm_opcodes.c
 	${PROJECT_SOURCE_DIR}/qcvm/qcvm_parameters.c
 	${PROJECT_SOURCE_DIR}/qcvm/qcvm_return.c
 	${PROJECT_SOURCE_DIR}/qcvm/qcvm_runtime.c
