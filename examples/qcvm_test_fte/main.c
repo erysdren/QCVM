@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 	/* check validity */
 	if (qcvm == NULL)
 	{
-		fprintf(stderr, "failed to load test2.dat\n");
+		fprintf(stderr, "QCVM: %s\n", qcvm_get_error());
 		return 1;
 	}
 	else

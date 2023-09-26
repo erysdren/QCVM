@@ -118,6 +118,8 @@ typedef float qcvm_global_t;
 /* version macros */
 #define PROGS_VERSION_ID 6
 #define PROGS_VERSION_FTE 7
+#define PROGS_EXTENDED_VERSION_FTE16 0x021b1461
+#define PROGS_EXTENDED_VERSION_FTE32 0x65167402
 
 /*
  *
@@ -154,7 +156,7 @@ typedef struct qcvm_header_t
 	int ofs_types;
 	int num_types;
 	int num_compressed_blocks;
-	char secondary_version[4];
+	unsigned int extended_version;
 } qcvm_header_t;
 
 /*
