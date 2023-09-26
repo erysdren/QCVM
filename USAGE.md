@@ -15,7 +15,7 @@ An absolutely minimal program looks like this:
 int main(int argc, char **argv)
 {
 	// load qc module
-	qcvm_t *qcvm = qcvm_open("progs.dat");
+	qcvm_t *qcvm = qcvm_from_file("progs.dat");
 
 	// check validity
 	if (qcvm == NULL)
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 	qcvm_run(qcvm, function_main);
 
 	// destroy qcvm context
-	qcvm_close(qcvm);
+	qcvm_free(qcvm);
 
 	// return success
 	return 0;
