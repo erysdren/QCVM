@@ -75,6 +75,15 @@ if(QCVM_INSTALL_TARGET)
 	include(${PROJECT_SOURCE_DIR}/cmake/install.cmake)
 endif()
 
+# QCPKG sources
+set(QCPKG_SOURCES
+	${PROJECT_SOURCE_DIR}/qcpkg/main.c
+)
+
+## QCPKG tool
+add_executable(qcpkg ${QCPKG_SOURCES})
+target_link_libraries(qcpkg PUBLIC qcvm qclib)
+
 ## QCVM Test Application
 if(QCVM_BUILD_TESTAPP)
 
