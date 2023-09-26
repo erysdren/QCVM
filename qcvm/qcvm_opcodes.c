@@ -767,37 +767,37 @@ QCVM_OPCODE_FUNC(CALL8H)
 
 QCVM_OPCODE_FUNC(STORE_I)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[2]->int_ = qcvm->eval_p[1]->int_;
 }
 
 QCVM_OPCODE_FUNC(STORE_IF)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[2]->float_ = (float)qcvm->eval_p[1]->int_;
 }
 
 QCVM_OPCODE_FUNC(STORE_FI)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[2]->int_ = (int)qcvm->eval_p[1]->float_;
 }
 
 QCVM_OPCODE_FUNC(ADD_I)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[3]->int_ = qcvm->eval_p[1]->int_ + qcvm->eval_p[2]->int_;
 }
 
 QCVM_OPCODE_FUNC(ADD_FI)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[3]->float_ = qcvm->eval_p[1]->float_ + (float)qcvm->eval_p[2]->int_;
 }
 
 QCVM_OPCODE_FUNC(ADD_IF)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[3]->float_ = (float)qcvm->eval_p[1]->int_ + qcvm->eval_p[2]->float_;
 }
 
 QCVM_OPCODE_FUNC(SUB_I)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[3]->float_ = qcvm->eval_p[1]->int_ - qcvm->eval_p[2]->int_;
 }
 
 QCVM_OPCODE_FUNC(SUB_FI)
@@ -812,12 +812,12 @@ QCVM_OPCODE_FUNC(SUB_IF)
 
 QCVM_OPCODE_FUNC(CONV_ITOF)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[3]->float_ = (float)qcvm->eval_p[1]->int_;
 }
 
 QCVM_OPCODE_FUNC(CONV_FTOI)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[3]->int_ = (int)qcvm->eval_p[1]->float_;
 }
 
 QCVM_OPCODE_FUNC(LOADP_ITOF)
@@ -1097,32 +1097,36 @@ QCVM_OPCODE_FUNC(LOADP_C)
 
 QCVM_OPCODE_FUNC(MUL_IF)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[3]->float_ = (qcvm->eval_p[1]->int_ * qcvm->eval_p[2]->float_);
 }
 
 QCVM_OPCODE_FUNC(MUL_FI)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[3]->float_ = (qcvm->eval_p[1]->float_ * qcvm->eval_p[2]->int_);
 }
 
 QCVM_OPCODE_FUNC(MUL_VI)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[3]->vector[0] = qcvm->eval_p[1]->vector[0] * qcvm->eval_p[2]->int_;
+	qcvm->eval_p[3]->vector[1] = qcvm->eval_p[1]->vector[1] * qcvm->eval_p[2]->int_;
+	qcvm->eval_p[3]->vector[2] = qcvm->eval_p[1]->vector[2] * qcvm->eval_p[2]->int_;
 }
 
 QCVM_OPCODE_FUNC(MUL_IV)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[3]->vector[0] = qcvm->eval_p[2]->int_ * qcvm->eval_p[1]->vector[0];
+	qcvm->eval_p[3]->vector[1] = qcvm->eval_p[2]->int_ * qcvm->eval_p[1]->vector[1];
+	qcvm->eval_p[3]->vector[2] = qcvm->eval_p[2]->int_ * qcvm->eval_p[1]->vector[2];
 }
 
 QCVM_OPCODE_FUNC(DIV_IF)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[3]->float_ = (qcvm->eval_p[1]->int_ / qcvm->eval_p[2]->float_);
 }
 
 QCVM_OPCODE_FUNC(DIV_FI)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	qcvm->eval_p[3]->float_ = (qcvm->eval_p[1]->float_ / qcvm->eval_p[2]->int_);
 }
 
 QCVM_OPCODE_FUNC(BITAND_IF)

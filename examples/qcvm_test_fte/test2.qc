@@ -26,5 +26,11 @@
 
 void main()
 {
-	printf("hello world!\n");
+	int i = 64;
+	float f = 385.4;
+	vector v = [1, 2, 3];
+
+	v *= i;
+
+	printf("hello world! i = %d\n", i);
 }
