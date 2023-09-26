@@ -108,8 +108,8 @@ qcvm_t *qcvm_from_memory(void *memory, size_t size)
 
 	if (qcvm->header->version == PROGS_VERSION_FTE)
 	{
-		/* check if its fte32 */
-		if (qcvm->header->extended_version == PROGS_EXTENDED_VERSION_FTE32)
+		/* check if its fte16 */
+		if (qcvm->header->extended_version != PROGS_EXTENDED_VERSION_FTE16)
 		{
 			qcvm_set_error(QCVM_ERROR_VERSION);
 			free(qcvm->pool);
