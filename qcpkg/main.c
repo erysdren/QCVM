@@ -158,10 +158,10 @@ void qcpkg_run_package(const char *self_filename, int len_progs)
 	qclib_install(qcvm);
 
 	/* find main */
-	func_main = qcvm_find_function(qcvm, "test");
+	func_main = qcvm_find_function(qcvm, "main");
 	if (func_main < 1)
 	{
-		printf("No function \"test\"\n");
+		printf("No function \"main\"\n");
 		return;
 	}
 
