@@ -45,7 +45,8 @@ enum
 	QCVM_ERROR_NONE,
 	QCVM_ERROR_FOPEN,
 	QCVM_ERROR_MALLOC,
-	QCVM_ERROR_VERSION
+	QCVM_ERROR_VERSION,
+	QCVM_ERROR_COMPRESSED
 };
 
 int qcvm_error = QCVM_ERROR_NONE;
@@ -54,7 +55,8 @@ const char *qcvm_error_strings[] = {
 	"None",
 	"Could not open file",
 	"Could not allocate memory",
-	"Invalid version in header"
+	"Invalid version in header",
+	"Compressed progs are not supported"
 };
 
 /*
@@ -104,13 +106,25 @@ qcvm_t *qcvm_from_memory(void *memory, size_t size)
 		return NULL;
 	}
 
-	/* check extended version */
-	if (qcvm->header->version == PROGS_VERSION_FTE && qcvm->header->extended_version == PROGS_EXTENDED_VERSION_FTE32)
+	if (qcvm->header->version == PROGS_VERSION_FTE)
 	{
-		qcvm_set_error(QCVM_ERROR_VERSION);
-		free(qcvm->pool);
-		free(qcvm);
-		return NULL;
+		/* check if its fte32 */
+		if (qcvm->header->extended_version == PROGS_EXTENDED_VERSION_FTE32)
+		{
+			qcvm_set_error(QCVM_ERROR_VERSION);
+			free(qcvm->pool);
+			free(qcvm);
+			return NULL;
+		}
+
+		/* check if its compressed*/
+		if (qcvm->header->num_compressed_functions != 0)
+		{
+			qcvm_set_error(QCVM_ERROR_COMPRESSED);
+			free(qcvm->pool);
+			free(qcvm);
+			return NULL;
+		}
 	}
 
 	/* set pointer addresses */
