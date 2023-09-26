@@ -62,61 +62,43 @@ const char *qcvm_error_strings[] = {
  */
 
 /* set error */
-void qcvm_set_error(int e)
+static void qcvm_set_error(int e)
 {
 	qcvm_error = e;
 }
 
-/* load progs.dat and return handle */
-qcvm_t *qcvm_open(const char *filename)
+/* create qcvm from memory */
+qcvm_t *qcvm_from_memory(void *memory, size_t size)
 {
 	/* variables */
 	qcvm_t *qcvm;
-	FILE *file;
-	size_t len_file;
 
-	/* open file pointer */
-	file = fopen(filename, "rb");
-	if (file == NULL)
-	{
-		qcvm_set_error(QCVM_ERROR_FOPEN);
-		return NULL;
-	}
-
-	/* malloc qcvm struct */
+	/* allocate qcvm */
 	qcvm = malloc(sizeof(qcvm_t));
 	if (qcvm == NULL)
 	{
 		qcvm_set_error(QCVM_ERROR_MALLOC);
-		fclose(file);
 		return NULL;
 	}
 
-	/* get length of file */
-	fseek(file, 0L, SEEK_END);
-	len_file = ftell(file);
-	fseek(file, 0L, SEEK_SET);
-
-	/* malloc memory pool */
-	qcvm->pool = malloc(len_file);
+	/* allocate pool */
+	qcvm->len_pool = size;
+	qcvm->pool = malloc(qcvm->len_pool);
 	if (qcvm->pool == NULL)
 	{
 		qcvm_set_error(QCVM_ERROR_MALLOC);
-		fclose(file);
 		free(qcvm);
 		return NULL;
 	}
 
-	/* read in pool */
-	fread(qcvm->pool, len_file, 1, file);
-	qcvm->len_pool = len_file;
+	/* copy in pool */
+	memcpy(qcvm->pool, memory, size);
 
-	/* check header */
+	/* check version */
 	qcvm->header = (qcvm_header_t *)qcvm->pool;
 	if (qcvm->header->version != 6)
 	{
 		qcvm_set_error(QCVM_ERROR_VERSION);
-		fclose(file);
 		free(qcvm->pool);
 		free(qcvm);
 		return NULL;
@@ -154,6 +136,50 @@ qcvm_t *qcvm_open(const char *filename)
 	qcvm->num_exports = -1;
 	#endif
 
+	/* return pointer */
+	return qcvm;
+}
+
+/* load progs.dat and return handle */
+qcvm_t *qcvm_from_file(const char *filename)
+{
+	/* variables */
+	qcvm_t *qcvm;
+	FILE *file;
+	size_t len_file;
+	void *pool;
+
+	/* open file pointer */
+	file = fopen(filename, "rb");
+	if (file == NULL)
+	{
+		qcvm_set_error(QCVM_ERROR_FOPEN);
+		return NULL;
+	}
+
+	/* get length of file */
+	fseek(file, 0L, SEEK_END);
+	len_file = ftell(file);
+	fseek(file, 0L, SEEK_SET);
+
+	/* malloc memory pool */
+	pool = malloc(len_file);
+	if (pool == NULL)
+	{
+		qcvm_set_error(QCVM_ERROR_MALLOC);
+		fclose(file);
+		return NULL;
+	}
+
+	/* read in pool */
+	fread(pool, len_file, 1, file);
+
+	/* create qcvm from the memory */
+	qcvm = qcvm_from_memory(pool, len_file);
+
+	/* free memory */
+	free(pool);
+
 	/* close file pointer */
 	fclose(file);
 
@@ -162,7 +188,7 @@ qcvm_t *qcvm_open(const char *filename)
 }
 
 /* destroy qcvm context */
-void qcvm_close(qcvm_t *qcvm)
+void qcvm_free(qcvm_t *qcvm)
 {
 	if (qcvm)
 	{

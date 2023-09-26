@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 	const char *field2;
 
 	/* load qcvm */
-	qcvm = qcvm_open("test.dat");
+	qcvm = qcvm_from_file("test.dat");
 
 	/* check validity */
 	if (qcvm == NULL)
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 	qcvm_dump_exports(qcvm, "../qclib/qclib.qc");
 
 	/* close qcvm */
-	qcvm_close(qcvm);
+	qcvm_free(qcvm);
 
 	/* return success */
 	return 0;

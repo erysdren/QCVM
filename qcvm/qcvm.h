@@ -108,11 +108,14 @@ typedef struct qcvm_vec3_t
  * qcvm_bootstrap.c
  */
 
+/* create qcvm from chunk of memory */
+qcvm_t *qcvm_from_memory(void *memory, size_t size);
+
 /* open progs.dat file and return qcvm runtime handle */
-qcvm_t *qcvm_open(const char *filename);
+qcvm_t *qcvm_from_file(const char *filename);
 
 /* destroy qcvm runtime handle */
-void qcvm_close(qcvm_t *qcvm);
+void qcvm_free(qcvm_t *qcvm);
 
 /* get error */
 const char *qcvm_get_error(void);

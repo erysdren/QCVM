@@ -275,7 +275,7 @@ int main(int argc, char **argv)
 	 */
 
 	/* load qcvm */
-	qcvm = qcvm_open(PROGS);
+	qcvm = qcvm_from_file(PROGS);
 
 	/* check validity */
 	if (qcvm == NULL) error("Failed to load required QuakeC module!");
@@ -428,7 +428,7 @@ int main(int argc, char **argv)
 	qcvm_run(qcvm, func_shutdown);
 
 	/* close qcvm */
-	qcvm_close(qcvm);
+	qcvm_free(qcvm);
 
 	/* pixels */
 	free(pixels);

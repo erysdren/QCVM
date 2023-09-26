@@ -113,8 +113,8 @@ qcvm_export_t _export_sendfloat =
 int main(int argc, char **argv)
 {
 	/* load modules */
-	qcvm_module1 = qcvm_open("module1.dat");
-	qcvm_module2 = qcvm_open("module2.dat");
+	qcvm_module1 = qcvm_from_file("module1.dat");
+	qcvm_module2 = qcvm_from_file("module2.dat");
 
 	/* install qclib */
 	qclib_install(qcvm_module1);
@@ -137,8 +137,8 @@ int main(int argc, char **argv)
 	qcvm_run(qcvm_module2, func_module2_main);
 
 	/* close modules */
-	qcvm_close(qcvm_module1);
-	qcvm_close(qcvm_module2);
+	qcvm_free(qcvm_module1);
+	qcvm_free(qcvm_module2);
 
 	/* return */
 	return 0;
