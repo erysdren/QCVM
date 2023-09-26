@@ -68,7 +68,10 @@ QCVM_OPCODE_FUNC(_DONE_RETURN)
 QCVM_OPCODE_FUNC(_CALL)
 {
 	/* get argument count of next function */
-	qcvm->function_argc = qcvm->statement_p->opcode - OPCODE_CALL0;
+	if (qcvm->statement_p->opcode > OPCODE_CALL8)
+		qcvm->function_argc = qcvm->statement_p->opcode - (OPCODE_CALL1H - 1);
+	else
+		qcvm->function_argc = qcvm->statement_p->opcode - OPCODE_CALL0;
 
 	/* check for null function */
 	if (!qcvm->eval_p[1]->function)
@@ -117,6 +120,22 @@ QCVM_OPCODE_FUNC(_CALL)
 	}
 
 	qcvm->statement_i = qcvm_function_setup(qcvm, qcvm->nextfunction_p);
+}
+
+QCVM_OPCODE_FUNC(_CALLH)
+{
+	if (qcvm->statement_p->opcode > OPCODE_CALL1H)
+	{
+		GET_VECTOR(OFS_PARM1)[0] = qcvm->eval_p[3]->vector[0];
+		GET_VECTOR(OFS_PARM1)[1] = qcvm->eval_p[3]->vector[1];
+		GET_VECTOR(OFS_PARM1)[2] = qcvm->eval_p[3]->vector[2];
+	}
+
+	GET_VECTOR(OFS_PARM0)[0] = qcvm->eval_p[2]->vector[0];
+	GET_VECTOR(OFS_PARM0)[1] = qcvm->eval_p[2]->vector[1];
+	GET_VECTOR(OFS_PARM0)[2] = qcvm->eval_p[2]->vector[2];
+
+	QCVM_CALL_OPCODE_FUNC(_CALL);
 }
 
 /*
@@ -708,42 +727,42 @@ QCVM_OPCODE_FUNC(CASERANGE)
 
 QCVM_OPCODE_FUNC(CALL1H)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	QCVM_CALL_OPCODE_FUNC(_CALLH);
 }
 
 QCVM_OPCODE_FUNC(CALL2H)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	QCVM_CALL_OPCODE_FUNC(_CALLH);
 }
 
 QCVM_OPCODE_FUNC(CALL3H)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	QCVM_CALL_OPCODE_FUNC(_CALLH);
 }
 
 QCVM_OPCODE_FUNC(CALL4H)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	QCVM_CALL_OPCODE_FUNC(_CALLH);
 }
 
 QCVM_OPCODE_FUNC(CALL5H)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	QCVM_CALL_OPCODE_FUNC(_CALLH);
 }
 
 QCVM_OPCODE_FUNC(CALL6H)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	QCVM_CALL_OPCODE_FUNC(_CALLH);
 }
 
 QCVM_OPCODE_FUNC(CALL7H)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	QCVM_CALL_OPCODE_FUNC(_CALLH);
 }
 
 QCVM_OPCODE_FUNC(CALL8H)
 {
-	QCVM_CALL_OPCODE_FUNC(_NOT_IMPLEMENTED);
+	QCVM_CALL_OPCODE_FUNC(_CALLH);
 }
 
 QCVM_OPCODE_FUNC(STORE_I)
