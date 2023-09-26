@@ -212,14 +212,12 @@ typedef struct qcvm_function_t
  */
 typedef union qcvm_evaluator_t
 {
-
 	int string;			/* offset into string table */
 	float float_;		/* float value */
 	float vector[3];	/* 3-part float vector */
 	int function;		/* index into function table */
 	int int_;			/* integer value */
 	int entity;			/* index into entity table */
-
 } qcvm_evaluator_t;
 
 /*
