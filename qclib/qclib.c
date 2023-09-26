@@ -29,6 +29,7 @@
  */
 
 /* std */
+#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -58,6 +59,82 @@ qcvm_export_t export_print =
 	.type = QCVM_VOID,
 	.argc = 2,
 	.args[0] = {.name = "s", .type = QCVM_STRING},
+	.args[1] = {.name = "...", .type = QCVM_VARGS}
+};
+
+/* print formatted text */
+void qclib_printf(qcvm_t *qcvm)
+{
+	qcvm_vec3_t v;
+	const char *fmt;
+	char c;
+	int arg;
+	char buffer[512];
+
+	/* get fmt string */
+	fmt = qcvm_get_parm_string(qcvm, 0);
+
+	/* loups */
+	arg = 1;
+	while ((c = *fmt++))
+	{
+		/* sanity check */
+		if (arg > qcvm_get_argc(qcvm))
+			break;
+
+		/* not a format char */
+		if (c != '%')
+		{
+			fputc(c, stdout);
+			continue;
+		}
+
+		/* do formatting */
+		switch ((c = *fmt++))
+		{
+			/* % */
+			case '%':
+				fputc(c, stdout);
+				break;
+
+			/* string */
+			case 's':
+				fprintf(stdout, "%s", qcvm_get_parm_string(qcvm, arg));
+				arg++;
+				break;
+
+			/* int */
+			case 'd':
+				fprintf(stdout, "%d", qcvm_get_parm_int(qcvm, arg));
+				arg++;
+				break;
+
+			/* float */
+			case 'f':
+				fprintf(stdout, "%0.4f", qcvm_get_parm_float(qcvm, arg));
+				arg++;
+				break;
+
+			/* vector */
+			case 'v':
+				v = qcvm_get_parm_vector(qcvm, arg);
+				fprintf(stdout, "%0.4f %0.4f %0.4f", v.x, v.y, v.z);
+				arg++;
+				break;
+		}
+	}
+
+	/* print to stdout */
+	fflush(stdout);
+}
+
+qcvm_export_t export_printf =
+{
+	.func = qclib_printf,
+	.name = "printf",
+	.type = QCVM_VOID,
+	.argc = 2,
+	.args[0] = {.name = "fmt", .type = QCVM_STRING},
 	.args[1] = {.name = "...", .type = QCVM_VARGS}
 };
 
@@ -214,6 +291,7 @@ qcvm_export_t export_substring =
 void qclib_install(qcvm_t *qcvm)
 {
 	qcvm_add_export(qcvm, &export_print);
+	qcvm_add_export(qcvm, &export_printf);
 	qcvm_add_export(qcvm, &export_spawn);
 	qcvm_add_export(qcvm, &export_strlen);
 	qcvm_add_export(qcvm, &export_strcat);

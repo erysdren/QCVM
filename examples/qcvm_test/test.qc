@@ -51,4 +51,7 @@ void test()
 
 	print("sup\n");
 	print(ent.field2, "\n");
+
+	printf("%f, %f, %v\n", 1, 7543, [0.02, 0.0654, 100.2]);
+	printf("%s %s %s\n", "multi", "part", "sentence");
 }

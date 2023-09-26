@@ -1,4 +1,5 @@
 void print(string s, ...) = #0 : print;
+void printf(string fmt, ...) = #0 : printf;
 entity spawn() = #0 : spawn;
 float strlen(string s) = #0 : strlen;
 string strcat(string s1, string s2, ...) = #0 : strcat;
