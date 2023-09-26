@@ -44,7 +44,6 @@ typedef struct qcvm_runtime qcvm_t;
 /* var type */
 typedef enum qcvm_var_type_t
 {
-
 	QCVM_VAR_VOID,
 	QCVM_VAR_STRING,
 	QCVM_VAR_FLOAT,
@@ -53,7 +52,6 @@ typedef enum qcvm_var_type_t
 	QCVM_VAR_FIELD,
 	QCVM_VAR_FUNCTION,
 	QCVM_VAR_POINTER
-
 } qcvm_var_type_t;
 
 /* export func */
@@ -62,7 +60,6 @@ typedef void (*qcvm_export_func_t)(qcvm_t *);
 /* export return type */
 typedef enum qcvm_export_type_t
 {
-
 	QCVM_VOID,
 	QCVM_FLOAT,
 	QCVM_INT,
@@ -70,7 +67,6 @@ typedef enum qcvm_export_type_t
 	QCVM_STRING,
 	QCVM_VECTOR,
 	QCVM_VARGS
-
 } qcvm_export_type_t;
 
 /* arg for export */
@@ -78,7 +74,6 @@ typedef struct qcvm_export_arg_t
 {
 	char name[32];
 	qcvm_export_type_t type;
-
 } qcvm_export_arg_t;
 
 /* export structure */
@@ -89,7 +84,6 @@ typedef struct qcvm_export_t
 	qcvm_export_type_t type;
 	int argc;
 	qcvm_export_arg_t args[8];
-
 } qcvm_export_t;
 
 /* vector */

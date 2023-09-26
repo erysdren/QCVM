@@ -126,7 +126,6 @@ typedef float qcvm_global_t;
  */
 typedef struct qcvm_header_t
 {
-
 	int version;			/* file version */
 	int crc;				/* compiled crc */
 	int ofs_statements;		/* offset to statements */
@@ -142,7 +141,6 @@ typedef struct qcvm_header_t
 	int ofs_globals;		/* offset to globals */
 	int num_globals;		/* number of globals */
 	int num_entity_fields;	/* number of entity fields */
-
 } qcvm_header_t;
 
 /*
@@ -171,10 +169,8 @@ typedef struct qcvm_var_t
  */
 typedef struct qcvm_statement_t
 {
-
 	unsigned short opcode;
 	short vars[3];
-
 } qcvm_statement_t;
 
 /*
@@ -187,7 +183,6 @@ typedef struct qcvm_statement_t
  */
 typedef struct qcvm_function_t
 {
-
 	int first_statement;
 	int first_parm;
 	int num_locals;
@@ -196,7 +191,6 @@ typedef struct qcvm_function_t
 	qcvm_string_t file;
 	int num_parms;
 	unsigned char parm_sizes[8];
-
 } qcvm_function_t;
 
 /*
@@ -268,18 +262,14 @@ typedef struct qcvm_entity_t
  */
 struct qcvm_runtime
 {
-
 	/* functions */
-
 	int function_argc;				/* number of args in current function */
 
 	/* miscellaneous */
-
 	int trace;						/* print trace info */
 	int len_entity;					/* size of the entity struct */
 
 	/* stack */
-
 	qcvm_stack_t stack[32];			/* stack buffer */
 	int stack_depth;				/* current depth into stack buffer */
 	int local_stack[2048];			/* local stack */
@@ -287,7 +277,6 @@ struct qcvm_runtime
 	qcvm_stack_t xstack;			/* stack temp */
 
 	/* pointers */
-
 	qcvm_header_t *header;			/* pointer to header */
 	qcvm_statement_t *statements;	/* pointer to statements */
 	qcvm_function_t *functions;		/* pointer to functions */
@@ -310,7 +299,6 @@ struct qcvm_runtime
 	int num_entities;
 
 	/* runtime */
-
 	qcvm_evaluator_t *eval_p[4];
 	int exit_depth;
 	int statement_i;
@@ -323,10 +311,8 @@ struct qcvm_runtime
 	qcvm_entity_t *entity_p;
 
 	/* memory pool */
-
 	void *pool;						/* pointer to memory pool */
 	int len_pool;					/* size of memory pool */
-
 };
 
 /* qcvm opcodes */
@@ -344,7 +330,6 @@ typedef void qcvm_opcode_func_t(qcvm_t *qcvm);
 /* qcvm opcode function table entry */
 typedef struct qcvm_opcode_table_entry_t
 {
-
 	/* function to execute */
 	qcvm_opcode_func_t *func;
 
@@ -353,7 +338,6 @@ typedef struct qcvm_opcode_table_entry_t
 
 	/* printable name of opcode */
 	const char *name;
-
 } qcvm_opcode_table_entry_t;
 
 /* qcvm opcode function table */
