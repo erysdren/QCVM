@@ -38,6 +38,7 @@ void test()
 {
 	entity ent;
 	float x, y, z;
+	string str;
 
 	gtest.field1 = 4643;
 	gtest.field2 = "hello world!";
@@ -54,4 +55,7 @@ void test()
 
 	printf("%f, %f, %v\n", 1, 7543, [0.02, 0.0654, 100.2]);
 	printf("%s %s %s\n", "multi", "part", "sentence");
+
+	str = sprintf("%v", [111, 3623.56, 0.124]);
+	printf("%s\n", str);
 }

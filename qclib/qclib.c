@@ -137,6 +137,82 @@ qcvm_export_t export_printf =
 	.args[1] = {.name = "...", .type = QCVM_VARGS}
 };
 
+/* print formatted text and return tempstring */
+void qclib_sprintf(qcvm_t *qcvm)
+{
+	qcvm_vec3_t v;
+	const char *fmt;
+	char c;
+	int arg;
+	static char buffer[1024];
+
+	/* get fmt string */
+	fmt = qcvm_get_parm_string(qcvm, 0);
+
+	/* loups */
+	arg = 1;
+	while ((c = *fmt++))
+	{
+		/* sanity check */
+		if (arg > qcvm_get_argc(qcvm))
+			break;
+
+		/* not a format char */
+		if (c != '%')
+		{
+			sprintf(buffer, "%c", c);
+			continue;
+		}
+
+		/* do formatting */
+		switch ((c = *fmt++))
+		{
+			/* % */
+			case '%':
+				sprintf(buffer, "%c", c);
+				break;
+
+			/* string */
+			case 's':
+				sprintf(buffer, "%s", qcvm_get_parm_string(qcvm, arg));
+				arg++;
+				break;
+
+			/* int */
+			case 'd':
+				sprintf(buffer, "%d", qcvm_get_parm_int(qcvm, arg));
+				arg++;
+				break;
+
+			/* float */
+			case 'f':
+				sprintf(buffer, "%0.4f", qcvm_get_parm_float(qcvm, arg));
+				arg++;
+				break;
+
+			/* vector */
+			case 'v':
+				v = qcvm_get_parm_vector(qcvm, arg);
+				sprintf(buffer, "%0.4f %0.4f %0.4f", v.x, v.y, v.z);
+				arg++;
+				break;
+		}
+	}
+
+	/* return the string */
+	qcvm_return_string(qcvm, buffer);
+}
+
+qcvm_export_t export_sprintf =
+{
+	.func = qclib_sprintf,
+	.name = "sprintf",
+	.type = QCVM_STRING,
+	.argc = 2,
+	.args[0] = {.name = "fmt", .type = QCVM_STRING},
+	.args[1] = {.name = "...", .type = QCVM_VARGS}
+};
+
 /* spawn entity */
 void qclib_spawn(qcvm_t *qcvm)
 {
@@ -299,6 +375,7 @@ void qclib_install(qcvm_t *qcvm)
 {
 	qcvm_add_export(qcvm, &export_print);
 	qcvm_add_export(qcvm, &export_printf);
+	qcvm_add_export(qcvm, &export_sprintf);
 	qcvm_add_export(qcvm, &export_spawn);
 	qcvm_add_export(qcvm, &export_strlen);
 	qcvm_add_export(qcvm, &export_strcat);
