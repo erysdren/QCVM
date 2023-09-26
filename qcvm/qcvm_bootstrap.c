@@ -96,7 +96,7 @@ qcvm_t *qcvm_from_memory(void *memory, size_t size)
 
 	/* check version */
 	qcvm->header = (qcvm_header_t *)qcvm->pool;
-	if (qcvm->header->version != 6)
+	if (qcvm->header->version != PROGS_VERSION_ID & qcvm->header->version != PROGS_VERSION_FTE)
 	{
 		qcvm_set_error(QCVM_ERROR_VERSION);
 		free(qcvm->pool);

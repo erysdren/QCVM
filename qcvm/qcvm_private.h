@@ -115,6 +115,10 @@ extern "C" {
 typedef int qcvm_string_t;
 typedef float qcvm_global_t;
 
+/* version macros */
+#define PROGS_VERSION_ID 6
+#define PROGS_VERSION_FTE 7
+
 /*
  *
  * qc progs.dat header.
@@ -141,6 +145,16 @@ typedef struct qcvm_header_t
 	int ofs_globals;		/* offset to globals */
 	int num_globals;		/* number of globals */
 	int num_entity_fields;	/* number of entity fields */
+
+	/* version 7 fields */
+	int ofs_files;
+	int ofs_linenums;
+	int ofs_compressed_functions;
+	int num_compressed_functions;
+	int ofs_types;
+	int num_types;
+	int num_compressed_blocks;
+	char secondary_version[4];
 } qcvm_header_t;
 
 /*

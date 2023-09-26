@@ -106,6 +106,28 @@ if(QCVM_BUILD_TESTAPP)
 
 endif()
 
+## QCVM Test Application 2
+if(QCVM_BUILD_TESTAPP)
+
+	## QC
+	find_program(fteqcc64 fteqcc64 REQUIRED)
+	add_custom_command(
+		OUTPUT ${PROJECT_BINARY_DIR}/test2.dat
+		COMMAND fteqcc64 ${PROJECT_SOURCE_DIR}/examples/qcvm_test_fte/test2.src -o ${PROJECT_BINARY_DIR}/test2.dat
+	)
+	add_custom_target(test2_dat ALL DEPENDS ${PROJECT_BINARY_DIR}/test2.dat)
+
+	## Sources
+	set(QCVM_TEST_FTE_SOURCES
+		${PROJECT_SOURCE_DIR}/examples/qcvm_test_fte/main.c
+	)
+
+	## Executable
+	add_executable(test2 ${QCVM_TEST_FTE_SOURCES})
+	target_link_libraries(test2 PUBLIC qcvm qclib)
+
+endif()
+
 ## QCVM Module Test Application
 if(QCVM_BUILD_MODULE_TESTAPP)
 
