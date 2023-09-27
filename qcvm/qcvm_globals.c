@@ -111,3 +111,48 @@ int qcvm_find_global(qcvm_t *qcvm, const char *name)
 	/* return failure */
 	return -1;
 }
+
+/* find global entity by type */
+int qcvm_find_global_by_type(qcvm_t *qcvm, const char *name, qcvm_export_type_t type)
+{
+	int i;
+
+	for (i = 1; i < qcvm->header->num_global_vars; i++)
+	{
+		if ((qcvm->global_vars[i].type & ~32768) == type
+			&& strcmp(name, GET_STRING_OFS(qcvm->global_vars[i].name)) == 0)
+			return i;
+	}
+
+	return -1;
+}
+
+/* find global float by name */
+int qcvm_find_global_float(qcvm_t *qcvm, const char *name)
+{
+	return qcvm_find_global_by_type(qcvm, name, QCVM_FLOAT);
+}
+
+/* find global int by name */
+int qcvm_find_global_int(qcvm_t *qcvm, const char *name)
+{
+	return qcvm_find_global_by_type(qcvm, name, QCVM_INT);
+}
+
+/* find global entity by name */
+int qcvm_find_global_entity(qcvm_t *qcvm, const char *name)
+{
+	return qcvm_find_global_by_type(qcvm, name, QCVM_ENTITY);
+}
+
+/* find global string by name */
+int qcvm_find_global_string(qcvm_t *qcvm, const char *name)
+{
+	return qcvm_find_global_by_type(qcvm, name, QCVM_STRING);
+}
+
+/* find global vector by name */
+int qcvm_find_global_vector(qcvm_t *qcvm, const char *name)
+{
+	return qcvm_find_global_by_type(qcvm, name, QCVM_VECTOR);
+}

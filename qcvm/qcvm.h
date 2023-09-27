@@ -121,9 +121,6 @@ const char *qcvm_get_error(void);
 /* add entity and return id */
 int qcvm_add_entity(qcvm_t *qcvm);
 
-/* find global entity by name */
-int qcvm_find_entity(qcvm_t *qcvm, const char *name);
-
 /*
  * qcvm_exports.c
  */
@@ -208,6 +205,24 @@ qcvm_vec3_t qcvm_get_global_vector(qcvm_t *qcvm, int global);
 
 /* retrieve the offset of a global by name */
 int qcvm_find_global(qcvm_t *qcvm, const char *name);
+
+/* retrieve the offset of a global by name & type */
+int qcvm_find_global_by_type(qcvm_t *qcvm, const char *name, qcvm_export_type_t type);
+
+/* retrieve the offset of a global float by name */
+int qcvm_find_global_float(qcvm_t *qcvm, const char *name);
+
+/* retrieve the offset of a global int by name */
+int qcvm_find_global_int(qcvm_t *qcvm, const char *name);
+
+/* retrieve the offset of a global entity by name */
+int qcvm_find_global_entity(qcvm_t *qcvm, const char *name);
+
+/* retrieve the offset of a global string by name */
+int qcvm_find_global_string(qcvm_t *qcvm, const char *name);
+
+/* retrieve the offset of a global vector by name */
+int qcvm_find_global_vector(qcvm_t *qcvm, const char *name);
 
 /*
  * qcvm_parameters.c
