@@ -48,7 +48,7 @@ const char qcpkg_footer_magic[4] = "QCVM";
  */
 
 /* cat executable and progs */
-void qcpkg_concat(const char *self_filename, const char *destination_filename, const char *progs_filename)
+int qcpkg_concat(const char *self_filename, const char *destination_filename, const char *progs_filename)
 {
 	/* variables */
 	FILE *self, *destination, *progs;
@@ -59,6 +59,8 @@ void qcpkg_concat(const char *self_filename, const char *destination_filename, c
 	self = fopen(self_filename, "rb");
 	destination = fopen(destination_filename, "wb");
 	progs = fopen(progs_filename, "rb");
+	if (!self || !destination || !progs)
+		return 0;
 
 	/* get self size */
 	fseek(self, 0L, SEEK_END);
@@ -90,6 +92,8 @@ void qcpkg_concat(const char *self_filename, const char *destination_filename, c
 	fclose(progs);
 	fclose(destination);
 	fclose(self);
+
+	return 1;
 }
 
 /* check if we're a bundle */
@@ -240,7 +244,12 @@ int main(int argc, char **argv)
 
 	/* check stub */
 	self_filename = get_arg("--stub");
-	if (!self_filename) self_filename = argv[0];
+	if (!self_filename)
+	{
+		if (check_arg("--verbose"))
+			fprintf(stderr, "Warning: No stub specified, assuming self\n");
+		self_filename = argv[0];
+	}
 
 	/* check progs */
 	progs_filename = get_arg("--progs");
@@ -261,7 +270,15 @@ int main(int argc, char **argv)
 	}
 
 	/* do concat */
-	qcpkg_concat(self_filename, destination_filename, progs_filename);
+	if (!qcpkg_concat(self_filename, destination_filename, progs_filename))
+	{
+		fprintf(stderr, "Error: Failed to make package\n");
+		return 1;
+	}
+	else
+	{
+		printf("Successfully built QC package \"%s\"\n", destination_filename);
+	}
 
 	return 0;
 }
