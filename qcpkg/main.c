@@ -173,6 +173,21 @@ static int global_argc = 0;
 static char **global_argv = NULL;
 
 /* check arg */
+int check_arg(const char *pattern)
+{
+	int i;
+
+	for (i = 0; i < global_argc; i++)
+	{
+		/* check if arg is there */
+		if (strcmp(global_argv[i], pattern) == 0)
+			return 1;
+	}
+
+	return 0;
+}
+
+/* get arg */
 const char *get_arg(const char *pattern)
 {
 	int i;
@@ -191,6 +206,11 @@ const char *get_arg(const char *pattern)
 	return NULL;
 }
 
+void print_help(void)
+{
+	printf("qcpkg options:\n--stub <stub file>\n--progs <progs file>\n--output <output file>\n");
+}
+
 /* main */
 int main(int argc, char **argv)
 {
@@ -207,16 +227,16 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	/* emit help */
-	if (argc < 2)
-	{
-		printf("qcpkg options:\n--stub <stub file>\n--progs <progs file>\n--output <output file>\n");
-		return 0;
-	}
-
 	/* init argc/argv */
 	global_argc = argc;
 	global_argv = argv;
+
+	/* emit help */
+	if (argc < 2 || check_arg("--help"))
+	{
+		print_help();
+		return 0;
+	}
 
 	/* check stub */
 	self_filename = get_arg("--stub");
@@ -227,6 +247,7 @@ int main(int argc, char **argv)
 	if (!progs_filename)
 	{
 		fprintf(stderr, "Error: No progs specified\n");
+		print_help();
 		return 1;
 	}
 
@@ -235,6 +256,7 @@ int main(int argc, char **argv)
 	if (!destination_filename)
 	{
 		fprintf(stderr, "Error: No destination filename specified\n");
+		print_help();
 		return 1;
 	}
 
