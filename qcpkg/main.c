@@ -169,11 +169,36 @@ void qcpkg_run_package(const char *self_filename, int len_progs)
 	qcvm_run(qcvm, func_main);
 }
 
+static int global_argc = 0;
+static char **global_argv = NULL;
+
+/* check arg */
+const char *get_arg(const char *pattern)
+{
+	int i;
+
+	for (i = 0; i < global_argc; i++)
+	{
+		/* check if arg is there */
+		if (strcmp(global_argv[i], pattern) != 0)
+			continue;
+
+		/* check if it has a value */
+		if (global_argc > (i + 1))
+			return global_argv[i + 1];
+	}
+
+	return NULL;
+}
+
 /* main */
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
 	/* variables */
 	int len_progs;
+	const char *self_filename;
+	const char *destination_filename;
+	const char *progs_filename;
 
 	/* check if we're bundled */
 	if ((len_progs = qcpkg_check_packaged(argv[0])))
@@ -182,8 +207,39 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
+	/* emit help */
+	if (argc < 2)
+	{
+		printf("qcpkg options:\n--stub <stub file>\n--progs <progs file>\n--output <output file>\n");
+		return 0;
+	}
+
+	/* init argc/argv */
+	global_argc = argc;
+	global_argv = argv;
+
+	/* check stub */
+	self_filename = get_arg("--stub");
+	if (!self_filename) self_filename = argv[0];
+
+	/* check progs */
+	progs_filename = get_arg("--progs");
+	if (!progs_filename)
+	{
+		fprintf(stderr, "Error: No progs specified\n");
+		return 1;
+	}
+
+	/* check destination filename */
+	destination_filename = get_arg("--output");
+	if (!destination_filename)
+	{
+		fprintf(stderr, "Error: No destination filename specified\n");
+		return 1;
+	}
+
 	/* do concat */
-	qcpkg_concat(argv[0], argv[1], argv[2]);
+	qcpkg_concat(self_filename, destination_filename, progs_filename);
 
 	return 0;
 }
