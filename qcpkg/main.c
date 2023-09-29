@@ -36,6 +36,7 @@
 /* qcvm */
 #include "qcvm.h"
 #include "qclib.h"
+#include "qcpkg.h"
 
 /*
  * constants
@@ -101,8 +102,7 @@ int qcpkg_check_packaged(const char *self_filename)
 {
 	/* variables */
 	FILE *self;
-	char magic[4];
-	int len_progs;
+	qcpkg_header_t header;
 
 	/* open */
 	self = fopen(self_filename, "rb");
@@ -110,20 +110,20 @@ int qcpkg_check_packaged(const char *self_filename)
 
 	/* seek to header location */
 	fseek(self, 0, SEEK_END);
-	fseek(self, -8, SEEK_CUR);
+	fseek(self, -sizeof(qcpkg_header_t), SEEK_CUR);
 
-	/* read values */
-	fread(&len_progs, 4, 1, self);
-	fread(magic, 4, 1, self);
+	/* read header */
+	fread(&header.len_progs, sizeof(int), 1, self);
+	fread(header.magic, sizeof(char), 4, self);
 
 	/* close file */
 	fclose(self);
 
 	/* check validity */
-	if (memcmp(magic, qcpkg_footer_magic, 4) != 0)
+	if (memcmp(header.magic, qcpkg_footer_magic, 4) != 0)
 		return 0;
 
-	return len_progs;
+	return header.len_progs;
 }
 
 /* run package */
@@ -140,7 +140,7 @@ void qcpkg_run_package(const char *self_filename, int len_progs)
 
 	/* seek to progs */
 	fseek(self, 0L, SEEK_END);
-	fseek(self, -(len_progs + 8), SEEK_CUR);
+	fseek(self, -(len_progs + sizeof(qcpkg_header_t)), SEEK_CUR);
 
 	/* read progs */
 	buffer = malloc(len_progs);
