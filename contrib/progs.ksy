@@ -8,9 +8,7 @@ doc-ref: |
   https://github.com/id-Software/Quake/blob/master/WinQuake/pr_comp.h
 
 doc: |
-  Quake's "Programs" format. Built on opcodes and runs inside a virtual machine.
-
-  Origin of this file: https://github.com/erysdren/Formats
+  QuakeC "Progs" format. Built on opcodes and runs inside a virtual machine.
 
 seq:
   - id: header
