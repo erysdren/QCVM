@@ -23,17 +23,10 @@ QCVM is built via CMake.
 
 Linux:
 ```
-mkdir build && cd build
+mkdir cmake-build && cd cmake-build
 cmake ..
 make
 ```
-
-## Todo
-
-- [ ] Add support for HexenC and FTEQCC's extended opcodes.
-- [ ] Add support for the QTest progs format.
-- [ ] Bindings for other languages.
-- [ ] Add support to automatically compile QuakeC by calling FTEQCC.
 
 ## Feedback
 
