@@ -4,12 +4,16 @@
 		<comment>QuakeC source code</comment>
 		<glob pattern="*.qc"/>
 	</mime-type>
+	<mime-type type="text/x-quakec-qh">
+		<comment>QuakeC header</comment>
+		<glob pattern="*.qh"/>
+	</mime-type>
 	<mime-type type="text/x-quakec-src">
 		<comment>QuakeC build file</comment>
 		<glob pattern="*.src"/>
 		<glob weight="50" pattern="progs.src"/>
 	</mime-type>
-	<mime-type type="text/x-quakec-dat">
+	<mime-type type="application/x-quakec-dat">
 		<comment>QuakeC object code</comment>
 		<!-- *.dat extension -->
 		<glob weight="10" pattern="*.dat"/>
