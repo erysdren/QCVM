@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+	<mime-type type="text/x-quakec-qc">
+		<comment>QuakeC source code</comment>
+		<glob pattern="*.qc"/>
+	</mime-type>
+	<mime-type type="text/x-quakec-src">
+		<comment>QuakeC build file</comment>
+		<glob pattern="*.src"/>
+		<glob weight="50" pattern="progs.src"/>
+	</mime-type>
+	<mime-type type="text/x-quakec-dat">
+		<comment>QuakeC object code</comment>
+		<!-- *.dat extension -->
+		<glob weight="10" pattern="*.dat"/>
+		<!-- common progs filenames -->
+		<glob weight="50" pattern="progs.dat"/>
+		<glob weight="50" pattern="csprogs.dat"/>
+		<glob weight="50" pattern="qwprogs.dat"/>
+		<glob weight="50" pattern="menu.dat"/>
+		<!-- version 3 (qtest) -->
+		<magic priority="50">
+			<match value="\003\000\000\000" type="string" offset="0"/>
+		</magic>
+		<!-- version 6 (standard) -->
+		<magic priority="50">
+			<match value="\006\000\000\000" type="string" offset="0"/>
+		</magic>
+		<!-- version 7 (fte) -->
+		<magic priority="50">
+			<match value="\007\000\000\000" type="string" offset="0"/>
+		</magic>
+	</mime-type>
+</mime-info>
