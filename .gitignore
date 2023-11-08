@@ -1,18 +1,9 @@
+
 ## unversioned files
 local/
 
-## vscode
-.vscode/
-*.code-workspace
-
-## cmake
-cmake-build-*/
-
-## meson
-meson-build-*/
-
-## make
-make-build-*/
+## cmake builds
+cmake-build*/
 
 ## progs
 *.lno
