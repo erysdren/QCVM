@@ -3,6 +3,7 @@
 	<mime-type type="text/x-quakec-qc">
 		<comment>QuakeC source code</comment>
 		<glob pattern="*.qc"/>
+		<glob pattern="*.hc"/>
 	</mime-type>
 	<mime-type type="text/x-quakec-qh">
 		<comment>QuakeC header</comment>
