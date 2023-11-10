@@ -2,6 +2,19 @@
 
 A bite-sized QuakeC virtual machine written in C.
 
+This repository contains various tools and libraries:
+
+- `qcvm`: The main QuakeC virtual machine library.
+- `qclib`: An additional library of useful functions for C to QuakeC interop.
+- `qcpkg`: A command-line tool that can produce native executables from QuakeC modules.
+
+It also includes some examples:
+
+- `examples/module_test`: Test application for communicating between two different QuakeC modules.
+- `examples/qcpong`: PONG clone made with SDL2 and QCVM.
+- `examples/qcvm_test`: The main basic test application.
+- `examples/qcvm_test_fte`: Test application for the extended QuakeC opcodes provided by FTE Quake.
+
 ## Resources
 
 - [State-of-the-art QuakeC compiler](https://www.fteqcc.org/)
