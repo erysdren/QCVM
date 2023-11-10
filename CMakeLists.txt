@@ -27,7 +27,6 @@
 ## CMake
 cmake_minimum_required(VERSION 3.13)
 project(QCVM DESCRIPTION "QuakeC Virtual Machine" HOMEPAGE_URL https://github.com/erysdren/QCVM LANGUAGES C VERSION 0.0.1)
-set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_C_STANDARD 90)
 set(CMAKE_C_STANDARD_REQUIRED TRUE)
 
