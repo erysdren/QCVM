@@ -49,29 +49,29 @@ const char qcpkg_footer_magic[4] = "QCVM";
  */
 
 /* cat executable and progs */
-int qcpkg_concat(const char *self_filename, const char *destination_filename, const char *progs_filename)
+int qcpkg_concat(const char *stub_filename, const char *destination_filename, const char *progs_filename)
 {
 	/* variables */
-	FILE *self, *destination, *progs;
-	int len_self, len_progs;
+	FILE *stub, *destination, *progs;
+	int len_stub, len_progs;
 	void *buffer;
 
 	/* open files  */
-	self = fopen(self_filename, "rb");
+	stub = fopen(stub_filename, "rb");
 	destination = fopen(destination_filename, "wb");
 	progs = fopen(progs_filename, "rb");
-	if (!self || !destination || !progs)
+	if (!stub || !destination || !progs)
 		return 0;
 
-	/* get self size */
-	fseek(self, 0L, SEEK_END);
-	len_self = ftell(self);
-	fseek(self, 0L, SEEK_SET);
+	/* get stub size */
+	fseek(stub, 0L, SEEK_END);
+	len_stub = ftell(stub);
+	fseek(stub, 0L, SEEK_SET);
 
-	/* copy self */
-	buffer = malloc(len_self);
-	fread(buffer, len_self, 1, self);
-	fwrite(buffer, len_self, 1, destination);
+	/* copy stub */
+	buffer = malloc(len_stub);
+	fread(buffer, len_stub, 1, stub);
+	fwrite(buffer, len_stub, 1, destination);
 	free(buffer);
 
 	/* get progs size */
@@ -92,32 +92,32 @@ int qcpkg_concat(const char *self_filename, const char *destination_filename, co
 	/* close */
 	fclose(progs);
 	fclose(destination);
-	fclose(self);
+	fclose(stub);
 
 	return 1;
 }
 
 /* check if we're a bundle */
-int qcpkg_check_packaged(const char *self_filename)
+int qcpkg_check_packaged(const char *stub_filename)
 {
 	/* variables */
-	FILE *self;
+	FILE *stub;
 	qcpkg_header_t header;
 
 	/* open */
-	self = fopen(self_filename, "rb");
-	if (!self) return 0;
+	stub = fopen(stub_filename, "rb");
+	if (!stub) return 0;
 
 	/* seek to header location */
-	fseek(self, 0, SEEK_END);
-	fseek(self, -sizeof(qcpkg_header_t), SEEK_CUR);
+	fseek(stub, 0, SEEK_END);
+	fseek(stub, -sizeof(qcpkg_header_t), SEEK_CUR);
 
 	/* read header */
-	fread(&header.len_progs, sizeof(int), 1, self);
-	fread(header.magic, sizeof(char), 4, self);
+	fread(&header.len_progs, sizeof(int), 1, stub);
+	fread(header.magic, sizeof(char), 4, stub);
 
 	/* close file */
-	fclose(self);
+	fclose(stub);
 
 	/* check validity */
 	if (memcmp(header.magic, qcpkg_footer_magic, 4) != 0)
@@ -127,25 +127,25 @@ int qcpkg_check_packaged(const char *self_filename)
 }
 
 /* run package */
-void qcpkg_run_package(const char *self_filename, int len_progs)
+void qcpkg_run_package(const char *stub_filename, int len_progs)
 {
 	/* variables */
-	FILE *self;
+	FILE *stub;
 	qcvm_t *qcvm;
 	int func_main;
 	void *buffer;
 
-	/* open self */
-	self = fopen(self_filename, "rb");
+	/* open stub */
+	stub = fopen(stub_filename, "rb");
 
 	/* seek to progs */
-	fseek(self, 0L, SEEK_END);
-	fseek(self, -(len_progs + sizeof(qcpkg_header_t)), SEEK_CUR);
+	fseek(stub, 0L, SEEK_END);
+	fseek(stub, -(len_progs + sizeof(qcpkg_header_t)), SEEK_CUR);
 
 	/* read progs */
 	buffer = malloc(len_progs);
-	fread(buffer, len_progs, 1, self);
-	fclose(self);
+	fread(buffer, len_progs, 1, stub);
+	fclose(stub);
 
 	/* open qcvm */
 	qcvm = qcvm_from_memory(buffer, len_progs);
@@ -220,7 +220,7 @@ int main(int argc, char **argv)
 {
 	/* variables */
 	int len_progs;
-	const char *self_filename;
+	const char *stub_filename;
 	const char *destination_filename;
 	const char *progs_filename;
 
@@ -243,12 +243,12 @@ int main(int argc, char **argv)
 	}
 
 	/* check stub */
-	self_filename = get_arg("--stub");
-	if (!self_filename)
+	stub_filename = get_arg("--stub");
+	if (!stub_filename)
 	{
 		if (check_arg("--verbose"))
 			fprintf(stderr, "Warning: No stub specified, assuming self\n");
-		self_filename = argv[0];
+		stub_filename = argv[0];
 	}
 
 	/* check progs */
@@ -270,7 +270,7 @@ int main(int argc, char **argv)
 	}
 
 	/* do concat */
-	if (!qcpkg_concat(self_filename, destination_filename, progs_filename))
+	if (!qcpkg_concat(stub_filename, destination_filename, progs_filename))
 	{
 		fprintf(stderr, "Error: Failed to make package\n");
 		return 1;
