@@ -31,8 +31,9 @@ set(CMAKE_C_STANDARD 90)
 set(CMAKE_C_STANDARD_REQUIRED TRUE)
 
 ## Options
-option(QCVM_BUILD_APPLICATIONS "Build Example Applications" ON)
+option(QCVM_BUILD_EXAMPLES "Build Example Applications" ON)
 option(QCVM_BUILD_QCPONG "Build Example Game QCPONG" ON)
+option(QCVM_BUILD_QCPKG "Build QCPKG tool" ON)
 option(QCVM_INSTALL_TARGET "Enable install target" ON)
 
 ## QCVM Sources
@@ -73,29 +74,37 @@ if(QCVM_INSTALL_TARGET)
 	include(${PROJECT_SOURCE_DIR}/cmake/install.cmake)
 endif()
 
-# QCPKG sources
-set(QCPKG_SOURCES
-	${PROJECT_SOURCE_DIR}/qcpkg/main.c
-)
+# QCPKG tool
+if(QCVM_BUILD_QCPKG)
 
-## QCPKG tool
-add_executable(qcpkg ${QCPKG_SOURCES})
-target_link_libraries(qcpkg PUBLIC qcvm qclib)
+	# QCPKG sources
+	set(QCPKG_SOURCES
+		${PROJECT_SOURCE_DIR}/qcpkg/main.c
+	)
 
-# things we need to build the test applications
-find_program(fteqcc fteqcc)
-find_package(SDL2)
+	## QCPKG tool
+	add_executable(qcpkg ${QCPKG_SOURCES})
+	target_link_libraries(qcpkg PUBLIC qcvm qclib)
 
-if(NOT fteqcc)
-	message(WARNING "Can't find QuakeC compiler (fteqcc), cannot build example applications")
 endif()
 
-if(NOT SDL2_FOUND)
-	message(WARNING "Can't find SDL2, cannot build example game")
+# things we need to build the test applications
+if(QCVM_BUILD_EXAMPLES OR QCVM_BUILD_QCPONG)
+	find_program(fteqcc fteqcc)
+	if(NOT fteqcc)
+		message(WARNING "Can't find QuakeC compiler (fteqcc), cannot build example applications")
+	endif()
+endif()
+
+if(QCVM_BUILD_QCPONG)
+	find_package(SDL2)
+	if(NOT SDL2_FOUND)
+		message(WARNING "Can't find SDL2, cannot build example game")
+	endif()
 endif()
 
 ## QCVM Example Applications
-if(QCVM_BUILD_APPLICATIONS AND fteqcc)
+if(QCVM_BUILD_EXAMPLES AND fteqcc)
 
 	#
 	# testapp 1
