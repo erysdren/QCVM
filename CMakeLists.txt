@@ -31,9 +31,8 @@ set(CMAKE_C_STANDARD 90)
 set(CMAKE_C_STANDARD_REQUIRED TRUE)
 
 ## Options
-option(QCVM_BUILD_TESTAPP "Build Test Application" ON)
-option(QCVM_BUILD_QCPONG "Build Example Game" OFF)
-option(QCVM_BUILD_MODULE_TESTAPP "Build Module Test Application" OFF)
+option(QCVM_BUILD_APPLICATIONS "Build Example Applications" ON)
+option(QCVM_BUILD_QCPONG "Build Example Game QCPONG" ON)
 option(QCVM_INSTALL_TARGET "Enable install target" ON)
 
 ## QCVM Sources
@@ -83,14 +82,29 @@ set(QCPKG_SOURCES
 add_executable(qcpkg ${QCPKG_SOURCES})
 target_link_libraries(qcpkg PUBLIC qcvm qclib)
 
-## QCVM Test Application
-if(QCVM_BUILD_TESTAPP)
+# things we need to build the test applications
+find_program(fteqcc fteqcc)
+find_package(SDL2)
+
+if(NOT fteqcc)
+	message(WARNING "Can't find QuakeC compiler (fteqcc), cannot build example applications")
+endif()
+
+if(NOT SDL2_FOUND)
+	message(WARNING "Can't find SDL2, cannot build example game")
+endif()
+
+## QCVM Example Applications
+if(QCVM_BUILD_APPLICATIONS AND fteqcc)
+
+	#
+	# testapp 1
+	#
 
 	## QC
-	find_program(fteqcc64 fteqcc64 REQUIRED)
 	add_custom_command(
 		OUTPUT ${PROJECT_BINARY_DIR}/test.dat
-		COMMAND fteqcc64 ${PROJECT_SOURCE_DIR}/examples/qcvm_test/test.src -o ${PROJECT_BINARY_DIR}/test.dat
+		COMMAND fteqcc ${PROJECT_SOURCE_DIR}/examples/qcvm_test/test.src -o ${PROJECT_BINARY_DIR}/test.dat
 	)
 	add_custom_target(test_dat ALL DEPENDS ${PROJECT_BINARY_DIR}/test.dat)
 
@@ -103,16 +117,14 @@ if(QCVM_BUILD_TESTAPP)
 	add_executable(test ${QCVM_TEST_SOURCES})
 	target_link_libraries(test PUBLIC qcvm qclib)
 
-endif()
-
-## QCVM Test Application 2
-if(QCVM_BUILD_TESTAPP)
+	#
+	# testapp 2
+	#
 
 	## QC
-	find_program(fteqcc64 fteqcc64 REQUIRED)
 	add_custom_command(
 		OUTPUT ${PROJECT_BINARY_DIR}/test2.dat
-		COMMAND fteqcc64 ${PROJECT_SOURCE_DIR}/examples/qcvm_test_fte/test2.src -o ${PROJECT_BINARY_DIR}/test2.dat
+		COMMAND fteqcc ${PROJECT_SOURCE_DIR}/examples/qcvm_test_fte/test2.src -o ${PROJECT_BINARY_DIR}/test2.dat
 	)
 	add_custom_target(test2_dat ALL DEPENDS ${PROJECT_BINARY_DIR}/test2.dat)
 
@@ -125,20 +137,18 @@ if(QCVM_BUILD_TESTAPP)
 	add_executable(test2 ${QCVM_TEST_FTE_SOURCES})
 	target_link_libraries(test2 PUBLIC qcvm qclib)
 
-endif()
-
-## QCVM Module Test Application
-if(QCVM_BUILD_MODULE_TESTAPP)
+	#
+	# testapp 3
+	#
 
 	## QC
-	find_program(fteqcc64 fteqcc64 REQUIRED)
 	add_custom_command(
 		OUTPUT ${PROJECT_BINARY_DIR}/module1.dat
-		COMMAND fteqcc64 ${PROJECT_SOURCE_DIR}/examples/module_test/module1.src -o ${PROJECT_BINARY_DIR}/module1.dat
+		COMMAND fteqcc ${PROJECT_SOURCE_DIR}/examples/module_test/module1.src -o ${PROJECT_BINARY_DIR}/module1.dat
 	)
 	add_custom_command(
 		OUTPUT ${PROJECT_BINARY_DIR}/module2.dat
-		COMMAND fteqcc64 ${PROJECT_SOURCE_DIR}/examples/module_test/module2.src -o ${PROJECT_BINARY_DIR}/module2.dat
+		COMMAND fteqcc ${PROJECT_SOURCE_DIR}/examples/module_test/module2.src -o ${PROJECT_BINARY_DIR}/module2.dat
 	)
 	add_custom_target(module1_dat ALL DEPENDS ${PROJECT_BINARY_DIR}/module1.dat)
 	add_custom_target(module2_dat ALL DEPENDS ${PROJECT_BINARY_DIR}/module2.dat)
@@ -155,14 +165,12 @@ if(QCVM_BUILD_MODULE_TESTAPP)
 endif()
 
 ## QCVM Example Game
-find_package(SDL2)
-if(QCVM_BUILD_QCPONG AND SDL2_FOUND)
+if(QCVM_BUILD_QCPONG AND SDL2_FOUND AND fteqcc)
 
 	## QC
-	find_program(fteqcc64 fteqcc64 REQUIRED)
 	add_custom_command(
 		OUTPUT ${CMAKE_BINARY_DIR}/qcpong.dat
-		COMMAND fteqcc64 ${PROJECT_SOURCE_DIR}/examples/qcpong/qcpong.src -o ${PROJECT_BINARY_DIR}/qcpong.dat
+		COMMAND fteqcc ${PROJECT_SOURCE_DIR}/examples/qcpong/qcpong.src -o ${PROJECT_BINARY_DIR}/qcpong.dat
 	)
 	add_custom_target(qcpong_dat ALL DEPENDS ${CMAKE_BINARY_DIR}/qcpong.dat)
 
