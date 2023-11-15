@@ -24,8 +24,26 @@
  * 
  ******************************************************************************/
 
-typedef struct qcpkg_header_t
+/* guard */
+#pragma once
+#ifndef _QCPKG_H_
+#define _QCPKG_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* qcpkg file footer magic */
+#define QCPKG_FOOTER_MAGIC "QCVM"
+
+/* qcpkg file footer */
+typedef struct qcpkg_footer_t
 {
 	int len_progs;
 	char magic[4];
-} qcpkg_header_t;
+} qcpkg_footer_t;
+
+/* guard */
+#ifdef __cplusplus
+}
+#endif
+#endif /* _QCPKG_H_ */

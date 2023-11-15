@@ -39,12 +39,6 @@
 #include "qcpkg.h"
 
 /*
- * constants
- */
-
-const char qcpkg_footer_magic[4] = "QCVM";
-
-/*
  * functions
  */
 
@@ -87,7 +81,7 @@ int qcpkg_concat(const char *stub_filename, const char *destination_filename, co
 
 	/* write footer */
 	fwrite(&len_progs, 4, 1, destination);
-	fwrite(qcpkg_footer_magic, 4, 1, destination);
+	fwrite(QCPKG_FOOTER_MAGIC, 4, 1, destination);
 
 	/* close */
 	fclose(progs);
@@ -102,28 +96,28 @@ int qcpkg_check_packaged(const char *stub_filename)
 {
 	/* variables */
 	FILE *stub;
-	qcpkg_header_t header;
+	qcpkg_footer_t footer;
 
 	/* open */
 	stub = fopen(stub_filename, "rb");
 	if (!stub) return 0;
 
-	/* seek to header location */
+	/* seek to footer location */
 	fseek(stub, 0, SEEK_END);
-	fseek(stub, -sizeof(qcpkg_header_t), SEEK_CUR);
+	fseek(stub, -sizeof(qcpkg_footer_t), SEEK_CUR);
 
-	/* read header */
-	fread(&header.len_progs, sizeof(int), 1, stub);
-	fread(header.magic, sizeof(char), 4, stub);
+	/* read footer */
+	fread(&footer.len_progs, sizeof(int), 1, stub);
+	fread(footer.magic, sizeof(char), 4, stub);
 
 	/* close file */
 	fclose(stub);
 
 	/* check validity */
-	if (memcmp(header.magic, qcpkg_footer_magic, 4) != 0)
+	if (memcmp(footer.magic, QCPKG_FOOTER_MAGIC, 4) != 0)
 		return 0;
 
-	return header.len_progs;
+	return footer.len_progs;
 }
 
 /* run package */
@@ -140,7 +134,7 @@ void qcpkg_run_package(const char *stub_filename, int len_progs)
 
 	/* seek to progs */
 	fseek(stub, 0L, SEEK_END);
-	fseek(stub, -(len_progs + sizeof(qcpkg_header_t)), SEEK_CUR);
+	fseek(stub, -(len_progs + sizeof(qcpkg_footer_t)), SEEK_CUR);
 
 	/* read progs */
 	buffer = malloc(len_progs);
