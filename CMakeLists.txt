@@ -79,7 +79,7 @@ if(QCVM_BUILD_QCPKG)
 
 	# QCPKG sources
 	set(QCPKG_SOURCES
-		${PROJECT_SOURCE_DIR}/qcpkg/main.c
+		${PROJECT_SOURCE_DIR}/qcpkg/qcpkg.c
 	)
 
 	## QCPKG tool
