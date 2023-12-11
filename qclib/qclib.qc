@@ -7,5 +7,5 @@ string strcat(string s1, string s2, ...) = #0 : strcat;
 string substring(string s, float start, float len) = #0 : substring;
 string vtos(vector v) = #0 : vtos;
 string ftos(float f) = #0 : ftos;
-int ftoi(float i) = #0 : ftoi;
+int ftoi(float f) = #0 : ftoi;
 float itof(int i) = #0 : itof;

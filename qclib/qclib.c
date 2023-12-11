@@ -418,9 +418,9 @@ qcvm_export_t export_ftoi =
 };
 
 void qclib_itof(qcvm_t* qcvm) {
-	float f = qcvm_get_parm_float(qcvm, 0);
+	int f = qcvm_get_parm_int(qcvm, 0);
 
-	qcvm_return_int(qcvm, (int)f);
+	qcvm_return_float(qcvm, (float)f);
 }
 
 qcvm_export_t export_itof =
