@@ -144,60 +144,92 @@ void qclib_sprintf(qcvm_t *qcvm)
 	const char *fmt;
 	char c;
 	int arg;
-	static char buffer[1024];
-
+	static char buffer[1024] = {0};
+	unsigned len = 0;
 	/* get fmt string */
 	fmt = qcvm_get_parm_string(qcvm, 0);
 
-	/* loups */
+	/* loops */
 	arg = 1;
 	while ((c = *fmt++))
 	{
 		/* sanity check */
 		if (arg > qcvm_get_argc(qcvm))
+		{
 			break;
+		}
+			
 
 		/* not a format char */
 		if (c != '%')
 		{
-			sprintf(buffer, "%c", c);
+			buffer[len] = c;
+			len++;
 			continue;
 		}
 
 		/* do formatting */
 		switch ((c = *fmt++))
 		{
-			/* % */
-			case '%':
-				sprintf(buffer, "%c", c);
-				break;
-
 			/* string */
 			case 's':
-				sprintf(buffer, "%s", qcvm_get_parm_string(qcvm, arg));
-				arg++;
+				{
+					const char* str = qcvm_get_parm_string(qcvm, arg);
+					unsigned sub_len = strlen(str);
+					for (unsigned i = 0; i < sub_len; i++) {
+						buffer[len + i] = str[i];
+					}
+					len += sub_len;
+					arg++;
+				}
 				break;
 
 			/* int */
 			case 'd':
-				sprintf(buffer, "%d", qcvm_get_parm_int(qcvm, arg));
-				arg++;
+				{
+					char str[32] = {0};
+					sprintf(str, "%d", qcvm_get_parm_int(qcvm, arg));
+					unsigned sub_len = strlen(str);
+					for (unsigned i = 0; i < sub_len; i++) {
+						buffer[len + i] = str[i];
+					}
+					len += sub_len;
+					arg++;
+				}
 				break;
 
 			/* float */
 			case 'f':
-				sprintf(buffer, "%0.4f", qcvm_get_parm_float(qcvm, arg));
-				arg++;
+				{
+					char str[32] = {0};
+					sprintf(str, "%0.4f", qcvm_get_parm_float(qcvm, arg));
+					unsigned sub_len = strlen(str);
+					for (unsigned i = 0; i < sub_len; i++) {
+						buffer[len + i] = str[i];
+					}
+					len += sub_len;
+					arg++;
+				}
 				break;
 
 			/* vector */
 			case 'v':
-				v = qcvm_get_parm_vector(qcvm, arg);
-				sprintf(buffer, "%0.4f %0.4f %0.4f", v.x, v.y, v.z);
-				arg++;
+				{
+					char str[32] = {0};
+					v = qcvm_get_parm_vector(qcvm, arg);
+					sprintf(str, "%0.4f %0.4f %0.4f", v.x, v.y, v.z);
+					unsigned sub_len = strlen(str);
+					for (unsigned i = 0; i < sub_len; i++) {
+						buffer[len + i] = str[i];
+					}
+					len += sub_len;
+					arg++;
+				}
 				break;
 		}
 	}
+
+	buffer[len] = '\0';
 
 	/* return the string */
 	qcvm_return_string(qcvm, buffer);
@@ -370,6 +402,36 @@ qcvm_export_t export_substring =
 	.args[2] = {.name = "len", .type = QCVM_FLOAT}
 };
 
+void qclib_ftoi(qcvm_t* qcvm) {
+	float f = qcvm_get_parm_float(qcvm, 0);
+
+	qcvm_return_int(qcvm, (int)f);
+}
+
+qcvm_export_t export_ftoi =
+{
+	.func = qclib_ftoi,
+	.name = "ftoi",
+	.type = QCVM_INT,
+	.argc = 1,
+	.args[0] = {.name = "f", .type = QCVM_FLOAT}
+};
+
+void qclib_itof(qcvm_t* qcvm) {
+	float f = qcvm_get_parm_float(qcvm, 0);
+
+	qcvm_return_int(qcvm, (int)f);
+}
+
+qcvm_export_t export_itof =
+{
+	.func = qclib_itof,
+	.name = "itof",
+	.type = QCVM_FLOAT,
+	.argc = 1,
+	.args[0] = {.name = "i", .type = QCVM_INT}
+};
+
 /* install qclib default builtin functions */
 void qclib_install(qcvm_t *qcvm)
 {
@@ -382,4 +444,6 @@ void qclib_install(qcvm_t *qcvm)
 	qcvm_add_export(qcvm, &export_substring);
 	qcvm_add_export(qcvm, &export_vtos);
 	qcvm_add_export(qcvm, &export_ftos);
+	qcvm_add_export(qcvm, &export_ftoi);
+	qcvm_add_export(qcvm, &export_itof);
 }
