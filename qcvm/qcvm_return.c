@@ -33,6 +33,9 @@
 #include <string.h>
 #include <stdarg.h>
 
+/* include public header */
+#include "qcvm.h"
+
 /* qcvm */
 #include "qcvm_private.h"
 
@@ -49,18 +52,12 @@ void qcvm_return_entity(qcvm_t *qcvm, int entity)
 /* return a string to the previous function */
 void qcvm_return_string(qcvm_t *qcvm, const char *s)
 {
-	/* bounds check */
-	if (qcvm->tempstrings_ptr + strlen(s) + 1 > qcvm->tempstrings + TEMPSTRINGS_SIZE)
-		qcvm->tempstrings_ptr = qcvm->tempstrings;
-
 	/* sprintf */
-	sprintf(qcvm->tempstrings_ptr, "%s", s);
+	memset(qcvm->tempstrings_ptr, 0, TEMPSTRINGS_SIZE);
+	memcpy(qcvm->tempstrings_ptr, s, strlen(s));
 
 	/* return str */
 	RETURN_STRING(qcvm->tempstrings_ptr);
-
-	/* advance ptr */
-	qcvm->tempstrings_ptr += strlen(s) + 1;
 }
 
 /* return a formatted string to the previous function */

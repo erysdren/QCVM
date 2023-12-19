@@ -76,7 +76,7 @@ qcvm_t *qcvm_from_memory(void *memory, size_t size)
 	qcvm_t *qcvm;
 
 	/* allocate qcvm */
-	qcvm = malloc(sizeof(qcvm_t));
+	qcvm = calloc(1, sizeof(qcvm_t));
 	if (qcvm == NULL)
 	{
 		qcvm_set_error(QCVM_ERROR_MALLOC);
