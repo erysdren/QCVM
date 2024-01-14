@@ -146,6 +146,7 @@ void qclib_sprintf(qcvm_t *qcvm)
 	int arg;
 	static char buffer[1024] = {0};
 	unsigned len = 0;
+	unsigned i = 0;
 	/* get fmt string */
 	fmt = qcvm_get_parm_string(qcvm, 0);
 
@@ -174,9 +175,9 @@ void qclib_sprintf(qcvm_t *qcvm)
 			/* string */
 			case 's':
 				{
-					const char* str = qcvm_get_parm_string(qcvm, arg);
+					const char *str = qcvm_get_parm_string(qcvm, arg);
 					unsigned sub_len = strlen(str);
-					for (unsigned i = 0; i < sub_len; i++) {
+					for (i = 0; i < sub_len; i++) {
 						buffer[len + i] = str[i];
 					}
 					len += sub_len;
@@ -190,7 +191,7 @@ void qclib_sprintf(qcvm_t *qcvm)
 					char str[32] = {0};
 					sprintf(str, "%d", qcvm_get_parm_int(qcvm, arg));
 					unsigned sub_len = strlen(str);
-					for (unsigned i = 0; i < sub_len; i++) {
+					for (i = 0; i < sub_len; i++) {
 						buffer[len + i] = str[i];
 					}
 					len += sub_len;
@@ -204,7 +205,7 @@ void qclib_sprintf(qcvm_t *qcvm)
 					char str[32] = {0};
 					sprintf(str, "%0.4f", qcvm_get_parm_float(qcvm, arg));
 					unsigned sub_len = strlen(str);
-					for (unsigned i = 0; i < sub_len; i++) {
+					for (i = 0; i < sub_len; i++) {
 						buffer[len + i] = str[i];
 					}
 					len += sub_len;
@@ -219,7 +220,7 @@ void qclib_sprintf(qcvm_t *qcvm)
 					v = qcvm_get_parm_vector(qcvm, arg);
 					sprintf(str, "%0.4f %0.4f %0.4f", v.x, v.y, v.z);
 					unsigned sub_len = strlen(str);
-					for (unsigned i = 0; i < sub_len; i++) {
+					for (i = 0; i < sub_len; i++) {
 						buffer[len + i] = str[i];
 					}
 					len += sub_len;
