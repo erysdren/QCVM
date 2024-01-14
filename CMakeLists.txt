@@ -26,7 +26,12 @@
 
 ## CMake
 cmake_minimum_required(VERSION 3.13)
-project(QCVM DESCRIPTION "QuakeC Virtual Machine" HOMEPAGE_URL https://github.com/erysdren/QCVM LANGUAGES C VERSION 0.0.1)
+project(QCVM
+	DESCRIPTION "QuakeC Virtual Machine"
+	HOMEPAGE_URL https://github.com/erysdren/QCVM
+	LANGUAGES C
+	VERSION 0.0.1
+)
 set(CMAKE_C_STANDARD 90)
 set(CMAKE_C_STANDARD_REQUIRED TRUE)
 
@@ -53,6 +58,8 @@ set(QCVM_SOURCES
 ## QCVM Library
 add_library(qcvm ${QCVM_SOURCES})
 target_include_directories(qcvm PUBLIC ${PROJECT_SOURCE_DIR}/qcvm)
+target_compile_options(qcvm PRIVATE ${QCVM_COMPILE_OPTIONS})
+target_compile_definitions(qcvm PRIVATE ${QCVM_COMPILE_DEFINITIONS})
 
 ## QCLIB Sources
 set(QCLIB_SOURCES
@@ -63,6 +70,8 @@ set(QCLIB_SOURCES
 add_library(qclib ${QCLIB_SOURCES})
 target_link_libraries(qclib PUBLIC qcvm)
 target_include_directories(qclib PUBLIC ${PROJECT_SOURCE_DIR}/qclib)
+target_compile_options(qclib PRIVATE ${QCVM_COMPILE_OPTIONS})
+target_compile_definitions(qclib PRIVATE ${QCVM_COMPILE_DEFINITIONS})
 
 # headers
 set(QCVM_HEADERS
