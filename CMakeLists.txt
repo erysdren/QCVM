@@ -99,8 +99,8 @@ endif()
 
 # things we need to build the test applications
 if(QCVM_BUILD_EXAMPLES OR QCVM_BUILD_QCPONG)
-	find_program(fteqcc fteqcc)
-	if(NOT fteqcc)
+	find_program(QCC fteqcc)
+	if(NOT QCC)
 		message(WARNING "Can't find QuakeC compiler (fteqcc), cannot build example applications")
 	endif()
 endif()
@@ -113,7 +113,7 @@ if(QCVM_BUILD_QCPONG)
 endif()
 
 ## QCVM Example Applications
-if(QCVM_BUILD_EXAMPLES AND fteqcc)
+if(QCVM_BUILD_EXAMPLES AND QCC)
 
 	#
 	# testapp 1
@@ -122,7 +122,7 @@ if(QCVM_BUILD_EXAMPLES AND fteqcc)
 	## QC
 	add_custom_command(
 		OUTPUT ${PROJECT_BINARY_DIR}/test.dat
-		COMMAND fteqcc ${PROJECT_SOURCE_DIR}/examples/qcvm_test/test.src -o ${PROJECT_BINARY_DIR}/test.dat
+		COMMAND ${QCC} ${PROJECT_SOURCE_DIR}/examples/qcvm_test/test.src -o ${PROJECT_BINARY_DIR}/test.dat
 	)
 	add_custom_target(test_dat ALL DEPENDS ${PROJECT_BINARY_DIR}/test.dat)
 
@@ -142,7 +142,7 @@ if(QCVM_BUILD_EXAMPLES AND fteqcc)
 	## QC
 	add_custom_command(
 		OUTPUT ${PROJECT_BINARY_DIR}/test2.dat
-		COMMAND fteqcc ${PROJECT_SOURCE_DIR}/examples/qcvm_test_fte/test2.src -o ${PROJECT_BINARY_DIR}/test2.dat
+		COMMAND ${QCC} ${PROJECT_SOURCE_DIR}/examples/qcvm_test_fte/test2.src -o ${PROJECT_BINARY_DIR}/test2.dat
 	)
 	add_custom_target(test2_dat ALL DEPENDS ${PROJECT_BINARY_DIR}/test2.dat)
 
@@ -162,11 +162,11 @@ if(QCVM_BUILD_EXAMPLES AND fteqcc)
 	## QC
 	add_custom_command(
 		OUTPUT ${PROJECT_BINARY_DIR}/module1.dat
-		COMMAND fteqcc ${PROJECT_SOURCE_DIR}/examples/module_test/module1.src -o ${PROJECT_BINARY_DIR}/module1.dat
+		COMMAND ${QCC} ${PROJECT_SOURCE_DIR}/examples/module_test/module1.src -o ${PROJECT_BINARY_DIR}/module1.dat
 	)
 	add_custom_command(
 		OUTPUT ${PROJECT_BINARY_DIR}/module2.dat
-		COMMAND fteqcc ${PROJECT_SOURCE_DIR}/examples/module_test/module2.src -o ${PROJECT_BINARY_DIR}/module2.dat
+		COMMAND ${QCC} ${PROJECT_SOURCE_DIR}/examples/module_test/module2.src -o ${PROJECT_BINARY_DIR}/module2.dat
 	)
 	add_custom_target(module1_dat ALL DEPENDS ${PROJECT_BINARY_DIR}/module1.dat)
 	add_custom_target(module2_dat ALL DEPENDS ${PROJECT_BINARY_DIR}/module2.dat)
@@ -183,12 +183,12 @@ if(QCVM_BUILD_EXAMPLES AND fteqcc)
 endif()
 
 ## QCVM Example Game
-if(QCVM_BUILD_QCPONG AND SDL2_FOUND AND fteqcc)
+if(QCVM_BUILD_QCPONG AND SDL2_FOUND AND QCC)
 
 	## QC
 	add_custom_command(
 		OUTPUT ${CMAKE_BINARY_DIR}/qcpong.dat
-		COMMAND fteqcc ${PROJECT_SOURCE_DIR}/examples/qcpong/qcpong.src -o ${PROJECT_BINARY_DIR}/qcpong.dat
+		COMMAND ${QCC} ${PROJECT_SOURCE_DIR}/examples/qcpong/qcpong.src -o ${PROJECT_BINARY_DIR}/qcpong.dat
 	)
 	add_custom_target(qcpong_dat ALL DEPENDS ${CMAKE_BINARY_DIR}/qcpong.dat)
 
