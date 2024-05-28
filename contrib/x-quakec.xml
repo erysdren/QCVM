@@ -19,6 +19,7 @@
 	</mime-type>
 	<mime-type type="application/x-quakec-dat">
 		<comment>QuakeC object code</comment>
+		<icon name="application/x-object"/>
 		<!-- *.dat extension -->
 		<glob weight="10" pattern="*.dat"/>
 		<!-- common progs filenames -->
