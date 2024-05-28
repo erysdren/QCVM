@@ -2,15 +2,18 @@
 <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
 	<mime-type type="text/x-quakec-qc">
 		<comment>QuakeC source code</comment>
+		<icon name="text/x-csrc"/>
 		<glob pattern="*.qc"/>
 		<glob pattern="*.hc"/>
 	</mime-type>
 	<mime-type type="text/x-quakec-qh">
 		<comment>QuakeC header</comment>
+		<icon name="text/x-chdr"/>
 		<glob pattern="*.qh"/>
 	</mime-type>
 	<mime-type type="text/x-quakec-src">
 		<comment>QuakeC build file</comment>
+		<icon name="text/x-makefile"/>
 		<glob pattern="*.src"/>
 		<glob weight="50" pattern="progs.src"/>
 	</mime-type>
