@@ -1,6 +1,7 @@
 
 ## unversioned files
 local/
+untracked/
 
 ## cmake builds
 cmake-build*/
