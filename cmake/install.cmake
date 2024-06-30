@@ -31,6 +31,6 @@ include(GNUInstallDirs)
 configure_file(${PROJECT_SOURCE_DIR}/cmake/qcvm.pc.in ${PROJECT_BINARY_DIR}/qcvm.pc @ONLY) 
 
 # install everything
-install(TARGETS qcvm qclib DESTINATION ${CMAKE_INSTALL_LIBDIR}/qcvm)
+install(TARGETS qcvm qclib DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(FILES ${QCVM_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qcvm)
 install(FILES ${PROJECT_BINARY_DIR}/qcvm.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)

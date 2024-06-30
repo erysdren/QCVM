@@ -1,9 +1,9 @@
-libdir="@CMAKE_INSTALL_FULL_LIBDIR@/qcvm"
-includedir="@CMAKE_INSTALL_FULL_INCLUDEDIR@/qcvm"
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
 
 Name: @PROJECT_NAME@
 Description: @CMAKE_PROJECT_DESCRIPTION@
 URL: @CMAKE_PROJECT_HOMEPAGE_URL@
 Version: @PROJECT_VERSION@
-Cflags: -I"${includedir}"
-Libs: -L"${libdir}" -lqclib -lqcvm
+Cflags: -I${includedir}
+Libs: -L${libdir} -lqclib -lqcvm
