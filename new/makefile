@@ -1,5 +1,5 @@
 
-EXEC ?= qcvm_test
+EXEC ?= test
 RM ?= rm -f
 CC ?= gcc
 QCC ?= fteqcc
