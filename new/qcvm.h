@@ -28,6 +28,10 @@ SOFTWARE.
 extern "C" {
 #endif
 
+/* TODO: figure out how to include these in a portable way */
+#include <stdint.h>
+#include <stddef.h>
+
 /* result codes */
 enum {
 	QCVM_OK,
@@ -73,7 +77,7 @@ enum {
 #endif
 
 /* number of opcodes */
-extern const int qcvm_num_opcodes;
+extern const uint16_t qcvm_num_opcodes;
 
 /* main container */
 typedef struct qcvm {
@@ -85,7 +89,7 @@ typedef struct qcvm {
 	 * your own qc compiler. qcvm expects the entire file structure to be
 	 * present.
 	 */
-	unsigned int len_progs;
+	size_t len_progs;
 	void *progs;
 
 	/** entities buffer
@@ -93,7 +97,7 @@ typedef struct qcvm {
 	 * allocate this to a suitably large size to store entity definitions and
 	 * all their fields.
 	 */
-	unsigned int len_entities;
+	size_t len_entities;
 	void *entities;
 
 	/** state handler callback function
@@ -114,7 +118,7 @@ typedef struct qcvm {
 	 * in memory to point to the correct builtin array index. this will make
 	 * for slightly faster execution in further steps.
 	 */
-	unsigned int num_builtins;
+	size_t num_builtins;
 	struct qcvm_builtin {
 		const char *name;
 		int (*func)(struct qcvm *qcvm);
@@ -137,7 +141,7 @@ typedef struct qcvm {
 	 * if this buffer is null, qcvm will not be able to return strings from
 	 * builtins.
 	 */
-	unsigned int len_tempstrings;
+	size_t len_tempstrings;
 	char *tempstrings;
 
 	/*
@@ -148,32 +152,32 @@ typedef struct qcvm {
 
 	/* file header */
 	struct qcvm_header {
-		int version;
-		int crc;
-		int ofs_statements;
-		int num_statements;
-		int ofs_global_vars;
-		int num_global_vars;
-		int ofs_field_vars;
-		int num_field_vars;
-		int ofs_functions;
-		int num_functions;
-		int ofs_strings;
-		int len_strings;
-		int ofs_globals;
-		int num_globals;
-		int num_entity_fields;
+		uint32_t version;
+		uint32_t crc;
+		uint32_t ofs_statements;
+		uint32_t num_statements;
+		uint32_t ofs_global_vars;
+		uint32_t num_global_vars;
+		uint32_t ofs_field_vars;
+		uint32_t num_field_vars;
+		uint32_t ofs_functions;
+		uint32_t num_functions;
+		uint32_t ofs_strings;
+		uint32_t len_strings;
+		uint32_t ofs_globals;
+		uint32_t num_globals;
+		uint32_t num_entity_fields;
 	} *header;
 
 	/* statements */
-	unsigned int num_statements;
+	size_t num_statements;
 	struct qcvm_statement {
-		unsigned short opcode;
-		short vars[3];
+		uint16_t opcode;
+		int16_t vars[3];
 	} *statements;
 
 	/* functions */
-	unsigned int num_functions;
+	size_t num_functions;
 	struct qcvm_function {
 		int first_statement;
 		int first_parm;
@@ -186,27 +190,27 @@ typedef struct qcvm {
 	} *functions;
 
 	/* strings */
-	unsigned int len_strings;
+	size_t len_strings;
 	char *strings;
 
 	/* field vars */
-	unsigned int num_field_vars;
+	size_t num_field_vars;
 	struct qcvm_var {
-		unsigned short type;
-		unsigned short ofs;
+		uint16_t type;
+		uint16_t ofs;
 		int name;
 	} *field_vars;
 
 	/* global vars */
-	unsigned int num_global_vars;
+	size_t num_global_vars;
 	struct qcvm_var *global_vars;
 
 	/* globals */
-	unsigned int num_globals;
+	size_t num_globals;
 	union qcvm_global {
 		float f;
-		int i;
-		unsigned int ui;
+		int32_t i;
+		uint32_t ui;
 	} *globals;
 
 	/*
@@ -237,13 +241,13 @@ typedef struct qcvm {
 
 	/* function evaluation */
 	union qcvm_eval {
-		int s;
+		int32_t s;
 		float f;
 		float v[3];
-		int func;
-		int field;
-		int i;
-		unsigned int e;
+		int32_t func;
+		int32_t field;
+		int32_t i;
+		uint32_t e;
 	} *eval[4];
 
 } qcvm_t;
@@ -268,15 +272,15 @@ int qcvm_init(qcvm_t *qcvm);
  * usage example:
  *
  * const int max_entities = 8192;
- * unsigned int entity_fields = 0;
- * unsigned int entity_size = 0;
+ * size_t entity_fields = 0;
+ * size_t entity_size = 0;
  * qcvm_query_entity_info(&qcvm, &entity_fields, &entity_size);
  * qcvm.entities = malloc(max_entities * entity_size);
  *
  * @param qcvm virtual machone to query
  * @returns result code
  */
-int qcvm_query_entity_info(qcvm_t *qcvm, unsigned int *num_fields, unsigned int *size);
+int qcvm_query_entity_info(qcvm_t *qcvm, size_t *num_fields, size_t *size);
 
 /** get static string from result code
  * @param r result code
@@ -337,7 +341,7 @@ int qcvm_return_vector(qcvm_t *qcvm, float x, float y, float z);
  * @param e entity index
  * @returns result code
  */
-int qcvm_return_entity(qcvm_t *qcvm, unsigned int e);
+int qcvm_return_entity(qcvm_t *qcvm, uint32_t e);
 
 /** query argument type of current function
  *
@@ -383,7 +387,7 @@ int qcvm_get_argument_vector(qcvm_t *qcvm, int i, float *x, float *y, float *z);
  * @param e unsigned integer to fill
  * @returns result code
  */
-int qcvm_get_argument_entity(qcvm_t *qcvm, int i, unsigned int *e);
+int qcvm_get_argument_entity(qcvm_t *qcvm, int i, uint32_t *e);
 
 #ifdef __cplusplus
 }

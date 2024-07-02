@@ -44,10 +44,10 @@ static void die(int r)
 }
 
 /* load an entire file into memory */
-static void *load_file(const char *filename, unsigned int *sz)
+static void *load_file(const char *filename, size_t *sz)
 {
 	void *buffer;
-	unsigned int filesize;
+	size_t filesize;
 	FILE *file;
 
 	file = fopen(filename, "rb");
@@ -92,8 +92,8 @@ int _print(qcvm_t *qcvm)
 	return QCVM_OK;
 }
 
-static const int max_entities = 64;
-static int num_entities = 0;
+static const uint32_t max_entities = 64;
+static uint32_t num_entities = 0;
 
 int _spawn(qcvm_t *qcvm)
 {
@@ -143,7 +143,7 @@ int _state_callback(qcvm_t *qcvm, float frame, int function)
 int main(int argc, char **argv)
 {
 	int r;
-	unsigned int entity_fields, entity_size;
+	size_t entity_fields, entity_size;
 	qcvm_t qcvm;
 
 	/* load progs */

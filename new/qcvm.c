@@ -25,9 +25,9 @@ SOFTWARE.
 #include "qcvm.h"
 
 /* recognized version values */
-static const int progs_version_old = 3;
-static const int progs_version_standard = 6;
-static const int progs_version_extended = 7;
+static const uint32_t progs_version_old = 3;
+static const uint32_t progs_version_standard = 6;
+static const uint32_t progs_version_extended = 7;
 
 /* static offsets into globals table */
 #define OFS_NULL (0)
@@ -44,7 +44,7 @@ static const int progs_version_extended = 7;
 
 #define STR_OFS(o) (qcvm->strings + (o))
 
-#define FIELD_PTR(e, o) (&((unsigned int *)qcvm->entities + ((e) * qcvm->header->num_entity_fields))[(o)])
+#define FIELD_PTR(e, o) (&((uint32_t *)qcvm->entities + ((e) * qcvm->header->num_entity_fields))[(o)])
 
 /* opcode names */
 #include <stdio.h>
@@ -87,7 +87,7 @@ enum {
 	NUM_OPCODES
 };
 
-const int qcvm_num_opcodes = NUM_OPCODES;
+const uint16_t qcvm_num_opcodes = NUM_OPCODES;
 
 int qcvm_init(qcvm_t *qcvm)
 {
@@ -113,33 +113,33 @@ int qcvm_init(qcvm_t *qcvm)
 	qcvm->tempstrings_ptr = qcvm->tempstrings;
 
 	/* statements */
-	qcvm->num_statements = (unsigned int)qcvm->header->num_statements;
-	qcvm->statements = (struct qcvm_statement *)((char *)qcvm->progs + qcvm->header->ofs_statements);
+	qcvm->num_statements = qcvm->header->num_statements;
+	qcvm->statements = (struct qcvm_statement *)((uint8_t *)qcvm->progs + qcvm->header->ofs_statements);
 
 	/* functions */
-	qcvm->num_functions = (unsigned int)qcvm->header->num_functions;
-	qcvm->functions = (struct qcvm_function *)((char *)qcvm->progs + qcvm->header->ofs_functions);
+	qcvm->num_functions = qcvm->header->num_functions;
+	qcvm->functions = (struct qcvm_function *)((uint8_t *)qcvm->progs + qcvm->header->ofs_functions);
 
 	/* strings */
-	qcvm->len_strings = (unsigned int)qcvm->header->len_strings;
-	qcvm->strings = (char *)qcvm->progs + qcvm->header->ofs_strings;
+	qcvm->len_strings = qcvm->header->len_strings;
+	qcvm->strings = (char *)((uint8_t *)qcvm->progs + qcvm->header->ofs_strings);
 
 	/* field vars */
-	qcvm->num_field_vars = (unsigned int)qcvm->header->num_field_vars;
-	qcvm->field_vars = (struct qcvm_var *)((char *)qcvm->progs + qcvm->header->ofs_field_vars);
+	qcvm->num_field_vars = qcvm->header->num_field_vars;
+	qcvm->field_vars = (struct qcvm_var *)((uint8_t *)qcvm->progs + qcvm->header->ofs_field_vars);
 
 	/* global vars */
-	qcvm->num_global_vars = (unsigned int)qcvm->header->num_global_vars;
-	qcvm->global_vars = (struct qcvm_var *)((char *)qcvm->progs + qcvm->header->ofs_global_vars);
+	qcvm->num_global_vars = qcvm->header->num_global_vars;
+	qcvm->global_vars = (struct qcvm_var *)((uint8_t *)qcvm->progs + qcvm->header->ofs_global_vars);
 
 	/* globals */
-	qcvm->num_globals = (unsigned int)qcvm->header->num_globals;
-	qcvm->globals = (union qcvm_global *)((char *)qcvm->progs + qcvm->header->ofs_globals);
+	qcvm->num_globals = qcvm->header->num_globals;
+	qcvm->globals = (union qcvm_global *)((uint8_t *)qcvm->progs + qcvm->header->ofs_globals);
 
 	return QCVM_OK;
 }
 
-int qcvm_query_entity_info(qcvm_t *qcvm, unsigned int *num_fields, unsigned int *size)
+int qcvm_query_entity_info(qcvm_t *qcvm, size_t *num_fields, size_t *size)
 {
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
@@ -148,10 +148,10 @@ int qcvm_query_entity_info(qcvm_t *qcvm, unsigned int *num_fields, unsigned int 
 		return QCVM_INVALID_PROGS;
 
 	if (num_fields)
-		*num_fields = (unsigned int)qcvm->header->num_entity_fields;
+		*num_fields = (size_t)qcvm->header->num_entity_fields;
 
 	if (size)
-		*size = (unsigned int)qcvm->header->num_entity_fields * 4;
+		*size = (size_t)qcvm->header->num_entity_fields * 4;
 
 	return QCVM_OK;
 }
