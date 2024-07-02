@@ -12,5 +12,5 @@ string getenv(string name) = #3 : getenv;
 // main
 void() main =
 {
-	print("PWD: \"", getenv("PWD"), "\"");
+	print("PWD: \"", getenv("PWD"), "\"\n");
 };
