@@ -179,14 +179,14 @@ typedef struct qcvm {
 	/* functions */
 	size_t num_functions;
 	struct qcvm_function {
-		int first_statement;
-		int first_parm;
-		int num_locals;
-		int profile;
-		int ofs_name;
-		int ofs_filename;
-		int num_parms;
-		unsigned char parm_sizes[8];
+		int32_t first_statement;
+		int32_t first_parm;
+		int32_t num_locals;
+		int32_t profile;
+		int32_t ofs_name;
+		int32_t ofs_filename;
+		int32_t num_parms;
+		uint8_t parm_sizes[8];
 	} *functions;
 
 	/* strings */
@@ -198,7 +198,7 @@ typedef struct qcvm {
 	struct qcvm_var {
 		uint16_t type;
 		uint16_t ofs;
-		int name;
+		int32_t name;
 	} *field_vars;
 
 	/* global vars */
@@ -221,7 +221,7 @@ typedef struct qcvm {
 
 	/* stack */
 	struct qcvm_stack {
-		int statement;
+		int32_t statement;
 		struct qcvm_function *function;
 	} stack[QCVM_STACK_DEPTH];
 	int stack_depth;

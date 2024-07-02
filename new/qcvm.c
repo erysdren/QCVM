@@ -42,8 +42,6 @@ static const uint32_t progs_version_extended = 7;
 #define OFS_PARM7 (25)
 #define OFS_RESERVED (28)
 
-#define STR_OFS(o) (qcvm->strings + (o))
-
 #define FIELD_PTR(e, o) (&((uint32_t *)qcvm->entities + ((e) * qcvm->header->num_entity_fields))[(o)])
 
 /* opcode names */
@@ -110,7 +108,7 @@ int qcvm_init(qcvm_t *qcvm)
 		return QCVM_INVALID_PROGS;
 
 	/* tempstrings */
-	qcvm->tempstrings_ptr = qcvm->tempstrings;
+	qcvm->tempstrings_ptr = qcvm->tempstrings + 1;
 
 	/* statements */
 	qcvm->num_statements = qcvm->header->num_statements;
@@ -303,6 +301,29 @@ int qcvm_load(qcvm_t *qcvm, const char *name)
 	return setup_function(qcvm, &qcvm->functions[func]);
 }
 
+static const char *str_ofs(qcvm_t *qcvm, int32_t s)
+{
+	if (s < 0)
+	{
+		/* invert it */
+		s = s * -1;
+
+		/* if its out of range, return the "null" string */
+		if (s >= (int32_t)qcvm->len_tempstrings)
+			return &qcvm->tempstrings[0];
+
+		return &qcvm->tempstrings[s];
+	}
+	else
+	{
+		/* if its out of range, return the "null" string */
+		if (s >= (int32_t)qcvm->len_strings)
+			return &qcvm->strings[0];
+
+		return &qcvm->strings[s];
+	}
+}
+
 int qcvm_step(qcvm_t *qcvm)
 {
 	int r;
@@ -460,7 +481,7 @@ int qcvm_step(qcvm_t *qcvm)
 
 		case OPCODE_EQ_S:
 		{
-			qcvm->eval[3]->f = !_strcmp(STR_OFS(qcvm->eval[1]->s), STR_OFS(qcvm->eval[2]->s));
+			qcvm->eval[3]->f = !_strcmp(str_ofs(qcvm, qcvm->eval[1]->s), str_ofs(qcvm, qcvm->eval[2]->s));
 			break;
 		}
 
@@ -493,7 +514,7 @@ int qcvm_step(qcvm_t *qcvm)
 
 		case OPCODE_NE_S:
 		{
-			qcvm->eval[3]->f = _strcmp(STR_OFS(qcvm->eval[1]->s), STR_OFS(qcvm->eval[2]->s));
+			qcvm->eval[3]->f = _strcmp(str_ofs(qcvm, qcvm->eval[1]->s), str_ofs(qcvm, qcvm->eval[2]->s));
 			break;
 		}
 
@@ -810,12 +831,19 @@ int qcvm_return_string(qcvm_t *qcvm, const char *s)
 		len++;
 
 	/* check tempstrings bounds */
-	if (qcvm->tempstrings + len >= tempstrings_end)
-		qcvm->tempstrings_ptr = qcvm->tempstrings;
+	if (qcvm->tempstrings_ptr + len >= tempstrings_end)
+		qcvm->tempstrings_ptr = qcvm->tempstrings + 1;
+
+	/* return offset */
+	qcvm->globals[OFS_RETURN].i = -1 * (int32_t)(qcvm->tempstrings_ptr - qcvm->tempstrings);
+	qcvm->globals[OFS_RETURN + 1].i = 0;
+	qcvm->globals[OFS_RETURN + 2].i = 0;
 
 	/* bootleg strncpy */
 	while (*s != '\0' && qcvm->tempstrings_ptr < tempstrings_end)
 		*qcvm->tempstrings_ptr++ = *s++;
+
+	*qcvm->tempstrings_ptr = '\0';
 
 	return QCVM_OK;
 }
@@ -876,7 +904,7 @@ int qcvm_get_argument_string(qcvm_t *qcvm, int i, const char **s)
 		return QCVM_ARGUMENT_OUT_OF_RANGE;
 
 	if (s)
-		*s = STR_OFS(qcvm->globals[OFS_PARM0 + (i * 3)].i);
+		*s = str_ofs(qcvm, qcvm->globals[OFS_PARM0 + (i * 3)].i);
 
 	return QCVM_OK;
 }

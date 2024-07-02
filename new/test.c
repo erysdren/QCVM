@@ -79,7 +79,7 @@ int _print(qcvm_t *qcvm)
 
 	for (i = 0; i < argc; i++)
 	{
-		const char *s;
+		const char *s = NULL;
 
 		if ((r = qcvm_get_argument_string(qcvm, i, &s)) != QCVM_OK)
 			return r;
