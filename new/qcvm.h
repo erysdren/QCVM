@@ -28,7 +28,6 @@ SOFTWARE.
 extern "C" {
 #endif
 
-/* TODO: figure out how to include these in a portable way */
 #include <stdint.h>
 #include <stddef.h>
 
@@ -75,9 +74,6 @@ enum {
 #ifndef QCVM_LOCAL_STACK_DEPTH
 #define QCVM_LOCAL_STACK_DEPTH (2048)
 #endif
-
-/* number of opcodes */
-extern const uint16_t qcvm_num_opcodes;
 
 /* main container */
 typedef struct qcvm {

@@ -44,26 +44,6 @@ static const uint32_t progs_version_extended = 7;
 
 #define FIELD_PTR(e, o) (&((uint32_t *)qcvm->entities + ((e) * qcvm->header->num_entity_fields))[(o)])
 
-/* opcode names */
-#include <stdio.h>
-const char *qcvm_opcode_names[] = {
-	/* vanilla */
-	"OPCODE_DONE", "OPCODE_MUL_F", "OPCODE_MUL_V", "OPCODE_MUL_FV", "OPCODE_MUL_VF",
-	"OPCODE_DIV_F", "OPCODE_ADD_F", "OPCODE_ADD_V", "OPCODE_SUB_F", "OPCODE_SUB_V",
-	"OPCODE_EQ_F", "OPCODE_EQ_V", "OPCODE_EQ_S", "OPCODE_EQ_E", "OPCODE_EQ_FNC",
-	"OPCODE_NE_F", "OPCODE_NE_V", "OPCODE_NE_S", "OPCODE_NE_E", "OPCODE_NE_FNC",
-	"OPCODE_LE", "OPCODE_GE", "OPCODE_LT", "OPCODE_GT", "OPCODE_LOAD_F", "OPCODE_LOAD_V",
-	"OPCODE_LOAD_S", "OPCODE_LOAD_ENT", "OPCODE_LOAD_FLD", "OPCODE_LOAD_FNC",
-	"OPCODE_ADDRESS", "OPCODE_STORE_F", "OPCODE_STORE_V", "OPCODE_STORE_S",
-	"OPCODE_STORE_ENT", "OPCODE_STORE_FLD", "OPCODE_STORE_FNC", "OPCODE_STOREP_F",
-	"OPCODE_STOREP_V", "OPCODE_STOREP_S", "OPCODE_STOREP_ENT", "OPCODE_STOREP_FLD",
-	"OPCODE_STOREP_FNC", "OPCODE_RETURN", "OPCODE_NOT_F", "OPCODE_NOT_V", "OPCODE_NOT_S",
-	"OPCODE_NOT_ENT", "OPCODE_NOT_FNC", "OPCODE_IF", "OPCODE_IFNOT", "OPCODE_CALL0",
-	"OPCODE_CALL1", "OPCODE_CALL2", "OPCODE_CALL3", "OPCODE_CALL4", "OPCODE_CALL5",
-	"OPCODE_CALL6", "OPCODE_CALL7", "OPCODE_CALL8", "OPCODE_STATE", "OPCODE_GOTO",
-	"OPCODE_AND_F", "OPCODE_OR_F", "OPCODE_BITAND_F", "OPCODE_BITOR_F"
-};
-
 /* opcodes */
 enum {
 	/* vanilla */
@@ -84,8 +64,6 @@ enum {
 
 	NUM_OPCODES
 };
-
-const uint16_t qcvm_num_opcodes = NUM_OPCODES;
 
 int qcvm_init(qcvm_t *qcvm)
 {
@@ -347,7 +325,6 @@ int qcvm_step(qcvm_t *qcvm)
 
 	/* parse opcode */
 	opcode = qcvm->current_statement->opcode;
-	printf("opcode: 0x%02x: %s\n", opcode, qcvm_opcode_names[opcode]);
 	switch (opcode)
 	{
 		/* function call */
