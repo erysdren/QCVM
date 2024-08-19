@@ -224,19 +224,19 @@ typedef struct qcvm {
 		int32_t statement;
 		struct qcvm_function *function;
 	} stack[QCVM_STACK_DEPTH];
-	int stack_depth;
-	int local_stack[QCVM_LOCAL_STACK_DEPTH];
-	int local_stack_used;
+	int32_t stack_depth;
+	int32_t local_stack[QCVM_LOCAL_STACK_DEPTH];
+	int32_t local_stack_used;
 	struct qcvm_stack xstack;
 
 	/* execution state */
 	struct qcvm_function *current_function;
 	struct qcvm_function *next_function;
 	struct qcvm_statement *current_statement;
-	int current_statement_index;
-	int current_builtin;
-	int exit_depth;
-	int current_argc;
+	int32_t current_statement_index;
+	int32_t current_builtin;
+	int32_t exit_depth;
+	int32_t current_argc;
 	char *tempstrings_ptr;
 
 	/* function evaluation */

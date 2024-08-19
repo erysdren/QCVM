@@ -144,45 +144,48 @@ int main(int argc, char **argv)
 {
 	int r;
 	size_t entity_fields, entity_size;
-	qcvm_t qcvm;
+	qcvm_t *qcvm;
+
+	qcvm = malloc(sizeof(qcvm_t));
 
 	/* load progs */
 	if (argc > 1)
-		qcvm.progs = load_file(argv[1], &qcvm.len_progs);
+		qcvm->progs = load_file(argv[1], &qcvm->len_progs);
 	else
-		qcvm.progs = load_file("qc_test1.dat", &qcvm.len_progs);
+		qcvm->progs = load_file("qc_test1.dat", &qcvm->len_progs);
 
 	/* create tempstrings buffer */
-	qcvm.len_tempstrings = 4096;
-	qcvm.tempstrings = malloc(qcvm.len_tempstrings);
+	qcvm->len_tempstrings = 4096;
+	qcvm->tempstrings = malloc(qcvm->len_tempstrings);
 
 	/* setup builtins */
-	qcvm.num_builtins = ASIZE(builtins);
-	qcvm.builtins = builtins;
+	qcvm->num_builtins = ASIZE(builtins);
+	qcvm->builtins = builtins;
 
 	/* set state callback */
-	qcvm.state_callback = _state_callback;
+	qcvm->state_callback = _state_callback;
 
 	/* init qcvm */
-	if ((r = qcvm_init(&qcvm)) != QCVM_OK)
+	if ((r = qcvm_init(qcvm)) != QCVM_OK)
 		die(r);
 
 	/* query entity info */
-	if ((r = qcvm_query_entity_info(&qcvm, &entity_fields, &entity_size)) != QCVM_OK)
+	if ((r = qcvm_query_entity_info(qcvm, &entity_fields, &entity_size)) != QCVM_OK)
 		die(r);
 
 	/* allocate entities buffer */
-	qcvm.len_entities = entity_size * max_entities;
-	qcvm.entities = malloc(qcvm.len_entities);
+	qcvm->len_entities = entity_size * max_entities;
+	qcvm->entities = malloc(qcvm->len_entities);
 
 	/* run main function */
-	if ((r = qcvm_run(&qcvm, "main")) != QCVM_OK)
+	if ((r = qcvm_run(qcvm, "main")) != QCVM_OK)
 		die(r);
 
 	/* free data */
-	free(qcvm.progs);
-	free(qcvm.tempstrings);
-	free(qcvm.entities);
+	free(qcvm->progs);
+	free(qcvm->tempstrings);
+	free(qcvm->entities);
+	free(qcvm);
 
 	return 0;
 }

@@ -585,10 +585,10 @@ int qcvm_step(qcvm_t *qcvm)
 		case OPCODE_ADDRESS:
 		{
 			/* get offset to entity field */
-			unsigned int *field_ptr = FIELD_PTR(qcvm->eval[1]->e, qcvm->eval[2]->i);
+			uint32_t *field_ptr = FIELD_PTR(qcvm->eval[1]->e, qcvm->eval[2]->i);
 
 			/* get offset from start of entities buffer */
-			qcvm->eval[3]->i = (int)((unsigned char *)field_ptr - (unsigned char *)qcvm->entities);
+			qcvm->eval[3]->i = (int)((uint8_t *)field_ptr - (uint8_t *)qcvm->entities);
 			break;
 		}
 
@@ -616,14 +616,14 @@ int qcvm_step(qcvm_t *qcvm)
 		case OPCODE_STOREP_FLD:
 		case OPCODE_STOREP_FNC:
 		{
-			qcvm->eval[0] = (union qcvm_eval *)((unsigned char *)qcvm->entities + qcvm->eval[2]->i);
+			qcvm->eval[0] = (union qcvm_eval *)((uint8_t *)qcvm->entities + qcvm->eval[2]->i);
 			qcvm->eval[0]->i = qcvm->eval[1]->i;
 			break;
 		}
 
 		case OPCODE_STOREP_V:
 		{
-			qcvm->eval[0] = (union qcvm_eval *)((unsigned char *)qcvm->entities + qcvm->eval[2]->i);
+			qcvm->eval[0] = (union qcvm_eval *)((uint8_t *)qcvm->entities + qcvm->eval[2]->i);
 			qcvm->eval[0]->v[0] = qcvm->eval[1]->v[0];
 			qcvm->eval[0]->v[1] = qcvm->eval[1]->v[1];
 			qcvm->eval[0]->v[2] = qcvm->eval[1]->v[2];
@@ -872,7 +872,7 @@ int qcvm_return_vector(qcvm_t *qcvm, float x, float y, float z)
 	return QCVM_OK;
 }
 
-int qcvm_return_entity(qcvm_t *qcvm, unsigned int e)
+int qcvm_return_entity(qcvm_t *qcvm, uint32_t e)
 {
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
@@ -943,7 +943,7 @@ int qcvm_get_argument_vector(qcvm_t *qcvm, int i, float *x, float *y, float *z)
 	return QCVM_OK;
 }
 
-int qcvm_get_argument_entity(qcvm_t *qcvm, int i, unsigned int *e)
+int qcvm_get_argument_entity(qcvm_t *qcvm, int i, uint32_t *e)
 {
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
