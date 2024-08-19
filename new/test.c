@@ -147,6 +147,11 @@ int main(int argc, char **argv)
 	qcvm_t *qcvm;
 
 	qcvm = malloc(sizeof(qcvm_t));
+	if (qcvm == NULL)
+	{
+		printf("Failed to allocate QCVM structure");
+		return 1;
+	}
 
 	/* load progs */
 	if (argc > 1)
