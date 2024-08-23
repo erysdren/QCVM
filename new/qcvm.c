@@ -112,6 +112,9 @@ int qcvm_init(qcvm_t *qcvm)
 	qcvm->num_globals = qcvm->header->num_globals;
 	qcvm->globals = (union qcvm_global *)((uint8_t *)qcvm->progs + qcvm->header->ofs_globals);
 
+	/* initialize other fields */
+	qcvm->stack_depth = qcvm->local_stack_used = 0;
+
 	return QCVM_OK;
 }
 
@@ -196,6 +199,8 @@ static int find_function(qcvm_t *qcvm, const char *name, unsigned int *out)
 	return QCVM_FUNCTION_NOT_FOUND;
 }
 
+#include <stdio.h>
+
 /* setup function for execution */
 static int setup_function(qcvm_t *qcvm, struct qcvm_function *func)
 {
@@ -205,6 +210,7 @@ static int setup_function(qcvm_t *qcvm, struct qcvm_function *func)
 		return QCVM_NULL_POINTER;
 
 	/* setup stack */
+	printf("qcvm->stack_depth: %d\n", qcvm->stack_depth);
 	qcvm->stack[qcvm->stack_depth] = qcvm->xstack;
 	qcvm->stack_depth++;
 	if (qcvm->stack_depth >= QCVM_STACK_DEPTH)
