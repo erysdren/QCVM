@@ -75,11 +75,6 @@ enum {
 #define QCVM_LOCAL_STACK_DEPTH (2048)
 #endif
 
-/* set this macro to something truthy to disable *all* sanity checks */
-#ifndef QCVM_RECKLESS
-#define QCVM_RECKLESS (0)
-#endif
-
 /* main container */
 typedef struct qcvm {
 
