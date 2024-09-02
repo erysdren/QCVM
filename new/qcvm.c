@@ -24,10 +24,14 @@ SOFTWARE.
 
 #include "qcvm.h"
 
+#include <stdio.h>
+
+#if !QCVM_RECKLESS
 /* recognized version values */
 static const uint32_t progs_version_old = 3;
 static const uint32_t progs_version_standard = 6;
 static const uint32_t progs_version_extended = 7;
+#endif
 
 /* static offsets into globals table */
 #define OFS_NULL (0)
@@ -67,16 +71,17 @@ enum {
 
 int qcvm_init(qcvm_t *qcvm)
 {
+#if !QCVM_RECKLESS
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
 	if (!qcvm->progs || !qcvm->len_progs)
 		return QCVM_INVALID_PROGS;
-	if (!qcvm->tempstrings)
-		return QCVM_INVALID_PROGS;
+#endif
 
 	/* file header */
 	qcvm->header = (struct qcvm_header *)qcvm->progs;
 
+#if !QCVM_RECKLESS
 	/* check recognized versions */
 	if (qcvm->header->version == progs_version_old)
 		return QCVM_UNSUPPORTED_VERSION;
@@ -84,9 +89,11 @@ int qcvm_init(qcvm_t *qcvm)
 		return QCVM_UNSUPPORTED_VERSION;
 	else if (qcvm->header->version != progs_version_standard)
 		return QCVM_INVALID_PROGS;
+#endif
 
 	/* tempstrings */
-	qcvm->tempstrings_ptr = qcvm->tempstrings + 1;
+	if (qcvm->tempstrings)
+		qcvm->tempstrings_ptr = qcvm->tempstrings + 1;
 
 	/* statements */
 	qcvm->num_statements = qcvm->header->num_statements;
@@ -120,11 +127,13 @@ int qcvm_init(qcvm_t *qcvm)
 
 int qcvm_query_entity_info(qcvm_t *qcvm, size_t *num_fields, size_t *size)
 {
+#if !QCVM_RECKLESS
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
 
 	if (!qcvm->header || !qcvm->field_vars || !qcvm->num_field_vars)
 		return QCVM_INVALID_PROGS;
+#endif
 
 	if (num_fields)
 		*num_fields = (size_t)qcvm->header->num_entity_fields;
@@ -159,8 +168,10 @@ const char *qcvm_result_string(int r)
 		"Wrong type for getting argument value"
 	};
 
+#if !QCVM_RECKLESS
 	if (r < 0 || r >= QCVM_NUM_RESULT_CODES)
 		return results[QCVM_INVALID_RESULT_CODE];
+#endif
 
 	return results[r];
 }
@@ -183,8 +194,10 @@ static int find_function(qcvm_t *qcvm, const char *name, unsigned int *out)
 	unsigned int i;
 	const char *function_name;
 
+#if !QCVM_RECKLESS
 	if (!qcvm || !name)
 		return QCVM_NULL_POINTER;
+#endif
 
 	for (i = 0; i < qcvm->num_functions; i++)
 	{
@@ -204,14 +217,18 @@ static int setup_function(qcvm_t *qcvm, struct qcvm_function *func)
 {
 	int i, x, p;
 
+#if !QCVM_RECKLESS
 	if (!qcvm || !func)
 		return QCVM_NULL_POINTER;
+#endif
 
 	/* setup stack */
 	qcvm->stack[qcvm->stack_depth] = qcvm->xstack;
 	qcvm->stack_depth++;
+#if !QCVM_RECKLESS
 	if (qcvm->stack_depth >= QCVM_STACK_DEPTH)
 		return QCVM_STACK_OVERFLOW;
+#endif
 
 	/* setup current local stack */
 	for (i = 0; i < func->num_locals; i++)
@@ -241,16 +258,20 @@ static int close_function(qcvm_t *qcvm)
 {
 	int i, num_locals;
 
+#if !QCVM_RECKLESS
 	/* check for stack underflow */
 	if (qcvm->stack_depth <= 0)
 		return QCVM_STACK_UNDERFLOW;
+#endif
 
 	num_locals = qcvm->xstack.function->num_locals;
 	qcvm->local_stack_used -= num_locals;
 
+#if !QCVM_RECKLESS
 	/* check for stack underflow */
 	if (qcvm->local_stack_used < 0)
 		return QCVM_STACK_UNDERFLOW;
+#endif
 
 	/* restore locals from the stack */
 	for (i = 0; i < num_locals; i++)
@@ -271,8 +292,10 @@ int qcvm_load(qcvm_t *qcvm, const char *name)
 	int r;
 	unsigned int func;
 
+#if !QCVM_RECKLESS
 	if (!qcvm || !name)
 		return QCVM_NULL_POINTER;
+#endif
 
 	/* retrieve function id */
 	if ((r = find_function(qcvm, name, &func)) != QCVM_OK)
@@ -305,13 +328,17 @@ static const char *str_ofs(qcvm_t *qcvm, int32_t s)
 	}
 }
 
+#include <stdio.h>
+
 int qcvm_step(qcvm_t *qcvm)
 {
 	int r;
 	unsigned short opcode;
 
+#if !QCVM_RECKLESS
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
+#endif
 
 	/* advance statement */
 	qcvm->current_statement_index++;
@@ -341,9 +368,11 @@ int qcvm_step(qcvm_t *qcvm)
 		case OPCODE_CALL7:
 		case OPCODE_CALL8:
 		{
+#if !QCVM_RECKLESS
 			/* check for null function */
 			if (qcvm->eval[1]->func < 1)
 				return QCVM_INVALID_FUNCTION;
+#endif
 
 			/* get function argc */
 			qcvm->current_argc = opcode - OPCODE_CALL0;
@@ -568,7 +597,7 @@ int qcvm_step(qcvm_t *qcvm)
 			uint32_t *field_ptr = FIELD_PTR(qcvm->eval[1]->e, qcvm->eval[2]->i);
 
 			/* get offset from start of entities buffer */
-			qcvm->eval[3]->i = (int)((uint8_t *)field_ptr - (uint8_t *)qcvm->entities);
+			qcvm->eval[3]->i = (int32_t)((uint8_t *)field_ptr - (uint8_t *)qcvm->entities);
 			break;
 		}
 
@@ -704,8 +733,10 @@ int qcvm_run(qcvm_t *qcvm, const char *name)
 	int r, running;
 	unsigned int i;
 
+#if !QCVM_RECKLESS
 	if (!qcvm || !name)
 		return QCVM_NULL_POINTER;
+#endif
 
 	/* save exit depth */
 	qcvm->exit_depth = qcvm->stack_depth;
@@ -795,11 +826,13 @@ int qcvm_return_string(qcvm_t *qcvm, const char *s)
 	char *ptr, *tempstrings_end;
 	unsigned int len;
 
+#if !QCVM_RECKLESS
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
 
 	if (!qcvm->tempstrings || !qcvm->tempstrings_ptr)
 		return QCVM_UNSUPPORTED_FUNCTION;
+#endif
 
 	/* end of tempstrings buffer */
 	tempstrings_end = qcvm->tempstrings + qcvm->len_tempstrings;
@@ -830,8 +863,10 @@ int qcvm_return_string(qcvm_t *qcvm, const char *s)
 
 int qcvm_return_float(qcvm_t *qcvm, float f)
 {
+#if !QCVM_RECKLESS
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
+#endif
 
 	qcvm->globals[OFS_RETURN].f = f;
 	qcvm->globals[OFS_RETURN + 1].f = 0;
@@ -842,8 +877,10 @@ int qcvm_return_float(qcvm_t *qcvm, float f)
 
 int qcvm_return_vector(qcvm_t *qcvm, float x, float y, float z)
 {
+#if !QCVM_RECKLESS
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
+#endif
 
 	qcvm->globals[OFS_RETURN].f = x;
 	qcvm->globals[OFS_RETURN + 1].f = y;
@@ -854,8 +891,10 @@ int qcvm_return_vector(qcvm_t *qcvm, float x, float y, float z)
 
 int qcvm_return_entity(qcvm_t *qcvm, uint32_t e)
 {
+#if !QCVM_RECKLESS
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
+#endif
 
 	qcvm->globals[OFS_RETURN].ui = e;
 	qcvm->globals[OFS_RETURN + 1].ui = 0;
@@ -866,8 +905,10 @@ int qcvm_return_entity(qcvm_t *qcvm, uint32_t e)
 
 int qcvm_query_argument_count(qcvm_t *qcvm, int *argc)
 {
+#if !QCVM_RECKLESS
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
+#endif
 
 	if (argc)
 		*argc = qcvm->current_argc;
@@ -875,13 +916,28 @@ int qcvm_query_argument_count(qcvm_t *qcvm, int *argc)
 	return QCVM_OK;
 }
 
+int qcvm_get_return_float(qcvm_t *qcvm, float *f)
+{
+#if !QCVM_RECKLESS
+	if (!qcvm)
+		return QCVM_NULL_POINTER;
+#endif
+
+	if (f)
+		*f = qcvm->globals[OFS_RETURN].f;
+
+	return QCVM_OK;
+}
+
 int qcvm_get_argument_string(qcvm_t *qcvm, int i, const char **s)
 {
+#if !QCVM_RECKLESS
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
 
 	if (i < 0 || i >= 8)
 		return QCVM_ARGUMENT_OUT_OF_RANGE;
+#endif
 
 	if (s)
 		*s = str_ofs(qcvm, qcvm->globals[OFS_PARM0 + (i * 3)].i);
@@ -891,11 +947,13 @@ int qcvm_get_argument_string(qcvm_t *qcvm, int i, const char **s)
 
 int qcvm_get_argument_float(qcvm_t *qcvm, int i, float *f)
 {
+#if !QCVM_RECKLESS
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
 
 	if (i < 0 || i >= 8)
 		return QCVM_ARGUMENT_OUT_OF_RANGE;
+#endif
 
 	if (f)
 		*f = qcvm->globals[OFS_PARM0 + (i * 3)].f;
@@ -905,11 +963,13 @@ int qcvm_get_argument_float(qcvm_t *qcvm, int i, float *f)
 
 int qcvm_get_argument_vector(qcvm_t *qcvm, int i, float *x, float *y, float *z)
 {
+#if !QCVM_RECKLESS
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
 
 	if (i < 0 || i >= 8)
 		return QCVM_ARGUMENT_OUT_OF_RANGE;
+#endif
 
 	if (x)
 		*x = qcvm->globals[OFS_PARM0 + (i * 3)].f;
@@ -925,11 +985,13 @@ int qcvm_get_argument_vector(qcvm_t *qcvm, int i, float *x, float *y, float *z)
 
 int qcvm_get_argument_entity(qcvm_t *qcvm, int i, uint32_t *e)
 {
+#if !QCVM_RECKLESS
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
 
 	if (i < 0 || i >= 8)
 		return QCVM_ARGUMENT_OUT_OF_RANGE;
+#endif
 
 	if (e)
 		*e = qcvm->globals[OFS_PARM0 + (i * 3)].ui;

@@ -1,6 +1,6 @@
 
 !ifndef TARGET
-TARGET=test.exe
+TARGET=sieve.exe
 !endif
 
 !ifndef MODEL
@@ -16,11 +16,12 @@ SYSTEM=dos
 !endif
 
 CFLAGS=&
+	-omaxnet&
 	-bt=$(SYSTEM)&
 	-m$(MODEL)&
 
 OBJECTS=&
-	test.obj&
+	sieve.obj&
 	qcvm.obj&
 
 .c.obj:

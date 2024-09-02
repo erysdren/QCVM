@@ -75,6 +75,11 @@ enum {
 #define QCVM_LOCAL_STACK_DEPTH (2048)
 #endif
 
+/* set this macro to something truthy to disable *all* sanity checks */
+#ifndef QCVM_RECKLESS
+#define QCVM_RECKLESS (0)
+#endif
+
 /* main container */
 typedef struct qcvm {
 
@@ -339,13 +344,21 @@ int qcvm_return_vector(qcvm_t *qcvm, float x, float y, float z);
  */
 int qcvm_return_entity(qcvm_t *qcvm, uint32_t e);
 
-/** query argument type of current function
+/** query argument count of current function
  *
  * @param qcvm virtual machine to use
  * @param argc integer to fill
  * @returns result code
  */
 int qcvm_query_argument_count(qcvm_t *qcvm, int *argc);
+
+/** retrieve function return value as a float
+ *
+ * @param qcvm virtual machine to use
+ * @param f float to fill
+ * @returns result code
+ */
+int qcvm_get_return_float(qcvm_t *qcvm, float *f);
 
 /** retrieve string from function argument
  *
