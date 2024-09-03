@@ -5,10 +5,10 @@ CC?=gcc
 QCC?=fteqcc
 PKGCONFIG?=pkg-config
 
-override CFLAGS+=-O2 -std=c89 -pedantic -Wextra -Wall -Werror
-override LDFLAGS+=-O2
+override CFLAGS+=-O3 -flto -Wextra -Wall -Werror
+override LDFLAGS+=-O3
 
-OBJECTS=sieve.o qcvm.o
+OBJECTS=sieve.o qcvm_reckless.o
 PROGS=sieve.dat
 PROGSRC=sieve.qc
 
