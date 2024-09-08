@@ -9,7 +9,8 @@ rules:
     - type: "\\b(float|(__)?double|__variant|__(u)?int(32|64)|(__)?int|enumflags|enum|void|struct|class|union|typedef|vector|string|entity|accessor)\\b"
     - type: "\\b[a-z_][0-9a-z_]+(_t|_T)\\b"
       # statements
-    - statement: "\\b(__state|__deprecated|nonstatic|var|__unused|noref|strip|__ignore|shared|optional|__used|local|nosave|__weak|__wrap|__accumulate|__inout|__in|__out)\\b"
+    - statement: "\\b(__deprecated|nonstatic|var|__unused|noref|strip|__ignore|shared|optional|__used|local|nosave|__weak|__wrap|__accumulate|__inout|__in|__out)\\b"
+    - statement: "\\b(__thinktime|__state|__until|__loop)\\b"
     - statement: "\\b(inline|static|const)\\b"
     - statement: "\\b(for|if|not|while|do|else|case|default|switch)\\b"
     - statement: "\\b(goto|continue|break|return)\\b"
