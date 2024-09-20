@@ -10,11 +10,11 @@ rules:
     - type: "\\b[a-z_][0-9a-z_]+(_t|_T)\\b"
       # compiler keywords
     - special: "\\b(__)([a-z]+)\\b"
-      # statements
+      # modifiers
     - statement: "\\b(nonstatic|var|noref|strip|shared|optional|local|nosave|inline|static|const)\\b"
-    - statement: "\\b(for|if|not|while|do|else|case|default|switch)\\b"
-    - statement: "\\b(goto|continue|break|return)\\b"
-    - statement: "\\b((non)?virtual)\\b"
+    - statement: "\\b((non)?virtual|protected|public|private)\\b"
+      # control flow
+    - statement: "\\b(for|if|not|while|do|else|case|default|switch|goto|continue|break|return)\\b"
       # frame statements
     - statement: "^[$][a-z_]+"
       # preprocessor
