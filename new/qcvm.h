@@ -51,7 +51,8 @@ enum {
 	QCVM_STACK_OVERFLOW,
 	QCVM_STACK_UNDERFLOW,
 	QCVM_ARGUMENT_OUT_OF_RANGE,
-	QCVM_WRONG_ARGUMENT_TYPE,
+	QCVM_NO_TEMPSTRINGS,
+	QCVM_NO_ENTITIES,
 	QCVM_NUM_RESULT_CODES
 };
 
@@ -252,7 +253,7 @@ typedef struct qcvm {
  *
  * this function parses the progs buffer and sets up pointers to the various
  * structures present in the file. it also checks for what features are
- * available, such as writeable progs memory and tempstrings.
+ * available, such as entities and tempstrings.
  *
  * @param qcvm virtual machine to init
  * @returns result code

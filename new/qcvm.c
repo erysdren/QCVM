@@ -83,9 +83,14 @@ int qcvm_init(qcvm_t *qcvm)
 	else if (qcvm->header->version != progs_version_standard)
 		return QCVM_INVALID_PROGS;
 
+	/* other sanity checks */
+	if (!qcvm->tempstrings)
+		return QCVM_NO_TEMPSTRINGS;
+	if (!qcvm->entities)
+		return QCVM_NO_ENTITIES;
+
 	/* tempstrings */
-	if (qcvm->tempstrings)
-		qcvm->tempstrings_ptr = qcvm->tempstrings + 1;
+	qcvm->tempstrings_ptr = qcvm->tempstrings + 1;
 
 	/* statements */
 	qcvm->num_statements = qcvm->header->num_statements;
@@ -155,7 +160,8 @@ const char *qcvm_result_string(int r)
 		"Stack overflow",
 		"Stack underflow",
 		"Argument index is out of range",
-		"Wrong type for getting argument value"
+		"No tempstrings buffer found",
+		"No entities buffer found"
 	};
 
 	if (r < 0 || r >= QCVM_NUM_RESULT_CODES)
@@ -165,7 +171,7 @@ const char *qcvm_result_string(int r)
 }
 
 /* we have strcmp() at home */
-static int _strcmp(const char *s1, const char *s2)
+static int str_cmp(const char *s1, const char *s2)
 {
 	while (*s1 && *s1 == *s2)
 	{
@@ -188,7 +194,7 @@ static int find_function(qcvm_t *qcvm, const char *name, unsigned int *out)
 	for (i = 0; i < qcvm->num_functions; i++)
 	{
 		function_name = (const char *)(qcvm->strings + qcvm->functions[i].ofs_name);
-		if (_strcmp(name, function_name) == 0)
+		if (str_cmp(name, function_name) == 0)
 		{
 			if (out) *out = i;
 			return QCVM_OK;
@@ -460,7 +466,7 @@ int qcvm_step(qcvm_t *qcvm)
 
 		case OPCODE_EQ_S:
 		{
-			qcvm->eval[3]->f = !_strcmp(str_ofs(qcvm, qcvm->eval[1]->s), str_ofs(qcvm, qcvm->eval[2]->s));
+			qcvm->eval[3]->f = !str_cmp(str_ofs(qcvm, qcvm->eval[1]->s), str_ofs(qcvm, qcvm->eval[2]->s));
 			break;
 		}
 
@@ -493,7 +499,7 @@ int qcvm_step(qcvm_t *qcvm)
 
 		case OPCODE_NE_S:
 		{
-			qcvm->eval[3]->f = _strcmp(str_ofs(qcvm, qcvm->eval[1]->s), str_ofs(qcvm, qcvm->eval[2]->s));
+			qcvm->eval[3]->f = str_cmp(str_ofs(qcvm, qcvm->eval[1]->s), str_ofs(qcvm, qcvm->eval[2]->s));
 			break;
 		}
 
@@ -736,7 +742,7 @@ int qcvm_run(qcvm_t *qcvm, const char *name)
 					/* search for named builtin */
 					for (i = 0; i < qcvm->num_builtins; i++)
 					{
-						if (_strcmp(name, qcvm->builtins[i].name) == 0)
+						if (str_cmp(name, qcvm->builtins[i].name) == 0)
 						{
 							qcvm->builtins[i].func(qcvm);
 							qcvm->next_function->first_statement = -1 * (i + 1);
