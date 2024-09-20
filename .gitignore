@@ -1,11 +1,13 @@
 
-## unversioned files
 local/
 untracked/
 
-## cmake builds
 cmake-build*/
 
-## progs
 *.lno
 *.log
+*.dat
+
+*.o
+*.exe
+sieve
