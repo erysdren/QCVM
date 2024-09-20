@@ -15,6 +15,9 @@ It also includes some examples:
 - `examples/qcvm_test`: The main basic test application.
 - `examples/qcvm_test_fte`: Test application for the extended QuakeC opcodes provided by FTE Quake.
 
+A new, experimental version of the QCVM can be found in the `new` directory of
+the source tree.
+
 ## Resources
 
 - [State-of-the-art QuakeC compiler](https://www.fteqcc.org/)
