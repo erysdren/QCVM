@@ -357,6 +357,11 @@ typedef struct qcvm_opcode_table_entry_t
 /* qcvm opcode function table */
 extern qcvm_opcode_table_entry_t qcvm_opcode_table[];
 
+/* private functions */
+int qcvm_find_export(qcvm_t *qcvm, const char *name);
+int qcvm_function_setup(qcvm_t *qcvm, qcvm_function_t *func);
+int qcvm_function_close(qcvm_t *qcvm);
+
 /* guard */
 #ifdef __cplusplus
 }
