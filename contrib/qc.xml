@@ -75,9 +75,13 @@
       <item>__out</item>
       <item>__double</item>
       <item>__uint</item>
+      <item>__uint8</item>
+      <item>__uint16</item>
       <item>__uint32</item>
       <item>__uint64</item>
       <item>__int</item>
+      <item>__int8</item>
+      <item>__int16</item>
       <item>__int32</item>
       <item>__int64</item>
       <item>__long</item>

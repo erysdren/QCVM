@@ -9,7 +9,7 @@ rules:
     - type: "\\b(float|double|int|enumflags|enum|void|struct|class|union|typedef|vector|string|entity|accessor)\\b"
     - type: "\\b[a-z_][0-9a-z_]+(_t|_T)\\b"
       # compiler keywords
-    - special: "\\b(__)([a-z]+)\\b"
+    - special: "\\b(__)([0-9a-z]+)\\b"
       # modifiers
     - statement: "\\b(nonstatic|var|noref|strip|shared|optional|local|nosave|inline|static|const)\\b"
     - statement: "\\b((non)?virtual|protected|public|private)\\b"
