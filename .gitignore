@@ -9,4 +9,5 @@ cmake-build*/
 
 *.o
 *.exe
-sieve
+new/sieve
+new/test
