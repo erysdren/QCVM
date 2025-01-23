@@ -1,14 +1,13 @@
 meta:
-  id: progs
+  id: quake_progs
+  title: QuakeC Bytecode
   file-extension: dat
+  license: CC0-1.0
   endian: le
-  bit-endian: le
-
-doc-ref: |
-  https://github.com/id-Software/Quake/blob/master/WinQuake/pr_comp.h
 
 doc: |
-  QuakeC "Progs" format. Built on opcodes and runs inside a virtual machine.
+  This specification was authored by erysdren (it/its).
+  https://erysdren.me/
 
 seq:
   - id: header
