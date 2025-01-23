@@ -249,18 +249,20 @@ typedef struct qcvm {
 
 } qcvm_t;
 
-/** initialize qcvm structure
+/**
+ * \brief initialize qcvm structure
  *
  * this function parses the progs buffer and sets up pointers to the various
  * structures present in the file. it also checks for what features are
  * available, such as entities and tempstrings.
  *
- * @param qcvm virtual machine to init
- * @returns result code
+ * \param qcvm virtual machine to init
+ * \returns result code
  */
 int qcvm_init(qcvm_t *qcvm);
 
-/** query qcvm for amount of memory needed for per-entity storage
+/**
+ * \brief query qcvm for amount of memory needed for per-entity storage
  *
  * qcvm requires a writeable buffer to store entities and their fields. each
  * entity field is 12 bytes, and the amount of entity fields in a progs file is
@@ -274,123 +276,128 @@ int qcvm_init(qcvm_t *qcvm);
  * qcvm_query_entity_info(&qcvm, &entity_fields, &entity_size);
  * qcvm.entities = malloc(max_entities * entity_size);
  *
- * @param qcvm virtual machone to query
- * @returns result code
+ * \param qcvm virtual machine to query
+ * \param num_fields pointer to size_t to contain the number of fields
+ * \param size pointer to size_t to contain the size of an entity
+ * \returns result code
  */
 int qcvm_query_entity_info(qcvm_t *qcvm, size_t *num_fields, size_t *size);
 
-/** get static string from result code
- * @param r result code
- * @returns null terminated result string
+/**
+ * \brief get static string from result code
+ * \param r result code
+ * \returns null terminated result string
  */
 const char *qcvm_result_string(int r);
 
-/** queue up function for execution
- * @param qcvm virtual machine to use
- * @param name function name
- * @returns result code
+/**
+ * \brief queue up function for execution
+ * \param qcvm virtual machine to use
+ * \param name function name
+ * \returns result code
  */
 int qcvm_load(qcvm_t *qcvm, const char *name);
 
-/** execute one qcvm step
- * @param qcvm virtual machine to use
- * @returns result code
+/**
+ * \brief execute one qcvm step
+ * \param qcvm virtual machine to use
+ * \returns result code
  */
 int qcvm_step(qcvm_t *qcvm);
 
-/** queue up and execute the named function
- *
- * @param qcvm virtual machine to use
- * @param name case-sensitive function name
- * @returns result code
+/**
+ * \brief queue up and execute the named function
+ * \param qcvm virtual machine to use
+ * \param name case-sensitive function name
+ * \returns result code
  */
 int qcvm_run(qcvm_t *qcvm, const char *name);
 
-/** return a string to the function that called this one
- *
- * @param qcvm virtual machine to use
- * @param s null-terminated string
- * @returns result code
+/**
+ * \brief return a string to the function that called this one
+ * \param qcvm virtual machine to use
+ * \param s null-terminated string
+ * \returns result code
  */
 int qcvm_return_string(qcvm_t *qcvm, const char *s);
 
-/** return a float to the function that called this one
- *
- * @param qcvm virtual machine to use
- * @param f float value
- * @returns result code
+/**
+ * \brief return a float to the function that called this one
+ * \param qcvm virtual machine to use
+ * \param f float value
+ * \returns result code
  */
 int qcvm_return_float(qcvm_t *qcvm, float f);
 
-/** return a vector to the function that called this one
- *
- * @param qcvm virtual machine to use
- * @param a vector x value
- * @param b vector y value
- * @param c vector z value
- * @returns result code
+/**
+ * \brief return a vector to the function that called this one
+ * \param qcvm virtual machine to use
+ * \param a vector x value
+ * \param b vector y value
+ * \param c vector z value
+ * \returns result code
  */
 int qcvm_return_vector(qcvm_t *qcvm, float x, float y, float z);
 
-/** return an entity index to the function that called this one
- *
- * @param qcvm virtual machine to use
- * @param e entity index
- * @returns result code
+/**
+ * \brief return an entity index to the function that called this one
+ * \param qcvm virtual machine to use
+ * \param e entity index
+ * \returns result code
  */
 int qcvm_return_entity(qcvm_t *qcvm, uint32_t e);
 
-/** query argument count of current function
- *
- * @param qcvm virtual machine to use
- * @param argc integer to fill
- * @returns result code
+/**
+ * \brief query argument count of current function
+ * \param qcvm virtual machine to use
+ * \param argc integer to fill
+ * \returns result code
  */
 int qcvm_query_argument_count(qcvm_t *qcvm, int *argc);
 
-/** retrieve function return value as a float
- *
- * @param qcvm virtual machine to use
- * @param f float to fill
- * @returns result code
+/**
+ * \brief retrieve function return value as a float
+ * \param qcvm virtual machine to use
+ * \param f float to fill
+ * \returns result code
  */
 int qcvm_get_return_float(qcvm_t *qcvm, float *f);
 
-/** retrieve string from function argument
- *
- * @param qcvm virtual machine to use
- * @param i argument index
- * @param s string pointer to fill
- * @returns result code
+/**
+ * \brief retrieve string from function argument
+ * \param qcvm virtual machine to use
+ * \param i argument index
+ * \param s string pointer to fill
+ * \returns result code
  */
 int qcvm_get_argument_string(qcvm_t *qcvm, int i, const char **s);
 
-/** retrieve float from function argument
- *
- * @param qcvm virtual machine to use
- * @param i argument index
- * @param f float to fill
- * @returns result code
+/**
+ * \brief retrieve float from function argument
+ * \param qcvm virtual machine to use
+ * \param i argument index
+ * \param f float to fill
+ * \returns result code
  */
 int qcvm_get_argument_float(qcvm_t *qcvm, int i, float *f);
 
-/** retrieve vector from function argument
- *
- * @param qcvm virtual machine to use
- * @param i argument index
- * @param x float to fill
- * @param y float to fill
- * @param z float to fill
- * @returns result code
+/**
+ * \brief retrieve vector from function argument
+ * \param qcvm virtual machine to use
+ * \param i argument index
+ * \param x float to fill
+ * \param y float to fill
+ * \param z float to fill
+ * \returns result code
  */
 int qcvm_get_argument_vector(qcvm_t *qcvm, int i, float *x, float *y, float *z);
 
-/** retrieve entity index from function argument
- *
- * @param qcvm virtual machine to use
- * @param i argument index
- * @param e unsigned integer to fill
- * @returns result code
+/**
+ * \brief retrieve entity index from function argument
+ * \param qcvm virtual machine to use
+ * \param i argument index
+ * \param e unsigned integer to fill
+ * \returns result code
  */
 int qcvm_get_argument_entity(qcvm_t *qcvm, int i, uint32_t *e);
 

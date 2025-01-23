@@ -24,6 +24,9 @@ SOFTWARE.
 
 #include "qcvm.h"
 
+/* for strcmp and strlen */
+#include <string.h>
+
 /* recognized version values */
 static const uint32_t progs_version_old = 3;
 static const uint32_t progs_version_standard = 6;
@@ -170,31 +173,40 @@ const char *qcvm_result_string(int r)
 	return results[r];
 }
 
-/* we have strcmp() at home */
-static int str_cmp(const char *s1, const char *s2)
+static const char *str_ofs(qcvm_t *qcvm, int32_t s)
 {
-	while (*s1 && *s1 == *s2)
+	if (s < 0)
 	{
-		s1++;
-		s2++;
-	}
+		/* invert it */
+		s = s * -1;
 
-	return *(const unsigned char*)s1 - *(const unsigned char*)s2;
+		/* if its out of range, return the "null" string */
+		if (s >= (int32_t)qcvm->len_tempstrings)
+			return &qcvm->tempstrings[0];
+
+		return &qcvm->tempstrings[s];
+	}
+	else
+	{
+		/* if its out of range, return the "null" string */
+		if (s >= (int32_t)qcvm->len_strings)
+			return &qcvm->strings[0];
+
+		return &qcvm->strings[s];
+	}
 }
 
 /* find function by name string */
-static int find_function(qcvm_t *qcvm, const char *name, unsigned int *out)
+static int find_function(qcvm_t *qcvm, const char *name, uint32_t *out)
 {
-	unsigned int i;
-	const char *function_name;
+	uint32_t i;
 
 	if (!qcvm || !name)
 		return QCVM_NULL_POINTER;
 
 	for (i = 0; i < qcvm->num_functions; i++)
 	{
-		function_name = (const char *)(qcvm->strings + qcvm->functions[i].ofs_name);
-		if (str_cmp(name, function_name) == 0)
+		if (strcmp(name, str_ofs(qcvm, qcvm->functions[i].ofs_name)) == 0)
 		{
 			if (out) *out = i;
 			return QCVM_OK;
@@ -274,7 +286,7 @@ static int close_function(qcvm_t *qcvm)
 int qcvm_load(qcvm_t *qcvm, const char *name)
 {
 	int r;
-	unsigned int func;
+	uint32_t func;
 
 	if (!qcvm || !name)
 		return QCVM_NULL_POINTER;
@@ -287,33 +299,10 @@ int qcvm_load(qcvm_t *qcvm, const char *name)
 	return setup_function(qcvm, &qcvm->functions[func]);
 }
 
-static const char *str_ofs(qcvm_t *qcvm, int32_t s)
-{
-	if (s < 0)
-	{
-		/* invert it */
-		s = s * -1;
-
-		/* if its out of range, return the "null" string */
-		if (s >= (int32_t)qcvm->len_tempstrings)
-			return &qcvm->tempstrings[0];
-
-		return &qcvm->tempstrings[s];
-	}
-	else
-	{
-		/* if its out of range, return the "null" string */
-		if (s >= (int32_t)qcvm->len_strings)
-			return &qcvm->strings[0];
-
-		return &qcvm->strings[s];
-	}
-}
-
 int qcvm_step(qcvm_t *qcvm)
 {
 	int r;
-	unsigned short opcode;
+	uint16_t opcode;
 
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
@@ -466,7 +455,7 @@ int qcvm_step(qcvm_t *qcvm)
 
 		case OPCODE_EQ_S:
 		{
-			qcvm->eval[3]->f = !str_cmp(str_ofs(qcvm, qcvm->eval[1]->s), str_ofs(qcvm, qcvm->eval[2]->s));
+			qcvm->eval[3]->f = !strcmp(str_ofs(qcvm, qcvm->eval[1]->s), str_ofs(qcvm, qcvm->eval[2]->s));
 			break;
 		}
 
@@ -499,7 +488,7 @@ int qcvm_step(qcvm_t *qcvm)
 
 		case OPCODE_NE_S:
 		{
-			qcvm->eval[3]->f = str_cmp(str_ofs(qcvm, qcvm->eval[1]->s), str_ofs(qcvm, qcvm->eval[2]->s));
+			qcvm->eval[3]->f = strcmp(str_ofs(qcvm, qcvm->eval[1]->s), str_ofs(qcvm, qcvm->eval[2]->s));
 			break;
 		}
 
@@ -707,7 +696,7 @@ int qcvm_step(qcvm_t *qcvm)
 int qcvm_run(qcvm_t *qcvm, const char *name)
 {
 	int r, running;
-	unsigned int i;
+	uint32_t i;
 
 	if (!qcvm || !name)
 		return QCVM_NULL_POINTER;
@@ -737,12 +726,12 @@ int qcvm_run(qcvm_t *qcvm, const char *name)
 			{
 				if (qcvm->next_function->first_statement == 0)
 				{
-					char *name = qcvm->strings + qcvm->next_function->ofs_name;
+					const char *name = str_ofs(qcvm, qcvm->next_function->ofs_name);
 
 					/* search for named builtin */
 					for (i = 0; i < qcvm->num_builtins; i++)
 					{
-						if (str_cmp(name, qcvm->builtins[i].name) == 0)
+						if (strcmp(name, qcvm->builtins[i].name) == 0)
 						{
 							qcvm->builtins[i].func(qcvm);
 							qcvm->next_function->first_statement = -1 * (i + 1);
@@ -797,8 +786,8 @@ int qcvm_run(qcvm_t *qcvm, const char *name)
 
 int qcvm_return_string(qcvm_t *qcvm, const char *s)
 {
-	char *ptr, *tempstrings_end;
-	unsigned int len;
+	char *tempstrings_end;
+	size_t len;
 
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
@@ -810,10 +799,7 @@ int qcvm_return_string(qcvm_t *qcvm, const char *s)
 	tempstrings_end = qcvm->tempstrings + qcvm->len_tempstrings;
 
 	/* get string len */
-	ptr = (char *)s;
-	len = 0;
-	while (*ptr++ != '\0')
-		len++;
+	len = strlen(s);
 
 	/* check tempstrings bounds */
 	if (qcvm->tempstrings_ptr + len >= tempstrings_end)
