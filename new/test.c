@@ -159,9 +159,13 @@ int main(int argc, char **argv)
 	else
 		qcvm->progs = load_file("qc_test1.dat", &qcvm->len_progs);
 
-	/* create tempstrings buffer */
+	/* allocate tempstrings buffer */
 	qcvm->len_tempstrings = 4096;
 	qcvm->tempstrings = malloc(qcvm->len_tempstrings);
+
+	/* allocate entities buffer */
+	qcvm->len_entities = max_entities * max_entities;
+	qcvm->entities = malloc(qcvm->len_entities);
 
 	/* setup builtins */
 	qcvm->num_builtins = ASIZE(builtins);
@@ -178,9 +182,12 @@ int main(int argc, char **argv)
 	if ((r = qcvm_query_entity_info(qcvm, &entity_fields, &entity_size)) != QCVM_OK)
 		die(r);
 
-	/* allocate entities buffer */
-	qcvm->len_entities = entity_size * max_entities;
-	qcvm->entities = malloc(qcvm->len_entities);
+	/* realloc entities buffer if we need to */
+	if (entity_size * max_entities > qcvm->len_entities)
+	{
+		qcvm->len_entities = entity_size * max_entities;
+		qcvm->entities = realloc(qcvm->entities, qcvm->len_entities);
+	}
 
 	/* run main function */
 	if ((r = qcvm_run(qcvm, "main")) != QCVM_OK)
