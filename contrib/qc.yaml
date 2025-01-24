@@ -6,7 +6,7 @@ detect:
 rules:
     - identifier: "\\b[A-Z_][0-9A-Z_]+\\b"
       # types
-    - type: "\\b(float|double|int|enumflags|enum|void|struct|class|union|typedef|vector|string|entity|accessor)\\b"
+    - type: "\\b(float|double|int|enumflags|enum|void|struct|class|union|typedef|vector|string|entity|accessor|char|short|long)\\b"
     - type: "\\b[a-z_][0-9a-z_]+(_t|_T)\\b"
       # compiler keywords
     - special: "\\b(__)([0-9a-z]+)\\b"
