@@ -74,6 +74,8 @@
       <item>__in</item>
       <item>__out</item>
       <item>__double</item>
+      <item>__char</item>
+      <item>__uchar</item>
       <item>__uint</item>
       <item>__uint8</item>
       <item>__uint16</item>
@@ -85,7 +87,9 @@
       <item>__int32</item>
       <item>__int64</item>
       <item>__long</item>
+      <item>__ulong</item>
       <item>__short</item>
+      <item>__ushort</item>
       <item>__variant</item>
       <item>const</item>
       <item>static</item>
@@ -109,6 +113,9 @@
       <item>signed</item>
       <item>unsigned</item>
       <item>void</item>
+      <item>char</item>
+      <item>short</item>
+      <item>long</item>
       <item>int8_t</item>
       <item>int16_t</item>
       <item>int32_t</item>
