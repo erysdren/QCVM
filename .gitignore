@@ -2,6 +2,7 @@
 untracked/
 
 cmake-build*/
+build*/
 
 *.lno
 *.log
