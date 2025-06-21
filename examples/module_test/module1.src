@@ -28,6 +28,6 @@
 #pragma progs_dat module1.dat
 #pragma autoproto
 
-#include "../../qclib/qclib.qc"
+#include "../../source/qclib.qc"
 #include "shared.qc"
 #include "module1.qc"

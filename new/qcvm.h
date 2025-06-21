@@ -245,7 +245,7 @@ typedef struct qcvm {
 		int32_t field;
 		int32_t i;
 		uint32_t e;
-	} *eval[4];
+	} *eval[3];
 
 } qcvm_t;
 

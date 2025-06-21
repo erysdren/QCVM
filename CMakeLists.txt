@@ -40,50 +40,72 @@ option(QCVM_BUILD_QCPKG "Build QCPKG tool" ON)
 
 # main libraries
 
-set(QCVM_SOURCES
-	${CMAKE_CURRENT_SOURCE_DIR}/qcvm/qcvm_bootstrap.c
-	${CMAKE_CURRENT_SOURCE_DIR}/qcvm/qcvm_entities.c
-	${CMAKE_CURRENT_SOURCE_DIR}/qcvm/qcvm_exports.c
-	${CMAKE_CURRENT_SOURCE_DIR}/qcvm/qcvm_fields.c
-	${CMAKE_CURRENT_SOURCE_DIR}/qcvm/qcvm_functions.c
-	${CMAKE_CURRENT_SOURCE_DIR}/qcvm/qcvm_globals.c
-	${CMAKE_CURRENT_SOURCE_DIR}/qcvm/qcvm_opcodes.c
-	${CMAKE_CURRENT_SOURCE_DIR}/qcvm/qcvm_parameters.c
-	${CMAKE_CURRENT_SOURCE_DIR}/qcvm/qcvm_return.c
-	${CMAKE_CURRENT_SOURCE_DIR}/qcvm/qcvm_runtime.c
-)
-
 set(QCVM_HEADERS
-	${CMAKE_CURRENT_SOURCE_DIR}/qcvm/qcvm.h
-	${CMAKE_CURRENT_SOURCE_DIR}/qclib/qclib.h
+	${PROJECT_SOURCE_DIR}/include/qcvm.h
+	${PROJECT_SOURCE_DIR}/include/qclib.h
 )
 
-add_library(qcvm ${QCVM_SOURCES})
-target_include_directories(qcvm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/qcvm)
+add_library(qcvm STATIC)
+add_library(qcvm::qcvm ALIAS qcvm)
+target_sources(qcvm PRIVATE
+	${PROJECT_SOURCE_DIR}/source/qcvm_bootstrap.c
+	${PROJECT_SOURCE_DIR}/source/qcvm_entities.c
+	${PROJECT_SOURCE_DIR}/source/qcvm_exports.c
+	${PROJECT_SOURCE_DIR}/source/qcvm_fields.c
+	${PROJECT_SOURCE_DIR}/source/qcvm_functions.c
+	${PROJECT_SOURCE_DIR}/source/qcvm_globals.c
+	${PROJECT_SOURCE_DIR}/source/qcvm_opcodes.c
+	${PROJECT_SOURCE_DIR}/source/qcvm_parameters.c
+	${PROJECT_SOURCE_DIR}/source/qcvm_return.c
+	${PROJECT_SOURCE_DIR}/source/qcvm_runtime.c
+)
 
-add_library(qclib ${CMAKE_CURRENT_SOURCE_DIR}/qclib/qclib.c)
-target_link_libraries(qclib PUBLIC qcvm)
-target_include_directories(qclib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/qclib)
+target_include_directories(qcvm
+	PUBLIC
+		$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+		$<INSTALL_INTERFACE:include>
+	PRIVATE
+		$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source>
+)
+
+add_library(qclib STATIC)
+add_library(qcvm::qclib ALIAS qclib)
+target_link_libraries(qclib PRIVATE qcvm)
+target_sources(qclib PRIVATE
+	${PROJECT_SOURCE_DIR}/source/qclib.c
+)
+
+target_include_directories(qclib
+	PUBLIC
+		$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+		$<INSTALL_INTERFACE:include>
+	PRIVATE
+		$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source>
+)
+
 
 # install
 
-include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/qcvm.pc.in ${CMAKE_CURRENT_BINARY_DIR}/qcvm.pc @ONLY)
+configure_file(${PROJECT_SOURCE_DIR}/contrib/qcvm.pc.in ${PROJECT_BINARY_DIR}/qcvm.pc @ONLY)
+write_basic_package_version_file(${PROJECT_BINARY_DIR}/qcvm-config-version.cmake COMPATIBILITY AnyNewerVersion)
 
-install(TARGETS qcvm qclib DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(FILES ${QCVM_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qcvm)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qcvm.pc DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+install(FILES ${PROJECT_BINARY_DIR}/qcvm.pc DESTINATION lib/pkgconfig)
+install(TARGETS qcvm qclib EXPORT qcvm-targets INCLUDES DESTINATION include)
+install(EXPORT qcvm-targets DESTINATION lib/cmake NAMESPACE qcvm:: FILE qcvm-config.cmake)
+install(FILES ${PROJECT_BINARY_DIR}/qcvm-config-version.cmake DESTINATION lib/cmake)
+install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/" TYPE INCLUDE FILES_MATCHING PATTERN "*.h")
 
 # examples and utilities
 
 if(QCVM_BUILD_QCPKG)
-	add_executable(qcpkg ${CMAKE_CURRENT_SOURCE_DIR}/qcpkg/qcpkg.c)
+	add_executable(qcpkg ${PROJECT_SOURCE_DIR}/source/qcpkg.c)
 	target_link_libraries(qcpkg PRIVATE qcvm qclib)
 endif()
 
 if(QCVM_BUILD_EXAMPLES OR QCVM_BUILD_QCPONG)
-	find_program(QCC fteqcc)
+	find_program(QCC NAMES fteqcc fteqcc64)
 	if(NOT QCC)
 		message(WARNING "Can't find QuakeC compiler (fteqcc), cannot build example applications")
 	endif()
@@ -97,33 +119,35 @@ if(QCVM_BUILD_QCPONG)
 endif()
 
 function(qcvm_build_progs tgt src dst)
+	cmake_path(REMOVE_FILENAME src OUTPUT_VARIABLE srcpath)
 	add_custom_command(
 		OUTPUT ${dst}
 		COMMAND ${QCC} ${src} -o ${dst}
+		WORKING_DIRECTORY ${srcpath}
 	)
 	add_custom_target(${tgt} ALL DEPENDS ${dst})
 endfunction()
 
 if(QCVM_BUILD_EXAMPLES AND QCC)
-	qcvm_build_progs(test_dat ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcvm_test/test.src ${CMAKE_CURRENT_BINARY_DIR}/test.dat)
-	add_executable(test ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcvm_test/main.c)
+	qcvm_build_progs(test_dat ${PROJECT_SOURCE_DIR}/examples/qcvm_test/test.src ${PROJECT_BINARY_DIR}/test.dat)
+	add_executable(test ${PROJECT_SOURCE_DIR}/examples/qcvm_test/main.c)
 	target_link_libraries(test PRIVATE qcvm qclib)
 
-	qcvm_build_progs(test2_dat ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcvm_test_fte/test2.src ${CMAKE_CURRENT_BINARY_DIR}/test2.dat)
-	add_executable(test2 ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcvm_test_fte/main.c)
+	qcvm_build_progs(test2_dat ${PROJECT_SOURCE_DIR}/examples/qcvm_test_fte/test2.src ${PROJECT_BINARY_DIR}/test2.dat)
+	add_executable(test2 ${PROJECT_SOURCE_DIR}/examples/qcvm_test_fte/main.c)
 	target_link_libraries(test2 PRIVATE qcvm qclib)
 
-	qcvm_build_progs(module1_dat ${CMAKE_CURRENT_SOURCE_DIR}/examples/module_test/module1.src ${CMAKE_CURRENT_BINARY_DIR}/module1.dat)
-	qcvm_build_progs(module2_dat ${CMAKE_CURRENT_SOURCE_DIR}/examples/module_test/module2.src ${CMAKE_CURRENT_BINARY_DIR}/module2.dat)
-	add_executable(module_test ${CMAKE_CURRENT_SOURCE_DIR}/examples/module_test/module_test.c)
+	qcvm_build_progs(module1_dat ${PROJECT_SOURCE_DIR}/examples/module_test/module1.src ${PROJECT_BINARY_DIR}/module1.dat)
+	qcvm_build_progs(module2_dat ${PROJECT_SOURCE_DIR}/examples/module_test/module2.src ${PROJECT_BINARY_DIR}/module2.dat)
+	add_executable(module_test ${PROJECT_SOURCE_DIR}/examples/module_test/module_test.c)
 	target_link_libraries(module_test PRIVATE qcvm qclib)
 endif()
 
 if(QCVM_BUILD_QCPONG AND SDL2_FOUND AND QCC)
-	qcvm_build_progs(qcpong_dat ${CMAKE_CURRENT_SOURCE_DIR}/examples/qcpong/qcpong.src ${CMAKE_CURRENT_BINARY_DIR}/qcpong.dat)
+	qcvm_build_progs(qcpong_dat ${PROJECT_SOURCE_DIR}/examples/qcpong/qcpong.src ${PROJECT_BINARY_DIR}/qcpong.dat)
 	add_executable(qcpong
-		${CMAKE_CURRENT_SOURCE_DIR}/examples/qcpong/main.c
-		${CMAKE_CURRENT_SOURCE_DIR}/examples/qcpong/stb_image_write.c
+		${PROJECT_SOURCE_DIR}/examples/qcpong/main.c
+		${PROJECT_SOURCE_DIR}/examples/qcpong/stb_image_write.c
 	)
 	target_link_libraries(qcpong PRIVATE qcvm qclib)
 	target_link_libraries(qcpong PRIVATE ${SDL2_LIBRARIES})

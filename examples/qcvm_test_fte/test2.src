@@ -38,6 +38,6 @@
 
 // qc file list
 #includelist
-	../../qclib/qclib.qc
+	../../source/qclib.qc
 	test2.qc
 #endlist

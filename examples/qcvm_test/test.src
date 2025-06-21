@@ -35,6 +35,6 @@
 
 // qc file list
 #includelist
-	../../qclib/qclib.qc
+	../../source/qclib.qc
 	test.qc
 #endlist

@@ -312,9 +312,9 @@ int qcvm_step(qcvm_t *qcvm)
 
 	/* get current statement and evaluators */
 	qcvm->current_statement = &qcvm->statements[qcvm->current_statement_index];
-	qcvm->eval[1] = (union qcvm_eval *)&qcvm->globals[qcvm->current_statement->vars[0]];
-	qcvm->eval[2] = (union qcvm_eval *)&qcvm->globals[qcvm->current_statement->vars[1]];
-	qcvm->eval[3] = (union qcvm_eval *)&qcvm->globals[qcvm->current_statement->vars[2]];
+	qcvm->eval[0] = (union qcvm_eval *)&qcvm->globals[qcvm->current_statement->vars[0]];
+	qcvm->eval[1] = (union qcvm_eval *)&qcvm->globals[qcvm->current_statement->vars[1]];
+	qcvm->eval[2] = (union qcvm_eval *)&qcvm->globals[qcvm->current_statement->vars[2]];
 
 	/* update stack */
 	qcvm->xstack.function->profile++;
@@ -336,14 +336,14 @@ int qcvm_step(qcvm_t *qcvm)
 		case OPCODE_CALL8:
 		{
 			/* check for null function */
-			if (qcvm->eval[1]->func < 1)
+			if (qcvm->eval[0]->func < 1)
 				return QCVM_INVALID_FUNCTION;
 
 			/* get function argc */
 			qcvm->current_argc = opcode - OPCODE_CALL0;
 
 			/* assign next function value */
-			qcvm->next_function = &qcvm->functions[qcvm->eval[1]->func];
+			qcvm->next_function = &qcvm->functions[qcvm->eval[0]->func];
 
 			/* setup state for builtin call */
 			if (qcvm->next_function->first_statement < 1)
@@ -375,156 +375,156 @@ int qcvm_step(qcvm_t *qcvm)
 
 		case OPCODE_MUL_F:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->f * qcvm->eval[2]->f;
+			qcvm->eval[2]->f = qcvm->eval[0]->f * qcvm->eval[1]->f;
 			break;
 		}
 
 		case OPCODE_MUL_V:
 		{
-			qcvm->eval[3]->f =
-				qcvm->eval[1]->v[0] * qcvm->eval[2]->v[0] +
-				qcvm->eval[1]->v[1] * qcvm->eval[2]->v[1] +
-				qcvm->eval[1]->v[2] * qcvm->eval[2]->v[2];
+			qcvm->eval[2]->f =
+				qcvm->eval[0]->v[0] * qcvm->eval[1]->v[0] +
+				qcvm->eval[0]->v[1] * qcvm->eval[1]->v[1] +
+				qcvm->eval[0]->v[2] * qcvm->eval[1]->v[2];
 			break;
 		}
 
 		case OPCODE_MUL_FV:
 		{
-			qcvm->eval[3]->v[0] = qcvm->eval[1]->f * qcvm->eval[2]->v[0];
-			qcvm->eval[3]->v[1] = qcvm->eval[1]->f * qcvm->eval[2]->v[1];
-			qcvm->eval[3]->v[2] = qcvm->eval[1]->f * qcvm->eval[2]->v[2];
+			qcvm->eval[2]->v[0] = qcvm->eval[0]->f * qcvm->eval[1]->v[0];
+			qcvm->eval[2]->v[1] = qcvm->eval[0]->f * qcvm->eval[1]->v[1];
+			qcvm->eval[2]->v[2] = qcvm->eval[0]->f * qcvm->eval[1]->v[2];
 			break;
 		}
 
 		case OPCODE_MUL_VF:
 		{
-			qcvm->eval[3]->v[0] = qcvm->eval[2]->f * qcvm->eval[1]->v[0];
-			qcvm->eval[3]->v[1] = qcvm->eval[2]->f * qcvm->eval[1]->v[1];
-			qcvm->eval[3]->v[2] = qcvm->eval[2]->f * qcvm->eval[1]->v[2];
+			qcvm->eval[2]->v[0] = qcvm->eval[1]->f * qcvm->eval[0]->v[0];
+			qcvm->eval[2]->v[1] = qcvm->eval[1]->f * qcvm->eval[0]->v[1];
+			qcvm->eval[2]->v[2] = qcvm->eval[1]->f * qcvm->eval[0]->v[2];
 			break;
 		}
 
 		case OPCODE_DIV_F:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->f / qcvm->eval[2]->f;
+			qcvm->eval[2]->f = qcvm->eval[0]->f / qcvm->eval[1]->f;
 			break;
 		}
 
 		case OPCODE_ADD_F:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->f + qcvm->eval[2]->f;
+			qcvm->eval[2]->f = qcvm->eval[0]->f + qcvm->eval[1]->f;
 			break;
 		}
 
 		case OPCODE_ADD_V:
 		{
-			qcvm->eval[3]->v[0] = qcvm->eval[1]->v[0] + qcvm->eval[2]->v[0];
-			qcvm->eval[3]->v[1] = qcvm->eval[1]->v[1] + qcvm->eval[2]->v[1];
-			qcvm->eval[3]->v[2] = qcvm->eval[1]->v[2] + qcvm->eval[2]->v[2];
+			qcvm->eval[2]->v[0] = qcvm->eval[0]->v[0] + qcvm->eval[1]->v[0];
+			qcvm->eval[2]->v[1] = qcvm->eval[0]->v[1] + qcvm->eval[1]->v[1];
+			qcvm->eval[2]->v[2] = qcvm->eval[0]->v[2] + qcvm->eval[1]->v[2];
 			break;
 		}
 
 		case OPCODE_SUB_F:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->f - qcvm->eval[2]->f;
+			qcvm->eval[2]->f = qcvm->eval[0]->f - qcvm->eval[1]->f;
 			break;
 		}
 
 		case OPCODE_SUB_V:
 		{
-			qcvm->eval[3]->v[0] = qcvm->eval[1]->v[0] - qcvm->eval[2]->v[0];
-			qcvm->eval[3]->v[1] = qcvm->eval[1]->v[1] - qcvm->eval[2]->v[1];
-			qcvm->eval[3]->v[2] = qcvm->eval[1]->v[2] - qcvm->eval[2]->v[2];
+			qcvm->eval[2]->v[0] = qcvm->eval[0]->v[0] - qcvm->eval[1]->v[0];
+			qcvm->eval[2]->v[1] = qcvm->eval[0]->v[1] - qcvm->eval[1]->v[1];
+			qcvm->eval[2]->v[2] = qcvm->eval[0]->v[2] - qcvm->eval[1]->v[2];
 			break;
 		}
 
 		case OPCODE_EQ_F:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->f == qcvm->eval[2]->f;
+			qcvm->eval[2]->f = qcvm->eval[0]->f == qcvm->eval[1]->f;
 			break;
 		}
 
 		case OPCODE_EQ_V:
 		{
-			qcvm->eval[3]->f =
-				(qcvm->eval[1]->v[0] == qcvm->eval[2]->v[0]) &&
-				(qcvm->eval[1]->v[1] == qcvm->eval[2]->v[1]) &&
-				(qcvm->eval[1]->v[2] == qcvm->eval[2]->v[2]);
+			qcvm->eval[2]->f =
+				(qcvm->eval[0]->v[0] == qcvm->eval[1]->v[0]) &&
+				(qcvm->eval[0]->v[1] == qcvm->eval[1]->v[1]) &&
+				(qcvm->eval[0]->v[2] == qcvm->eval[1]->v[2]);
 			break;
 		}
 
 		case OPCODE_EQ_S:
 		{
-			qcvm->eval[3]->f = !strcmp(str_ofs(qcvm, qcvm->eval[1]->s), str_ofs(qcvm, qcvm->eval[2]->s));
+			qcvm->eval[2]->f = !strcmp(str_ofs(qcvm, qcvm->eval[0]->s), str_ofs(qcvm, qcvm->eval[1]->s));
 			break;
 		}
 
 		case OPCODE_EQ_E:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->i == qcvm->eval[2]->i;
+			qcvm->eval[2]->f = qcvm->eval[0]->i == qcvm->eval[1]->i;
 			break;
 		}
 
 		case OPCODE_EQ_FNC:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->func == qcvm->eval[2]->func;
+			qcvm->eval[2]->f = qcvm->eval[0]->func == qcvm->eval[1]->func;
 			break;
 		}
 
 		case OPCODE_NE_F:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->f != qcvm->eval[2]->f;
+			qcvm->eval[2]->f = qcvm->eval[0]->f != qcvm->eval[1]->f;
 			break;
 		}
 
 		case OPCODE_NE_V:
 		{
-			qcvm->eval[3]->f =
-				(qcvm->eval[1]->v[0] != qcvm->eval[2]->v[0]) ||
-				(qcvm->eval[1]->v[1] != qcvm->eval[2]->v[1]) ||
-				(qcvm->eval[1]->v[2] != qcvm->eval[2]->v[2]);
+			qcvm->eval[2]->f =
+				(qcvm->eval[0]->v[0] != qcvm->eval[1]->v[0]) ||
+				(qcvm->eval[0]->v[1] != qcvm->eval[1]->v[1]) ||
+				(qcvm->eval[0]->v[2] != qcvm->eval[1]->v[2]);
 			break;
 		}
 
 		case OPCODE_NE_S:
 		{
-			qcvm->eval[3]->f = strcmp(str_ofs(qcvm, qcvm->eval[1]->s), str_ofs(qcvm, qcvm->eval[2]->s));
+			qcvm->eval[2]->f = strcmp(str_ofs(qcvm, qcvm->eval[0]->s), str_ofs(qcvm, qcvm->eval[1]->s));
 			break;
 		}
 
 		case OPCODE_NE_E:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->i != qcvm->eval[2]->i;
+			qcvm->eval[2]->f = qcvm->eval[0]->i != qcvm->eval[1]->i;
 			break;
 		}
 
 		case OPCODE_NE_FNC:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->func != qcvm->eval[2]->func;
+			qcvm->eval[2]->f = qcvm->eval[0]->func != qcvm->eval[1]->func;
 			break;
 		}
 
 		case OPCODE_LE:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->f <= qcvm->eval[2]->f;
+			qcvm->eval[2]->f = qcvm->eval[0]->f <= qcvm->eval[1]->f;
 			break;
 		}
 
 		case OPCODE_GE:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->f >= qcvm->eval[2]->f;
+			qcvm->eval[2]->f = qcvm->eval[0]->f >= qcvm->eval[1]->f;
 			break;
 		}
 
 		case OPCODE_LT:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->f < qcvm->eval[2]->f;
+			qcvm->eval[2]->f = qcvm->eval[0]->f < qcvm->eval[1]->f;
 			break;
 		}
 
 		case OPCODE_GT:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->f > qcvm->eval[2]->f;
+			qcvm->eval[2]->f = qcvm->eval[0]->f > qcvm->eval[1]->f;
 			break;
 		}
 
@@ -535,10 +535,10 @@ int qcvm_step(qcvm_t *qcvm)
 		case OPCODE_LOAD_FNC:
 		{
 			/* get offset to field */
-			qcvm->eval[1] = (union qcvm_eval *)FIELD_PTR(qcvm->eval[1]->e, qcvm->eval[2]->i);
+			qcvm->eval[0] = (union qcvm_eval *)FIELD_PTR(qcvm->eval[0]->e, qcvm->eval[1]->i);
 
 			/* load field value */
-			qcvm->eval[3]->i = qcvm->eval[1]->i;
+			qcvm->eval[2]->i = qcvm->eval[0]->i;
 
 			break;
 		}
@@ -546,12 +546,12 @@ int qcvm_step(qcvm_t *qcvm)
 		case OPCODE_LOAD_V:
 		{
 			/* get offset to field */
-			qcvm->eval[1] = (union qcvm_eval *)FIELD_PTR(qcvm->eval[1]->e, qcvm->eval[2]->i);
+			qcvm->eval[0] = (union qcvm_eval *)FIELD_PTR(qcvm->eval[0]->e, qcvm->eval[1]->i);
 
 			/* load field value */
-			qcvm->eval[3]->v[0] = qcvm->eval[1]->v[0];
-			qcvm->eval[3]->v[1] = qcvm->eval[1]->v[1];
-			qcvm->eval[3]->v[2] = qcvm->eval[1]->v[2];
+			qcvm->eval[2]->v[0] = qcvm->eval[0]->v[0];
+			qcvm->eval[2]->v[1] = qcvm->eval[0]->v[1];
+			qcvm->eval[2]->v[2] = qcvm->eval[0]->v[2];
 
 			break;
 		}
@@ -559,10 +559,10 @@ int qcvm_step(qcvm_t *qcvm)
 		case OPCODE_ADDRESS:
 		{
 			/* get offset to entity field */
-			uint32_t *field_ptr = FIELD_PTR(qcvm->eval[1]->e, qcvm->eval[2]->i);
+			uint32_t *field_ptr = FIELD_PTR(qcvm->eval[0]->e, qcvm->eval[1]->i);
 
 			/* get offset from start of entities buffer */
-			qcvm->eval[3]->i = (int32_t)((uint8_t *)field_ptr - (uint8_t *)qcvm->entities);
+			qcvm->eval[2]->i = (int32_t)((uint8_t *)field_ptr - (uint8_t *)qcvm->entities);
 			break;
 		}
 
@@ -572,15 +572,15 @@ int qcvm_step(qcvm_t *qcvm)
 		case OPCODE_STORE_FLD:
 		case OPCODE_STORE_FNC:
 		{
-			qcvm->eval[2]->i = qcvm->eval[1]->i;
+			qcvm->eval[1]->i = qcvm->eval[0]->i;
 			break;
 		}
 
 		case OPCODE_STORE_V:
 		{
-			qcvm->eval[2]->v[0] = qcvm->eval[1]->v[0];
-			qcvm->eval[2]->v[1] = qcvm->eval[1]->v[1];
-			qcvm->eval[2]->v[2] = qcvm->eval[1]->v[2];
+			qcvm->eval[1]->v[0] = qcvm->eval[0]->v[0];
+			qcvm->eval[1]->v[1] = qcvm->eval[0]->v[1];
+			qcvm->eval[1]->v[2] = qcvm->eval[0]->v[2];
 			break;
 		}
 
@@ -590,60 +590,60 @@ int qcvm_step(qcvm_t *qcvm)
 		case OPCODE_STOREP_FLD:
 		case OPCODE_STOREP_FNC:
 		{
-			qcvm->eval[0] = (union qcvm_eval *)((uint8_t *)qcvm->entities + qcvm->eval[2]->i);
-			qcvm->eval[0]->i = qcvm->eval[1]->i;
+			union qcvm_eval *temp = (union qcvm_eval *)((uint8_t *)qcvm->entities + qcvm->eval[1]->i);
+			temp->i = qcvm->eval[0]->i;
 			break;
 		}
 
 		case OPCODE_STOREP_V:
 		{
-			qcvm->eval[0] = (union qcvm_eval *)((uint8_t *)qcvm->entities + qcvm->eval[2]->i);
-			qcvm->eval[0]->v[0] = qcvm->eval[1]->v[0];
-			qcvm->eval[0]->v[1] = qcvm->eval[1]->v[1];
-			qcvm->eval[0]->v[2] = qcvm->eval[1]->v[2];
+			union qcvm_eval *temp = (union qcvm_eval *)((uint8_t *)qcvm->entities + qcvm->eval[1]->i);
+			temp->v[0] = qcvm->eval[0]->v[0];
+			temp->v[1] = qcvm->eval[0]->v[1];
+			temp->v[2] = qcvm->eval[0]->v[2];
 			break;
 		}
 
 		case OPCODE_NOT_F:
 		{
-			qcvm->eval[3]->f = !qcvm->eval[1]->f;
+			qcvm->eval[2]->f = !qcvm->eval[0]->f;
 			break;
 		}
 
 		case OPCODE_NOT_V:
 		{
-			qcvm->eval[3]->f = !qcvm->eval[1]->v[0] && !qcvm->eval[1]->v[1] && !qcvm->eval[1]->v[2];
+			qcvm->eval[2]->f = !qcvm->eval[0]->v[0] && !qcvm->eval[0]->v[1] && !qcvm->eval[0]->v[2];
 			break;
 		}
 
 		case OPCODE_NOT_S:
 		{
-			qcvm->eval[3]->f = !qcvm->eval[1]->s || !qcvm->strings[qcvm->eval[1]->s];
+			qcvm->eval[2]->f = !qcvm->eval[0]->s || !qcvm->strings[qcvm->eval[0]->s];
 			break;
 		}
 
 		case OPCODE_NOT_ENT:
 		{
-			qcvm->eval[3]->f = !qcvm->eval[1]->e;
+			qcvm->eval[2]->f = !qcvm->eval[0]->e;
 			break;
 		}
 
 		case OPCODE_NOT_FNC:
 		{
-			qcvm->eval[3]->f = !qcvm->eval[1]->func;
+			qcvm->eval[2]->f = !qcvm->eval[0]->func;
 			break;
 		}
 
 		case OPCODE_IF:
 		{
-			if (qcvm->eval[1]->i)
+			if (qcvm->eval[0]->i)
 				qcvm->current_statement_index += qcvm->current_statement->vars[1] - 1;
 			break;
 		}
 
 		case OPCODE_IFNOT:
 		{
-			if (!qcvm->eval[1]->i)
+			if (!qcvm->eval[0]->i)
 				qcvm->current_statement_index += qcvm->current_statement->vars[1] - 1;
 			break;
 		}
@@ -662,25 +662,25 @@ int qcvm_step(qcvm_t *qcvm)
 
 		case OPCODE_AND_F:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->f && qcvm->eval[2]->f;
+			qcvm->eval[2]->f = qcvm->eval[0]->f && qcvm->eval[1]->f;
 			break;
 		}
 
 		case OPCODE_OR_F:
 		{
-			qcvm->eval[3]->f = qcvm->eval[1]->f || qcvm->eval[2]->f;
+			qcvm->eval[2]->f = qcvm->eval[0]->f || qcvm->eval[1]->f;
 			break;
 		}
 
 		case OPCODE_BITAND_F:
 		{
-			qcvm->eval[3]->f = (int)qcvm->eval[1]->f & (int)qcvm->eval[2]->f;
+			qcvm->eval[2]->f = (int)qcvm->eval[0]->f & (int)qcvm->eval[1]->f;
 			break;
 		}
 
 		case OPCODE_BITOR_F:
 		{
-			qcvm->eval[3]->f = (int)qcvm->eval[1]->f | (int)qcvm->eval[2]->f;
+			qcvm->eval[2]->f = (int)qcvm->eval[0]->f | (int)qcvm->eval[1]->f;
 			break;
 		}
 
@@ -767,7 +767,7 @@ int qcvm_run(qcvm_t *qcvm, const char *name)
 			/* parse state call */
 			case QCVM_STATE_CALL:
 				if (qcvm->state_callback)
-					if ((r = qcvm->state_callback(qcvm, qcvm->eval[1]->f, qcvm->eval[2]->func)) != QCVM_OK)
+					if ((r = qcvm->state_callback(qcvm, qcvm->eval[0]->f, qcvm->eval[1]->func)) != QCVM_OK)
 						return r;
 				break;
 
