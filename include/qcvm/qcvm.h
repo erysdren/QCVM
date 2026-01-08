@@ -379,6 +379,15 @@ int qcvm_get_argument_string(qcvm_t *qcvm, int i, const char **s);
 int qcvm_get_argument_float(qcvm_t *qcvm, int i, float *f);
 
 /**
+ * \brief retrieve int from function argument
+ * \param qcvm virtual machine to use
+ * \param i argument index
+ * \param i int to fill
+ * \returns result code
+ */
+int qcvm_get_argument_int(qcvm_t *qcvm, int i, int *n);
+
+/**
  * \brief retrieve vector from function argument
  * \param qcvm virtual machine to use
  * \param i argument index

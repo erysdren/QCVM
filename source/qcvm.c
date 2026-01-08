@@ -1032,6 +1032,20 @@ int qcvm_get_argument_float(qcvm_t *qcvm, int i, float *f)
 	return QCVM_OK;
 }
 
+int qcvm_get_argument_int(qcvm_t *qcvm, int i, int *n)
+{
+	if (!qcvm)
+		return QCVM_NULL_POINTER;
+
+	if (i < 0 || i >= 8)
+		return QCVM_ARGUMENT_OUT_OF_RANGE;
+
+	if (n)
+		*n = qcvm->globals[OFS_PARM0 + (i * 3)].i;
+
+	return QCVM_OK;
+}
+
 int qcvm_get_argument_vector(qcvm_t *qcvm, int i, float *x, float *y, float *z)
 {
 	if (!qcvm)
