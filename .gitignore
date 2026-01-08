@@ -10,5 +10,5 @@ build*/
 
 *.o
 *.exe
-new/sieve
-new/test
+
+include/qcvm/qcvmconf.h
