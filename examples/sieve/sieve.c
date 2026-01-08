@@ -134,6 +134,7 @@ int main(int argc, char **argv)
 	/* setup entities buffer */
 	qcvm_query_entity_info(qcvm, &entity_fields, &entity_size);
 	qcvm->entities = calloc(1, max_entities * entity_size);
+	qcvm->len_entities = max_entities * entity_size;
 
 	/* init qcvm */
 	if ((r = qcvm_init(qcvm)) != QCVM_OK)
