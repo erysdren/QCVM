@@ -254,17 +254,21 @@ int qcvm_init(qcvm_t *qcvm)
 
 int qcvm_query_entity_info(qcvm_t *qcvm, size_t *num_fields, size_t *size)
 {
+	struct qcvm_header *header;
+
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
 
-	if (!qcvm->header || !qcvm->field_vars || !qcvm->num_field_vars)
+	if (!qcvm->progs)
 		return QCVM_INVALID_PROGS;
 
+	header = (struct qcvm_header *)qcvm->progs;
+
 	if (num_fields)
-		*num_fields = (size_t)qcvm->header->num_entity_fields;
+		*num_fields = (size_t)LITTLE32(header->num_entity_fields);
 
 	if (size)
-		*size = (size_t)qcvm->header->num_entity_fields * 4;
+		*size = (size_t)LITTLE32(header->num_entity_fields) * 4;
 
 	return QCVM_OK;
 }
