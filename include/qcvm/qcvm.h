@@ -161,7 +161,7 @@ typedef struct qcvm {
 		uint32_t ofs_globals;
 		uint32_t num_globals;
 		uint32_t num_entity_fields;
-	} *header;
+	} header;
 
 	/* statements */
 	size_t num_statements;
