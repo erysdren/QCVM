@@ -361,6 +361,16 @@ int qcvm_query_argument_count(qcvm_t *qcvm, int *argc);
 int qcvm_get_return_float(qcvm_t *qcvm, float *f);
 
 /**
+ * \brief retrieve function return value as a vector
+ * \param qcvm virtual machine to use
+ * \param x float to fill
+ * \param y float to fill
+ * \param z float to fill
+ * \returns result code
+ */
+int qcvm_get_return_vector(qcvm_t *qcvm, float *x, float *y, float *z);
+
+/**
  * \brief retrieve string from function argument
  * \param qcvm virtual machine to use
  * \param i argument index

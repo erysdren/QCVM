@@ -1008,6 +1008,23 @@ int qcvm_get_return_float(qcvm_t *qcvm, float *f)
 	return QCVM_OK;
 }
 
+int qcvm_get_return_vector(qcvm_t *qcvm, float *x, float *y, float *z)
+{
+	if (!qcvm)
+		return QCVM_NULL_POINTER;
+
+	if (x)
+		*x = qcvm->globals[OFS_RETURN].f;
+
+	if (y)
+		*y = qcvm->globals[OFS_RETURN + 1].f;
+
+	if (z)
+		*z = qcvm->globals[OFS_RETURN + 2].f;
+
+	return QCVM_OK;
+}
+
 int qcvm_get_argument_string(qcvm_t *qcvm, int i, const char **s)
 {
 	if (!qcvm)
