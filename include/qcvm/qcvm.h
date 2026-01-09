@@ -373,6 +373,22 @@ int qcvm_get_return_float(qcvm_t *qcvm, float *f);
 int qcvm_get_return_vector(qcvm_t *qcvm, float *x, float *y, float *z);
 
 /**
+ * \brief retrieve function return value as an int
+ * \param qcvm virtual machine to use
+ * \param i int to fill
+ * \returns result code
+ */
+int qcvm_get_return_int(qcvm_t *qcvm, int *i);
+
+/**
+ * \brief retrieve function return value as an entity index
+ * \param qcvm virtual machine to use
+ * \param e unsigned integer to fill
+ * \returns result code
+ */
+int qcvm_get_return_entity(qcvm_t *qcvm, uint32_t *e);
+
+/**
  * \brief retrieve string from function argument
  * \param qcvm virtual machine to use
  * \param i argument index
