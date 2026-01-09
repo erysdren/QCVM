@@ -38,6 +38,10 @@ extern "C" {
 
 #cmakedefine QCVM_LOCAL_STACK_DEPTH @QCVM_LOCAL_STACK_DEPTH@
 
+#cmakedefine QCVM_STRLEN @QCVM_STRLEN@
+
+#cmakedefine QCVM_STRCMP @QCVM_STRCMP@
+
 #cmakedefine01 QCVM_BIG_ENDIAN
 
 #cmakedefine01 QCVM_NO_STDLIB
