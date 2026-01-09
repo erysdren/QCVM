@@ -265,6 +265,8 @@ int qcvm_init(qcvm_t *qcvm);
  * entity field is 12 bytes, and the amount of entity fields in a progs file is
  * user-defined. use this function to allocate a suitable amount of space.
  *
+ * this function may be called before qcvm_init().
+ *
  * usage example:
  *
  * const int max_entities = 8192;
@@ -283,7 +285,7 @@ int qcvm_query_entity_info(qcvm_t *qcvm, size_t *num_fields, size_t *size);
 /**
  * \brief get static string from result code
  * \param r result code
- * \returns null terminated result string
+ * \returns static null terminated result string
  */
 const char *qcvm_result_string(int r);
 
