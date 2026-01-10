@@ -36,13 +36,11 @@ the source tree.
 
 ## Building
 
-QCVM is built via CMake.
+QCVM is built via CMake and has no external library dependencies.
 
-Linux:
 ```
-mkdir cmake-build && cd cmake-build
-cmake ..
-make
+cmake -Bbuild -S.
+cmake --build build
 ```
 
 ## Feedback
