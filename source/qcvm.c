@@ -63,18 +63,26 @@ static int QCVM_STRCMP(const char *a, const char *b)
 #if QCVM_BIG_ENDIAN
 static uint16_t swap16(uint16_t n)
 {
+#if defined(__has_builtin) && __has_builtin(__builtin_bswap16)
+	return __builtin_bswap16(n);
+#else
 	return
 		((n >> 8) & 0x00FF) |
 		((n << 8) & 0xFF00);
+#endif
 }
 
 static uint32_t swap32(uint32_t n)
 {
+#if defined(__has_builtin) && __has_builtin(__builtin_bswap32)
+	return __builtin_bswap32(n);
+#else
 	return
 		((n >> 24) & 0x000000FF) |
 		((n >> 8) & 0x0000FF00) |
 		((n << 8) & 0x00FF0000) |
 		((n << 24) & 0xFF000000);
+#endif
 }
 
 static float swapfloat(float f)
