@@ -51,6 +51,13 @@ if(NOT DEFINED QCVM_VERSION_STR)
 	set(QCVM_VERSION_STR ${CMAKE_PROJECT_VERSION})
 endif()
 
+include(CheckFunctionExists)
+check_function_exists(strlen HAVE_STRLEN)
+check_function_exists(strcmp HAVE_STRCMP)
+if(NOT HAVE_STRLEN OR NOT HAVE_STRCMP)
+	set(QCVM_NO_STDLIB ON)
+endif()
+
 # configure options header
 
 configure_file(${PROJECT_SOURCE_DIR}/cmake/qcvmconf.h.in ${PROJECT_SOURCE_DIR}/include/qcvm/qcvmconf.h @ONLY)
