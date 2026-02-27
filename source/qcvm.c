@@ -179,14 +179,20 @@ int qcvm_init(qcvm_t *qcvm)
 		return QCVM_INVALID_PROGS;
 
 	/* other sanity checks */
-	if (!qcvm->tempstrings)
-		return QCVM_NO_TEMPSTRINGS;
 	if (!qcvm->entities)
 		return QCVM_NO_ENTITIES;
 
 	/* tempstrings */
-	qcvm->tempstrings[0] = '\0';
-	qcvm->tempstrings_ptr = qcvm->tempstrings + 1;
+	if (qcvm->tempstrings)
+	{
+		qcvm->tempstrings[0] = '\0';
+		qcvm->tempstrings_ptr = qcvm->tempstrings + 1;
+	}
+	else
+	{
+		qcvm->tempstrings = qcvm->tempstrings_ptr = "";
+		qcvm->len_tempstrings = 1;
+	}
 
 	/* statements */
 	qcvm->num_statements = qcvm->header.num_statements;
@@ -932,8 +938,8 @@ int qcvm_return_string(qcvm_t *qcvm, const char *s)
 	if (!qcvm)
 		return QCVM_NULL_POINTER;
 
-	if (!qcvm->tempstrings || !qcvm->tempstrings_ptr)
-		return QCVM_UNSUPPORTED_FUNCTION;
+	if (!qcvm->tempstrings || !qcvm->tempstrings_ptr || qcvm->len_tempstrings <= 1)
+		return QCVM_NO_TEMPSTRINGS;
 
 	/* end of tempstrings buffer */
 	tempstrings_end = qcvm->tempstrings + qcvm->len_tempstrings;
